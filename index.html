@@ -6,33 +6,27 @@
 <title>Home — Retro Football</title>
 <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
 <style>
+'use strict';
 :root{
-  --bg:#0A0A1A;
-  --yellow:#FFD60A;
-  --cyan:#00FFFF;
-  --nav-text:var(--yellow);
-  --nav-active-bg:var(--yellow);
-  --nav-active-text:#0A0A1A;
-  --error:#FF3B3B;
+  --bg:#0A0A1A; --yellow:#FFD60A; --cyan:#00FFFF; --nav-text:var(--yellow);
+  --nav-active-bg:var(--yellow); --nav-active-text:#0A0A1A; --error:#FF3B3B;
   font-family:'Press Start 2P',monospace;
 }
 *{box-sizing:border-box;margin:0;padding:0}
 html,body{height:100%;background:var(--bg);color:var(--yellow);font-family:'Press Start 2P',monospace;}
 header.site-header{position:sticky;top:0;z-index:50}
-nav.main-nav{display:flex;width:100%;justify-content:space-between;background:#0A0A1A;border-bottom:4px solid rgba(0,255,255,0.12)}
-.nav-link{flex:1;text-align:center;padding:14px 0;text-decoration:none;color:var(--nav-text);border-right:1px solid rgba(0,255,255,0.06);transition:all .2s; font-size:11px;}
+nav.main-nav{display:flex;width:100%;background:#0A0A1A;border-bottom:4px solid rgba(0,255,255,0.12)}
+.nav-link{flex:1;text-align:center;padding:10px 0;text-decoration:none;color:var(--nav-text);border-right:1px solid rgba(0,255,255,0.06);transition:all .2s;font-size:10px;}
 .nav-link:last-child{border-right:none;}
 .nav-link:hover{color:var(--cyan);text-shadow:0 0 8px var(--cyan);}
 .nav-link.active{background:var(--nav-active-bg);color:var(--nav-active-text);outline:3px solid var(--cyan);}
 .banner{width:100%;height:160px;background-image:url('assets/home.jpg');background-size:cover;background-position:center;margin-top:0;box-shadow:0 6px 18px rgba(0,255,255,0.1);}
 main{max-width:960px;margin:24px auto;padding:12px;text-align:center;}
-.cta{display:inline-block;padding:20px 28px;border-radius:6px;background:var(--yellow);color:#0A0A1A;border:6px solid transparent;font-size:12px;cursor:pointer;box-shadow:0 6px 0 rgba(0,0,0,0.5),0 0 18px rgba(0,255,255,0.12);transition:all .15s;}
+.cta{display:inline-block;padding:16px 26px;border-radius:6px;background:var(--yellow);color:#0A0A1A;border:6px solid transparent;font-size:12px;cursor:pointer;box-shadow:0 6px 0 rgba(0,0,0,0.5),0 0 18px rgba(0,255,255,0.12);transition:all .15s;}
 .cta:hover{transform:scale(1.03);box-shadow:0 10px 30px rgba(0,255,255,0.18),inset 0 0 24px rgba(255,255,255,0.02);}
 .cta:active{transform:translateY(2px);box-shadow:inset 0 6px 0 rgba(0,0,0,0.45);}
 footer{border-top:4px solid rgba(0,255,255,0.06);padding:18px 0;text-align:center;}
 footer a{color:var(--yellow);text-decoration:underline;font-size:11px;}
-
-/* Modal */
 .modal-backdrop{position:fixed;inset:0;background:rgba(0,0,0,0.8);display:none;align-items:center;justify-content:center;z-index:100}
 .modal{background:#0a0a1a;padding:22px;border:4px solid rgba(0,255,255,0.12);border-radius:6px;min-width:320px;max-width:500px;position:relative;box-shadow:0 10px 30px rgba(0,255,255,0.2)}
 .close-btn{position:absolute;right:10px;top:10px;background:transparent;border:none;color:var(--yellow);cursor:pointer;font-size:11px;}
@@ -43,91 +37,86 @@ input[type=checkbox]{transform:scale(1.2);margin-right:8px;}
 .submit-btn.enabled{opacity:1;}
 .field-error{color:var(--error);font-size:9px;margin-top:4px;}
 .success{padding:18px;border:4px solid rgba(0,255,255,0.06);border-radius:6px;font-size:10px;color:var(--yellow);}
-@media(max-width:480px){.banner{height:120px}.nav-link{font-size:9px;padding:12px 0;}}
+@media(max-width:480px){.banner{height:120px}.nav-link{font-size:9px;padding:8px 0;}}
 </style>
 </head>
 <body>
 <header class="site-header">
-  <nav class="main-nav" aria-label="Main navigation">
-    <a class="nav-link active" href="index.html">HOME</a>
-    <a class="nav-link" href="predict.html">PREDICT</a>
-    <a class="nav-link" href="standings.html">STANDINGS</a>
-    <a class="nav-link" href="rules.html">RULES</a>
-  </nav>
-  <div class="banner"></div>
+<nav class="main-nav" aria-label="Main navigation">
+<a class="nav-link active" href="index.html">HOME</a>
+<a class="nav-link" href="predict.html">PREDICT</a>
+<a class="nav-link" href="standings.html">STANDINGS</a>
+<a class="nav-link" href="rules.html">RULES</a>
+</nav>
+<div class="banner"></div>
 </header>
-
 <main>
-<h1 style="font-size:14px;margin-bottom:24px">WELCOME TO RETRO FOOTBALL</h1>
+<h1 style="font-size:14px;margin-bottom:24px">WELCOME</h1>
 <button id="openModal" class="cta" aria-haspopup="dialog">REGISTER INTEREST</button>
 </main>
-
 <footer>
-  <a href="privacy.html">Privacy Policy</a>
+<a href="privacy.html">Privacy Policy</a>
 </footer>
-
-<audio id="bgAudio" src="assets/go.mp3" preload="auto" playsinline></audio>
+<audio id="bgAudio" src="assets/go.mp3" preload="auto" playsinline autoplay loop></audio>
 
 <div id="modalBackdrop" class="modal-backdrop" role="dialog" aria-modal="true" aria-hidden="true">
-  <div class="modal" role="document" aria-labelledby="modalTitle">
-    <button class="close-btn" id="closeModal">✕</button>
-    <h2 id="modalTitle">REGISTER INTEREST</h2>
-    <form id="interestForm">
-      <div class="form-row">
-        <label for="email">Email address</label>
-        <input id="email" type="email" required>
-        <div id="emailError" class="field-error"></div>
-      </div>
-      <div class="form-row">
-        <label><input id="agree" type="checkbox"> I agree to the <a href="privacy.html" target="_blank" style="color:var(--cyan)">Privacy Policy</a></label>
-        <div id="agreeError" class="field-error"></div>
-      </div>
-      <button type="submit" id="submitBtn" class="submit-btn" disabled>SUBMIT</button>
-    </form>
-  </div>
+<div class="modal" role="document" aria-labelledby="modalTitle">
+<button class="close-btn" id="closeModal">✕</button>
+<h2 id="modalTitle">REGISTER INTEREST</h2>
+<form id="interestForm">
+<div class="form-row">
+<label for="email">Email address</label>
+<input id="email" type="email" required>
+<div id="emailError" class="field-error"></div>
+</div>
+<div class="form-row">
+<label><input id="agree" type="checkbox"> I agree to the <a href="privacy.html" target="_blank" style="color:var(--cyan)">Privacy Policy</a></label>
+<div id="agreeError" class="field-error"></div>
+</div>
+<button type="submit" id="submitBtn" class="submit-btn" disabled>SUBMIT</button>
+</form>
+</div>
 </div>
 
 <script>
-// Audio autoplay
+'use strict';
 const audio=document.getElementById('bgAudio');
 function tryPlay(){audio.play().catch(()=>{});}
 window.addEventListener('load',tryPlay);
 document.addEventListener('visibilitychange',()=>{if(!document.hidden){tryPlay();}});
 
-// Modal
 const openModal=document.getElementById('openModal'),
-      modalBackdrop=document.getElementById('modalBackdrop'),
-      closeModal=document.getElementById('closeModal'),
-      email=document.getElementById('email'),
-      agree=document.getElementById('agree'),
-      submitBtn=document.getElementById('submitBtn'),
-      emailError=document.getElementById('emailError'),
-      agreeError=document.getElementById('agreeError');
+modalBackdrop=document.getElementById('modalBackdrop'),
+closeModal=document.getElementById('closeModal'),
+email=document.getElementById('email'),
+agree=document.getElementById('agree'),
+submitBtn=document.getElementById('submitBtn'),
+emailError=document.getElementById('emailError'),
+agreeError=document.getElementById('agreeError');
 let lastFocused=null;
 openModal.addEventListener('click',()=>{lastFocused=document.activeElement;modalBackdrop.style.display='flex';email.focus();});
 closeModal.addEventListener('click',()=>{modalBackdrop.style.display='none';if(lastFocused) lastFocused.focus();});
 modalBackdrop.addEventListener('click',e=>{if(e.target===modalBackdrop){modalBackdrop.style.display='none';if(lastFocused) lastFocused.focus();}});
 
-// Validation
 function validateEmail(v){return /[^@\s]+@[^@\s]+\.[^@\s]+/.test(v);}
 function updateState(){
-  const okEmail=validateEmail(email.value);
-  email.style.borderColor=okEmail?'':'var(--error)';
-  emailError.textContent=okEmail?'':'Please enter a valid email.';
-  agreeError.textContent=agree.checked?'':'You must agree.';
-  submitBtn.disabled=!(okEmail && agree.checked);
-  submitBtn.classList.toggle('enabled',okEmail && agree.checked);
+const okEmail=validateEmail(email.value);
+email.style.borderColor=okEmail?'':'var(--error)';
+emailError.textContent=okEmail?'':'Please enter a valid email.';
+agreeError.textContent=agree.checked?'':'You must agree.';
+submitBtn.disabled=!(okEmail && agree.checked);
+submitBtn.classList.toggle('enabled',okEmail && agree.checked);
 }
 email.addEventListener('input',updateState);
 agree.addEventListener('change',updateState);
 
 document.getElementById('interestForm').addEventListener('submit',e=>{
-  e.preventDefault();updateState();
-  if(submitBtn.disabled)return;
-  console.log('Submission:',{email:email.value,agree:agree.checked});
-  const modal=modalBackdrop.querySelector('.modal');
-  modal.innerHTML=`<div class="success">Thank you! Your interest has been registered. ✔</div>`;
-  setTimeout(()=>{modalBackdrop.style.display='none';},3000);
+e.preventDefault();updateState();
+if(submitBtn.disabled)return;
+console.log('Submission:',{email:email.value,agree:agree.checked});
+const modal=modalBackdrop.querySelector('.modal');
+modal.innerHTML=`<div class="success">Thank you! Your interest has been registered. ✔</div>`;
+setTimeout(()=>{modalBackdrop.style.display='none';},3000);
 });
 </script>
 </body>
