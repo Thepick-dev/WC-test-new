@@ -1,49 +1,127 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Home — Retro Football</title>
-  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
-  <style>
-    :root{--bg:#0A0A1A;--yellow:#FFD60A;--cyan:#00FFFF;--nav-text:var(--yellow);--nav-active-bg:var(--yellow);--nav-active-text:#0A0A1A;--error:#FF3B3B}
-    *{box-sizing:border-box}
-    html,body{height:100%;margin:0;background:var(--bg);color:var(--yellow);font-family:'Press Start 2P',monospace}
-    header.site-header{position:sticky;top:0;z-index:40;height:160px;display:flex;align-items:flex-end;justify-content:center;border-bottom:6px solid rgba(0,255,255,0.06);box-shadow:0 8px 30px rgba(0,0,0,0.6)}
-    .banner{width:100%;height:160px;background-size:cover;background-position:center;display:flex;align-items:flex-end;justify-content:center;padding:12px}
-    nav.main-nav{position:absolute;left:12px;bottom:12px;display:flex;gap:12px;align-items:center;overflow-x:auto}
-    .nav-link{display:inline-block;padding:10px 14px;border:3px solid rgba(0,255,255,0.12);border-radius:6px;background:transparent;color:var(--nav-text);text-decoration:none;font-size:11px}
-    .nav-link.active{background:var(--nav-active-bg);color:var(--nav-active-text)}
-    main{max-width:960px;margin:28px auto;padding:18px;text-align:center}
-    .cta{display:inline-block;padding:20px 28px;border-radius:6px;background:var(--yellow);color:#0A0A1A;border:6px solid transparent;font-size:12px;cursor:pointer;box-shadow:0 6px 0 rgba(0,0,0,0.5),0 0 18px rgba(0,255,255,0.12);transition:transform .12s ease, box-shadow .12s ease}
-    .cta:hover{transform:scale(1.03);box-shadow:0 10px 30px rgba(0,255,255,0.18), inset 0 0 24px rgba(255,255,255,0.02)}
-    .cta:active{transform:translateY(2px);box-shadow:inset 0 6px 0 rgba(0,0,0,0.45)}
-    footer{border-top:4px solid rgba(0,255,255,0.04);padding:18px 0;text-align:center}
-  </style>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Home — Retro Football</title>
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0A0A1A; --yellow:#FFD60A; --cyan:#00FFFF; --nav-active-text:#0A0A1A; --error:#FF3B3B; --header-height:140px;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{background:var(--bg);color:var(--yellow);font-family:'Press Start 2P', monospace;}
+header.site-header{position:sticky;top:0;background:var(--bg);z-index:50;}
+nav.main-nav{display:flex;width:100%;justify-content:space-between;background:var(--bg);border-bottom:4px solid rgba(0,255,255,0.12);}
+.nav-link{flex:1;text-align:center;padding:12px 0;color:var(--yellow);text-decoration:none;font-size:11px;border:3px solid transparent;transition:all 0.15s ease;}
+.nav-link:hover{outline:3px solid var(--cyan);}
+.nav-link.active{background:var(--yellow);color:var(--nav-active-text);outline:3px solid var(--cyan);}
+.banner{height:var(--header-height);background-image:url('home.jpg');background-size:cover;background-position:center;}
+main{max-width:960px;margin:20px auto;text-align:center;padding:0 12px;}
+.cta{display:inline-block;padding:20px 28px;font-size:12px;color:#0A0A1A;background:var(--yellow);border:6px solid transparent;border-radius:6px;cursor:pointer;box-shadow:0 6px 0 rgba(0,0,0,0.5),0 0 18px rgba(0,255,255,0.12);transition:all 0.12s ease;}
+.cta:hover{transform:scale(1.03);box-shadow:0 10px 30px rgba(0,255,255,0.18),inset 0 0 24px rgba(255,255,255,0.02);}
+.cta:active{transform:translateY(2px);box-shadow:inset 0 6px 0 rgba(0,0,0,0.45);}
+footer{border-top:4px solid rgba(0,255,255,0.04);text-align:center;padding:12px 0;font-size:11px;}
+footer a{color:var(--yellow);text-decoration:underline;}
+.modal-backdrop{position:fixed;inset:0;background:rgba(0,0,0,0.85);display:none;align-items:center;justify-content:center;z-index:100;}
+.modal{background:linear-gradient(180deg,#071024,#0A0A1A);padding:20px;border:6px solid rgba(0,255,255,0.12);border-radius:6px;min-width:280px;max-width:480px;position:relative;}
+.close-btn{position:absolute;top:8px;right:10px;background:none;border:none;color:var(--yellow);font-size:11px;cursor:pointer;}
+input[type=email]{width:100%;padding:10px;border:4px solid rgba(0,255,255,0.06);border-radius:4px;background:transparent;color:var(--yellow);font-size:11px;}
+input[type=checkbox]{transform:scale(1.2);margin-right:8px;}
+.submit-btn{padding:12px 16px;background:var(--yellow);color:#0A0A1A;border-radius:6px;border:none;opacity:0.6;cursor:pointer;}
+.submit-btn.enabled{opacity:1;}
+.field-error{color:var(--error);font-size:9px;margin-top:4px;}
+.success{color:var(--cyan);font-size:11px;margin-top:12px;}
+.play-overlay{position:fixed;bottom:16px;left:16px;background:rgba(0,0,0,0.6);padding:6px 12px;border-radius:6px;cursor:pointer;display:none;z-index:50;}
+@media(max-width:480px){.banner{height:100px;}}
+</style>
 </head>
 <body>
-  <header class="site-header">
-    <div class="banner" style="background-image:url('assets/home.jpg')">
-      <nav class="main-nav" aria-label="Main navigation">
-        <a class="nav-link active" href="home.html">HOME</a>
-        <a class="nav-link" href="predict.html">PREDICT</a>
-        <a class="nav-link" href="standings.html">STANDINGS</a>
-        <a class="nav-link" href="rules.html">RULES</a>
-      </nav>
-    </div>
-  </header>
-  <main>
-    <h1 style="font-size:14px;margin-bottom:24px">WELCOME TO RETRO FOOTBALL</h1>
-    <button id="openModal" class="cta">REGISTER INTEREST</button>
-  </main>
-  <footer>
-    <a href="privacy.html" style="color:var(--yellow);text-decoration:underline;font-size:11px">Privacy Policy</a>
-  </footer>
-  <audio id="bgAudio" src="assets/go.mp3" preload="auto" playsinline></audio>
-  <script>
-    const audio = document.getElementById('bgAudio');
-    window.addEventListener('load',()=>{audio.play().catch(()=>{});});
-    document.addEventListener('visibilitychange',()=>{if(!document.hidden) audio.play().catch(()=>{});});
-  </script>
+
+<header class="site-header">
+  <nav class="main-nav" aria-label="Main Navigation">
+    <a href="home.html" class="nav-link active">HOME</a>
+    <a href="predict.html" class="nav-link">PREDICT</a>
+    <a href="standings.html" class="nav-link">STANDINGS</a>
+    <a href="rules.html" class="nav-link">RULES</a>
+  </nav>
+  <div class="banner"></div>
+</header>
+
+<main>
+  <h1 style="font-size:14px;margin-bottom:24px;">WELCOME TO RETRO FOOTBALL</h1>
+  <button id="openModal" class="cta">REGISTER INTEREST</button>
+</main>
+
+<footer>
+  <a href="privacy.html">Privacy Policy</a>
+</footer>
+
+<audio id="bgAudio" src="go.mp3" preload="auto" playsinline></audio>
+<div id="playOverlay" class="play-overlay" tabindex="0" role="button">▶ Play Music</div>
+
+<div id="modalBackdrop" class="modal-backdrop" role="dialog" aria-modal="true" aria-hidden="true">
+  <div class="modal">
+    <button class="close-btn" id="closeModal">✕</button>
+    <h2>REGISTER INTEREST</h2>
+    <form id="interestForm">
+      <label>Email Address
+        <input type="email" id="email" required>
+        <div id="emailError" class="field-error"></div>
+      </label>
+      <label><input type="checkbox" id="agree"> I agree to the <a href="privacy.html" target="_blank" style="color:var(--cyan)">Privacy Policy</a></label>
+      <div id="agreeError" class="field-error"></div>
+      <button type="submit" id="submitBtn" class="submit-btn" disabled>SUBMIT</button>
+    </form>
+  </div>
+</div>
+
+<script>
+// --- Audio ---
+const audio = document.getElementById('bgAudio');
+const playOverlay = document.getElementById('playOverlay');
+function tryPlay(){ audio.play().then(()=>{playOverlay.style.display='none';}).catch(()=>{playOverlay.style.display='block';}); }
+window.addEventListener('load', tryPlay);
+playOverlay.addEventListener('click', ()=>{ tryPlay(); });
+document.addEventListener('visibilitychange', ()=>{ if(!document.hidden) tryPlay(); });
+
+// --- Modal ---
+const openModal = document.getElementById('openModal');
+const modalBackdrop = document.getElementById('modalBackdrop');
+const closeModal = document.getElementById('closeModal');
+const email = document.getElementById('email');
+const agree = document.getElementById('agree');
+const submitBtn = document.getElementById('submitBtn');
+const emailError = document.getElementById('emailError');
+const agreeError = document.getElementById('agreeError');
+let lastFocused=null;
+function open(){ lastFocused=document.activeElement; modalBackdrop.style.display='flex'; modalBackdrop.setAttribute('aria-hidden','false'); email.focus();}
+function close(){ modalBackdrop.style.display='none'; modalBackdrop.setAttribute('aria-hidden','true'); if(lastFocused) lastFocused.focus();}
+openModal.addEventListener('click', open);
+closeModal.addEventListener('click', close);
+modalBackdrop.addEventListener('click',(e)=>{if(e.target===modalBackdrop) close();});
+document.addEventListener('keydown',(e)=>{if(e.key==='Escape') close();});
+
+function validateEmail(v){ return /[^@\s]+@[^@\s]+\.[^@\s]+/.test(v); }
+function updateState(){
+  const okEmail=validateEmail(email.value);
+  emailError.textContent = okEmail||email.value===''?'':'Please enter a valid email';
+  email.style.borderColor = okEmail?'':'var(--error)';
+  agreeError.textContent = agree.checked?'':'You must agree to the Privacy Policy.';
+  if(okEmail && agree.checked){ submitBtn.disabled=false; submitBtn.classList.add('enabled'); }
+  else { submitBtn.disabled=true; submitBtn.classList.remove('enabled'); }
+}
+email.addEventListener('input',updateState);
+agree.addEventListener('change',updateState);
+
+document.getElementById('interestForm').addEventListener('submit', function(e){
+  e.preventDefault(); updateState();
+  if(submitBtn.disabled) return;
+  console.log('REGISTER INTEREST SUBMISSION:', {email:email.value, agreed:agree.checked});
+  const modal = modalBackdrop.querySelector('.modal');
+  modal.innerHTML = '<div class="success">✔ Thank you! Your interest has been registered.</div>';
+  setTimeout(close,3000);
+});
+</script>
 </body>
 </html>
