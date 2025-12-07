@@ -1,0 +1,319 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Predict — Retro Football</title>
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Bungee&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0A0A1A;
+  --yellow:#FFD60A;
+  --cyan:#00FFFF;
+  --nav-text:var(--yellow);
+  --nav-active-bg:var(--yellow);
+  --nav-active-text:#0A0A1A;
+  font-family:'Press Start 2P',monospace;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;background:var(--bg);color:var(--yellow);font-family:'Press Start 2P',monospace;}
+header.site-header{position:sticky;top:0;z-index:50;padding-top: 12px;}
+nav.main-nav{display:flex;width:100%;justify-content:space-between;background:#0A0A1A;border-bottom:4px solid rgba(0,255,255,0.12)}
+.nav-link{flex:1;text-align:center;padding:14px 0;text-decoration:none;color:var(--nav-text);border-right:1px solid rgba(0,255,255,0.06);transition:all .2s;font-size:11px;}
+.nav-link:last-child{border-right:none;}
+.nav-link:hover{color:var(--cyan);text-shadow:0 0 8px var(--cyan);}
+.nav-link.active{background:var(--nav-active-bg);color:var(--nav-active-text);outline:3px solid var(--cyan);}
+.banner{display:none;}
+
+main{max-width:1100px;margin:18px auto;padding:18px;text-align:center;}
+
+.title-wrap{display:flex;align-items:center;justify-content:center;margin:6px 0 12px;}
+.title{
+  font-family:'Bungee',cursive;
+  font-size:48px;
+  letter-spacing:2px;
+  color:#0ff;
+  text-shadow:
+    0 0 12px #0ff,
+    0 0 24px #f0f,
+    0 0 36px #0ff;
+  padding:8px 12px;
+}
+
+/* form card area with sliding panels */
+.form-shell{position:relative;overflow:hidden;border-radius:12px;max-width:1100px;margin:0 auto;}
+.form-inner{display:flex;transition:transform .45s cubic-bezier(.2,.9,.2,1);width:200%;}
+.panel{width:50%;padding:18px;background:linear-gradient(180deg, rgba(255,255,255,0.01), rgba(0,0,0,0.03));border:6px solid rgba(0,255,255,0.06);min-height:420px;box-sizing:border-box;}
+.main-panel{}
+.side-panel{}
+
+/* small UI bits */
+.form-card{background:transparent;padding:0;border:none;}
+.row{display:flex;flex-wrap:wrap;gap:12px;justify-content:center;margin-bottom:12px;}
+.input{width:240px;display:flex;flex-direction:column;align-items:flex-start;font-size:9px;color:var(--yellow);}
+.input label{font-size:10px;margin-bottom:6px;}
+.input input, .input select{
+  width:100%;padding:10px;border-radius:6px;border:4px solid rgba(0,255,255,0.06);background:transparent;color:var(--yellow);font-family:'Press Start 2P',monospace;font-size:11px;outline:none;
+}
+.input select option{background:#07101a;color:var(--yellow);}
+.instruction{font-size:10px;margin:8px 0;color:var(--cyan);text-shadow:0 0 8px rgba(0,255,255,0.06);}
+
+/* controls */
+.controls{display:flex;justify-content:center;margin-bottom:12px;gap:12px;}
+.button-clear{padding:10px 12px;border-radius:8px;background:transparent;border:4px solid rgba(255,214,10,0.18);font-family:'Press Start 2P',monospace;cursor:pointer;color:var(--yellow);font-size:10px;}
+
+/* Submit button */
+.submit-btn{padding:10px 14px;border-radius:8px;background:transparent;border:6px solid rgba(255,214,10,0.12);font-family:'Press Start 2P',monospace;cursor:not-allowed;color:rgba(255,214,10,0.35);font-size:10px;transition:all .15s;box-shadow: none;}
+.submit-btn.lit{cursor:pointer;color:#0A0A1A;background:var(--yellow);box-shadow:0 10px 30px rgba(255,214,10,0.12),0 0 30px rgba(255,214,10,0.25),0 0 80px rgba(255,214,10,0.08) inset;border-color:rgba(255,214,10,0.9);}
+
+/* groups */
+.groups-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:12px;margin-top:12px}
+.group{background:linear-gradient(180deg, rgba(255,255,255,0.01), rgba(0,0,0,0.04));border:4px solid rgba(0,255,255,0.04);padding:10px;border-radius:8px;min-height:120px;display:flex;flex-direction:column;align-items:center;}
+.group h4{font-size:10px;margin-bottom:8px;color:var(--yellow);text-transform:uppercase;}
+.team-list{display:flex;flex-direction:column;gap:8px;width:100%;}
+.team-btn{font-family:'Press Start 2P',monospace;font-size:10px;padding:8px;border-radius:6px;border:3px solid rgba(0,255,255,0.04);background:transparent;color:var(--yellow);cursor:pointer;text-align:center;outline:none;transition:all .12s;box-shadow:0 6px 0 rgba(0,0,0,0.45);}
+.team-btn:hover{transform:translateY(-2px);box-shadow:0 12px 30px rgba(0,255,255,0.04);color:var(--cyan)}
+.team-btn.selected-2{background:var(--yellow);color:#0A0A1A;box-shadow:0 10px 30px rgba(255,214,10,0.12);border-color:rgba(255,214,10,0.7);}
+.team-btn.selected-3{background:linear-gradient(90deg,#FF3CAC,#FF2FC7);color:#0A0A1A;box-shadow:0 8px 40px rgba(255,50,150,0.18);border-color:rgba(255,50,150,0.6);}
+
+/* slide helpers */
+.form-inner[data-pos="0"]{transform:translateX(0%);}
+.form-inner[data-pos="1"]{transform:translateX(-50%);}
+
+/* side panel */
+.side-panel .row{margin-top:6px;}
+.side-panel .nav-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;}
+.back-btn{padding:8px 10px;border-radius:8px;background:transparent;border:4px solid rgba(0,255,255,0.06);color:var(--yellow);cursor:pointer;font-family:'Press Start 2P',monospace;}
+
+/* footer */
+footer{text-align:center;margin:24px 0;}
+footer a{color:var(--yellow);text-decoration:none;font-size:10px;padding:6px 12px;border:3px solid var(--yellow);border-radius:6px;}
+footer a:hover{color:#0A0A1A;background:var(--yellow);}
+</style>
+</head>
+<body>
+<header class="site-header">
+  <nav class="main-nav" aria-label="Main navigation">
+    <a class="nav-link" href="index.html">HOME</a>
+    <a class="nav-link active" href="predict.html">PREDICT</a>
+    <a class="nav-link" href="standings.html">STANDINGS</a>
+    <a class="nav-link" href="rules.html">RULES</a>
+  </nav>
+  <div class="title-wrap">
+    <div class="title">GOALSTORM!</div>
+  </div>
+</header>
+
+<main>
+<div class="form-shell">
+  <div class="form-inner" id="formInner" data-pos="0">
+    <!-- LEFT panel -->
+    <div class="panel main-panel">
+      <div class="form-card">
+        <div class="row" style="justify-content:center;margin-bottom:6px;">
+          <div class="input" style="width:640px;max-width:100%;">
+            <label for="comboSelect">Pick the combination of players you think will score the most goals in the idea tournament</label>
+            <select id="comboSelect" aria-label="Combo selection">
+              <option value="">-- pick a combo (placeholder) --</option>
+              <!-- FULL 30 combos as original -->
+              <option>Combo 1 - Player A + Player B</option>
+              <option>Combo 2 - Player C + Player D</option>
+              <option>Combo 3 - Player E + Player F</option>
+              <option>Combo 4 - Player G + Player H</option>
+              <option>Combo 5 - Player I + Player J</option>
+              <option>Combo 6 - Player K + Player L</option>
+              <option>Combo 7 - Player M + Player N</option>
+              <option>Combo 8 - Player O + Player P</option>
+              <option>Combo 9 - Player Q + Player R</option>
+              <option>Combo 10 - Player S + Player T</option>
+              <option>Combo 11 - Player U + Player V</option>
+              <option>Combo 12 - Player W + Player X</option>
+              <option>Combo 13 - Player Y + Player Z</option>
+              <option>Combo 14 - Player AA + Player BB</option>
+              <option>Combo 15 - Player CC + Player DD</option>
+              <option>Combo 16 - Player EE + Player FF</option>
+              <option>Combo 17 - Player GG + Player HH</option>
+              <option>Combo 18 - Player II + Player JJ</option>
+              <option>Combo 19 - Player KK + Player LL</option>
+              <option>Combo 20 - Player MM + Player NN</option>
+              <option>Combo 21 - Player OO + Player PP</option>
+              <option>Combo 22 - Player QQ + Player RR</option>
+              <option>Combo 23 - Player SS + Player TT</option>
+              <option>Combo 24 - Player UU + Player VV</option>
+              <option>Combo 25 - Player WW + Player XX</option>
+              <option>Combo 26 - Player YY + Player ZZ</option>
+              <option>Combo 27 - Player AAA + Player BBB</option>
+              <option>Combo 28 - Player CCC + Player DDD</option>
+              <option>Combo 29 - Player EEE + Player FFF</option>
+              <option>Combo 30 - Player GGG + Player HHH</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="row" style="justify-content:center;">
+          <div class="input">
+            <label for="goalsInput">How many goals will be scored in the group stage? (Tiebreaker)</label>
+            <input id="goalsInput" type="number" min="0" placeholder="TOTAL GOALS">
+          </div>
+        </div>
+
+        <div class="instruction" id="groupsInstruction">Pick the team you think will finish second in each group</div>
+        <div class="controls">
+          <button id="clearBtn" class="button-clear" title="Clear selections">CLEAR</button>
+        </div>
+
+        <div class="groups-grid" id="groupsGrid" role="list" aria-label="Groups"></div>
+      </div>
+    </div>
+
+    <!-- RIGHT panel -->
+    <div class="panel side-panel">
+      <div class="side-card">
+        <div class="nav-row">
+          <div style="font-size:10px;color:var(--cyan)">Account</div>
+          <button id="backBtn" class="back-btn" title="Back to picks">BACK</button>
+        </div>
+
+        <div class="row">
+          <div class="input">
+            <label for="nameInput">USERNAME</label>
+            <input id="nameInput" type="text" placeholder="YOUR USERNAME">
+          </div>
+          <div class="input">
+            <label for="emailInput">EMAIL</label>
+            <input id="emailInput" type="email" placeholder="EMAIL@EXAMPLE.COM">
+          </div>
+          <div class="input">
+            <label for="pinInput">4 DIGIT PIN</label>
+            <input id="pinInput" type="text" maxlength="4" inputmode="numeric" pattern="\d{4}" placeholder="1234">
+          </div>
+        </div>
+
+        <div class="controls" style="margin-top:18px;">
+          <button id="submitBtn" class="submit-btn" title="Submit picks">SUBMIT</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</main>
+
+<footer>
+  <a href="privacy.html">Privacy Policy</a>
+</footer>
+
+<audio id="bgAudio" src="assets/ko.mp3" preload="auto" playsinline autoplay loop></audio>
+
+<script>
+const audio=document.getElementById('bgAudio');
+function tryPlay(){audio.play().catch(()=>{});}
+window.addEventListener('load',tryPlay);
+document.addEventListener('visibilitychange',()=>{if(!document.hidden){tryPlay();}});
+
+/* Groups Data */
+const GROUPS = [
+  ["Norway","Ecuador","Germany","Uefa Play-off B"],
+  ["Ghana","Saudi Arabia","South Korea","Croatia"],
+  ["Uefa Play-off C","Curacao","Canada","Belgium"],
+  ["Paraguay","England","Qatar","Austria"],
+  ["South Africa","Haiti","Morocco","Switzerland"],
+  ["United States","Uefa Play-off D","Japan","Fifa Play-off 2"],
+  ["Egypt","Argentina","Uefa Play-off A","Jordan"],
+  ["Netherlands","Uzbekistan","Portugal","Panama"],
+  ["Spain","Mexico","Tunisia","France"],
+  ["Ivory Coast","New Zealand","Scotland","Cape Verde"],
+  ["Brazil","Senegal","Australia","Iran"],
+  ["Algeria","Colombia","Fifa Play-off 1","Uruguay"]
+];
+
+/* State */
+const state = { secondPicks:Array(GROUPS.length).fill(null), thirdPicksIndex:Array(GROUPS.length).fill(null), thirdCount:0 };
+let autoSlideTriggered = false;
+const groupsGrid = document.getElementById('groupsGrid');
+const clearBtn = document.getElementById('clearBtn');
+const formInner = document.getElementById('formInner');
+const comboSelect = document.getElementById('comboSelect');
+const goalsInput = document.getElementById('goalsInput');
+const backBtn = document.getElementById('backBtn');
+const submitBtn = document.getElementById('submitBtn');
+const nameInput = document.getElementById('nameInput');
+const emailInput = document.getElementById('emailInput');
+const pinInput = document.getElementById('pinInput');
+
+/* Render groups */
+function createGroupEl(i, teams){
+  const g = document.createElement('div');
+  g.className='group';
+  g.setAttribute('data-group',i);
+  g.innerHTML=`<h4>GROUP ${i+1}</h4><div class="team-list"></div>`;
+  const list=g.querySelector('.team-list');
+  teams.forEach((team,idx)=>{
+    const btn=document.createElement('button');
+    btn.className='team-btn';
+    btn.type='button';
+    btn.textContent=team;
+    btn.setAttribute('data-group',i);
+    btn.setAttribute('data-index',idx);
+    btn.setAttribute('aria-pressed','false');
+    btn.addEventListener('click',onTeamClick);
+    list.appendChild(btn);
+  });
+  return g;
+}
+function renderGroups(){ groupsGrid.innerHTML=''; GROUPS.forEach((g,i)=>groupsGrid.appendChild(createGroupEl(i,g))); }
+renderGroups();
+
+/* Helpers */
+function btnFor(gIdx,tIdx){ return document.querySelector(`.team-btn[data-group="${gIdx}"][data-index="${tIdx}"]`); }
+function updateUIFromState(){
+  document.querySelectorAll('.team-btn').forEach(b=>b.classList.remove('selected-2','selected-3'));
+  state.secondPicks.forEach((ti,g)=>{ if(ti!==null){ const b=btnFor(g,ti); if(b && state.thirdPicksIndex[g]!==ti) b.classList.add('selected-2'); }});
+  state.thirdPicksIndex.forEach((ti,g)=>{ if(ti!==null){ const b=btnFor(g,ti); if(b){ b.classList.remove('selected-2'); b.classList.add('selected-3'); }}});  
+}
+function flashInstruction(msg){
+  const el=document.getElementById('groupsInstruction');
+  const orig=el.textContent;
+  el.textContent=msg;
+  el.style.color='white';
+  setTimeout(()=>{ el.textContent='Pick the team you think will finish second in each group'; el.style.color='var(--cyan)'; },1200);
+}
+
+/* Click logic for seconds */
+function onTeamClick(e){
+  const btn=e.currentTarget;
+  const g=Number(btn.getAttribute('data-group'));
+  const t=Number(btn.getAttribute('data-index'));
+  const currentSecond=state.secondPicks[g];
+  const currentThird=state.thirdPicksIndex[g];
+
+  // If selecting same again
+  if(currentSecond===t){ state.secondPicks[g]=null; updateUIFromState(); return; }
+  // If selecting 3rd pick
+  if(state.thirdCount<8 && currentSecond!==t && currentThird===null){ state.thirdPicksIndex[g]=t; state.thirdCount++; updateUIFromState(); return; }
+
+  // Normal selection
+  if(currentThird===t){ state.thirdPicksIndex[g]=null; state.thirdCount--; }
+  state.secondPicks[g]=t;
+  updateUIFromState();
+
+  // Auto slide
+  if(!autoSlideTriggered && state.secondPicks.every(v=>v!==null)){ formInner.setAttribute('data-pos','1'); autoSlideTriggered=true; }
+}
+
+/* Clear button */
+clearBtn.addEventListener('click',()=>{
+  state.secondPicks.fill(null); state.thirdPicksIndex.fill(null); state.thirdCount=0;
+  updateUIFromState();
+});
+
+/* Back button */
+backBtn.addEventListener('click',()=>{ formInner.setAttribute('data-pos','0'); autoSlideTriggered=false; });
+
+/* Enable submit only when form complete */
+function checkSubmitReady(){
+  if(comboSelect.value!=="" && goalsInput.value!=="" && state.secondPicks.every(v=>v!==null) && nameInput.value!=="" && emailInput.value!=="" && pinInput.value.length===4){ submitBtn.classList.add('lit'); } else { submitBtn.classList.remove('lit'); } 
+}
+[comboSelect,goalsInput,nameInput,emailInput,pinInput].forEach(el=>el.addEventListener('input',checkSubmitReady));
+</script>
+</body>
+</html>
