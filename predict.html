@@ -1,0 +1,251 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Predict — GOALSTORM!</title>
+
+<!-- Fonts -->
+<link href="https://fonts.googleapis.com/css2?family=Jersey+10&family=Orbitron:wght@400;700&family=Press+Start+2P&display=swap" rel="stylesheet">
+
+<style>
+:root{
+  --bg:#0A0A1A;
+  --cyan:#00F6FF;
+  --yellow:#FFD60A;
+  --pink:#FF2FC7;
+  --third-pink:#FF6EC7;
+  --muted:#F7F7F2;
+  --nav-text:var(--muted);
+  --input-border: rgba(0,246,255,0.08);
+  --card-border: rgba(0,246,255,0.06);
+  font-family:'Press Start 2P',monospace;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+html,body{height:100%;background:var(--bg);color:var(--muted);}
+header.site-header{
+  position:static;
+  padding:12px 0;
+}
+nav.main-nav{display:flex;width:100%;justify-content:space-between;background:transparent;border-bottom:0;padding:6px 0;}
+.nav-link{flex:1;text-align:center;padding:14px 0;text-decoration:none;color:var(--nav-text);transition:all .18s;font-size:11px;cursor:pointer;}
+.nav-link.active{ color:var(--cyan); text-shadow:0 0 10px rgba(0,246,255,0.95); }
+#subTitle{ font-family:'Orbitron',sans-serif;font-weight:700;font-size:20px;color:var(--third-pink);margin:6px 0 0;text-align:center; }
+#pageTitle{ font-family:'Jersey 10',sans-serif;font-size:92px;font-style:italic;margin:6px 0 6px;color:var(--yellow);text-align:center; }
+main{max-width:960px;margin:24px auto;padding:12px;text-align:center;}
+footer{border-top:4px solid rgba(0,246,255,0.03);padding:12px 0;text-align:center;}
+footer a{color:var(--yellow);text-decoration:underline;font-size:10px;}
+.form-card{
+  background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(0,0,0,0.06));
+  border:6px solid var(--card-border);
+  padding:18px;
+  border-radius:12px;
+  display:flex;
+  flex-direction:column;
+  gap:14px;
+}
+.row{display:flex;flex-wrap:wrap;gap:12px;justify-content:center;margin-bottom:6px;}
+.input{width:260px;display:flex;flex-direction:column;align-items:flex-start;font-size:10px;color:var(--muted);}
+.input.center{align-items:center;}
+.input label{font-size:10px;margin-bottom:6px;color:rgba(247,247,242,0.9);text-align:left;width:100%;}
+.input.center label{text-align:center;}
+.input input,.input select{
+  width:100%;padding:12px;border-radius:8px;border:2px solid var(--input-border);
+  background:transparent;color:var(--muted);font-family:'Press Start 2P',monospace;font-size:11px;outline:none;
+  transition:all .18s;min-height:44px;box-shadow: inset 0 1px 0 rgba(255,255,255,0.02);
+}
+.input input::placeholder,.input select{color:rgba(255,214,10,0.35);}
+.input input:focus,.input select:focus{
+  border-color: rgba(0,246,255,0.28);
+  box-shadow:0 0 10px rgba(0,246,255,0.08),0 0 20px rgba(0,246,255,0.06) inset;
+}
+.top-instruction{font-size:10px;margin-bottom:6px;color:var(--yellow);}
+.controls{display:flex;justify-content:center;margin-top:8px;gap:12px;}
+.button-clear{padding:10px 12px;border-radius:8px;background:transparent;border:3px solid rgba(255,214,10,0.12);color:var(--yellow);cursor:pointer;font-size:10px;}
+.button-clear:hover{ background: rgba(255,214,10,0.06); border-color:rgba(255,214,10,0.28);}
+.submit-btn{padding:10px 14px;border-radius:8px;background:transparent;border:6px solid rgba(255,214,10,0.12);font-size:10px;cursor:not-allowed;color:rgba(255,214,10,0.35);}
+.submit-btn.lit{cursor:pointer;color:#0A0A1A;background:var(--yellow);border-color:rgba(255,214,10,0.95);}
+.groups-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:14px;margin-top:10px;}
+.group{background:linear-gradient(180deg, rgba(255,255,255,0.01), rgba(0,0,0,0.04));border:3px solid rgba(0,246,255,0.04);padding:12px;border-radius:10px;min-height:124px;display:flex;flex-direction:column;align-items:center;}
+.group h4{font-size:10px;margin-bottom:8px;color:var(--yellow);text-transform:uppercase;}
+.team-list{display:flex;flex-direction:column;gap:8px;width:100%;}
+.team-btn{font-family:'Press Start 2P',monospace;font-size:10px;padding:8px;border-radius:6px;border:2px solid rgba(0,246,255,0.06);background:transparent;color:var(--muted);cursor:pointer;text-align:center;outline:none;min-height:36px;transition:all .12s;}
+.team-btn.selected-2{background:var(--cyan);color:#0A0A1A;box-shadow:0 10px 30px rgba(0,246,255,0.16);}
+.team-btn.selected-3{background: var(--third-pink);color:#0A0A1A;box-shadow:0 8px 40px rgba(255,110,199,0.18);}
+.team-btn:focus-visible{outline:3px solid rgba(0,246,255,0.16);outline-offset:3px;border-radius:6px;}
+@media(max-width:1100px){.groups-grid{grid-template-columns:repeat(4,1fr)}.input{width:45%}}
+@media(max-width:820px){.groups-grid{grid-template-columns:repeat(2,1fr)}.input{width:100%}.row{flex-direction:column;align-items:center}}
+</style>
+</head>
+<body>
+<header class="site-header">
+  <nav class="main-nav" aria-label="Main navigation">
+    <a class="nav-link" href="index.html">HOME</a>
+    <a class="nav-link active" href="predict.html">PICK</a>
+    <a class="nav-link" href="standings.html">SCORES</a>
+    <a class="nav-link" href="rules.html">RULES</a>
+  </nav>
+  <div style="text-align:center;margin-top:6px;">
+    <div id="pageTitle">GOALSTORM!</div>
+    <div id="subTitle">WORLD CUP 2026</div>
+  </div>
+</header>
+
+<main>
+  <div class="form-card" id="predictCard">
+    <div class="row" id="inputsRow">
+      <div class="input">
+        <label for="nameInput">USERNAME</label>
+        <input id="nameInput" type="text" placeholder="YOUR USERNAME" />
+      </div>
+      <div class="input">
+        <label for="emailInput">EMAIL</label>
+        <input id="emailInput" type="email" placeholder="EMAIL@EXAMPLE.COM" />
+      </div>
+      <div class="input">
+        <label for="pinInput">4 DIGIT PIN</label>
+        <input id="pinInput" type="text" maxlength="4" inputmode="numeric" pattern="\d{4}" placeholder="1234" />
+      </div>
+      <div class="input center">
+        <label for="comboSelect">Pick the combination you think will score the most goals in the whole tournament</label>
+        <select id="comboSelect">
+          <option value="">-- SELECT COMBO --</option>
+          ${Array.from({length:30},(_,i)=>`<option>Combo ${i+1}</option>`).join('')}
+        </select>
+      </div>
+      <div class="input">
+        <label for="goalsInput">How many goals will be scored in the group stage? (Tiebreaker)</label>
+        <input id="goalsInput" type="number" min="0" placeholder="TOTAL GOALS" />
+      </div>
+    </div>
+
+    <div class="top-instruction" id="instruction">Pick the team to come 2nd in each group and THEN the 8 teams to qualify in 3rd place</div>
+
+    <div class="controls">
+      <button id="clearBtn" class="button-clear">CLEAR</button>
+      <button id="submitBtn" class="submit-btn">SUBMIT</button>
+    </div>
+
+    <div class="groups-grid" id="groupsGrid"></div>
+  </div>
+</main>
+
+<footer><a href="privacy.html">Privacy Policy</a></footer>
+
+<script>
+'use strict';
+
+/* ----------------- DATA ----------------- */
+const GROUPS = [
+["Norway","Ecuador","Germany","Uefa Play-off B"],
+["Ghana","Saudi Arabia","South Korea","Croatia"],
+["Uefa Play-off C","Curacao","Canada","Belgium"],
+["Paraguay","England","Qatar","Austria"],
+["South Africa","Haiti","Morocco","Switzerland"],
+["United States","Uefa Play-off D","Japan","Fifa Play-off 2"],
+["Egypt","Argentina","Uefa Play-off A","Jordan"],
+["Netherlands","Uzbekistan","Portugal","Panama"],
+["Spain","Mexico","Tunisia","France"],
+["Ivory Coast","New Zealand","Scotland","Cape Verde"],
+["Brazil","Senegal","Australia","Iran"],
+["Algeria","Colombia","Fifa Play-off 1","Uruguay"]
+];
+
+/* ----------------- STATE ----------------- */
+const state = {
+  secondPicks:Array(GROUPS.length).fill(null),
+  thirdPicks:[],
+  thirdPicksIndex:Array(GROUPS.length).fill(null)
+};
+
+const MAX_SECOND_PER_GROUP=2;
+const MAX_TOTAL_SECOND=20;
+const MAX_THIRD=8;
+
+/* DOM refs */
+const groupsGrid=document.getElementById('groupsGrid');
+const instructionEl=document.getElementById('instruction');
+const clearBtn=document.getElementById('clearBtn');
+const submitBtn=document.getElementById('submitBtn');
+const nameInput=document.getElementById('nameInput');
+
+/* ----------------- INITIAL RENDER ----------------- */
+function createGroupEl(i, teams){
+  const g=document.createElement('div');
+  g.className='group';
+  g.setAttribute('data-group',i);
+  g.innerHTML=`<h4>GROUP ${i+1}</h4><div class="team-list"></div>`;
+  const list=g.querySelector('.team-list');
+  teams.forEach((team,idx)=>{
+    const btn=document.createElement('button');
+    btn.className='team-btn';
+    btn.type='button';
+    btn.textContent=team;
+    btn.setAttribute('data-group',i);
+    btn.setAttribute('data-index',idx);
+    btn.setAttribute('aria-pressed','false');
+    btn.addEventListener('click',()=>onTeamClick(i,idx));
+    list.appendChild(btn);
+  });
+  return g;
+}
+
+function renderGroups(){ groupsGrid.innerHTML=''; GROUPS.forEach((g,i)=>groupsGrid.appendChild(createGroupEl(i,g))); }
+renderGroups();
+
+/* ----------------- LOGIC ----------------- */
+function onTeamClick(group,team){
+  const btn=btnFor(group,team);
+  // handle 2nd-place pick
+  if(!btn.classList.contains('selected-2')){
+    const currentSecondCount=state.secondPicks.filter(x=>x!==null).length;
+    if(currentSecondCount>=MAX_TOTAL_SECOND){
+      flashInstruction('You have selected the maximum 20 second-place teams');
+      return;
+    }
+    state.secondPicks[group]=team;
+    btn.classList.add('selected-2');
+    btn.setAttribute('aria-pressed','true');
+  } else {
+    state.secondPicks[group]=null;
+    btn.classList.remove('selected-2');
+    btn.setAttribute('aria-pressed','false');
+  }
+  checkForSubmit();
+}
+
+function btnFor(g,t){ return document.querySelector(`.team-btn[data-group="${g}"][data-index="${t}"]`); }
+
+function flashInstruction(msg){
+  const orig=instructionEl.textContent;
+  instructionEl.textContent=msg;
+  instructionEl.style.color='white';
+  setTimeout(()=>{ instructionEl.textContent=orig; instructionEl.style.color='var(--yellow)'; },1200);
+}
+
+/* ----------------- INPUT FOCUS ----------------- */
+window.addEventListener('load',()=>{nameInput.focus();});
+
+/* ----------------- CLEAR ----------------- */
+clearBtn.addEventListener('click',()=>{
+  state.secondPicks.fill(null);
+  document.querySelectorAll('.team-btn').forEach(b=>b.classList.remove('selected-2'));
+  nameInput.value=''; document.getElementById('emailInput').value=''; document.getElementById('pinInput').value=''; document.getElementById('goalsInput').value=''; document.getElementById('comboSelect').value='';
+  setSubmitState(false);
+});
+
+/* ----------------- SUBMIT ----------------- */
+function setSubmitState(enabled){
+  submitBtn.disabled=!enabled;
+  if(enabled) submitBtn.classList.add('lit'); else submitBtn.classList.remove('lit');
+}
+
+submitBtn.addEventListener('click',()=>{
+  if(submitBtn.disabled) return;
+  const payload={ username:nameInput.value.trim(), seconds:state.secondPicks };
+  console.log('SUBMIT payload',payload);
+  flashInstruction('SUBMITTED! THANKS');
+});
+</script>
+</body>
+</html>
