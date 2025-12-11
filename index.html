@@ -18,7 +18,6 @@
   --green:#2AFF6B;
   --muted:#F7F7F2;
   --nav-text:var(--muted);
-  --input-border: rgba(0,246,255,0.08);
   --card-border: rgba(0,246,255,0.06);
   font-family:'Press Start 2P',monospace;
 }
@@ -29,7 +28,7 @@ nav.main-nav{display:flex;width:100%;justify-content:space-between;background:tr
 .nav-link{flex:1;text-align:center;padding:14px 0;text-decoration:none;color:var(--nav-text);transition:all .18s;font-size:11px;cursor:pointer;}
 .nav-link.active{ color:var(--cyan); text-shadow:0 0 10px rgba(0,246,255,0.95); }
 #subTitle{ font-family:'Orbitron',sans-serif;font-weight:700;font-size:20px;color:var(--third-pink);margin:6px 0 0;text-align:center; }
-#pageTitle{ font-family:'Jersey 10',sans-serif;font-size:92px;font-style:italic;margin:6px 0 6px;color:var(--yellow);text-align:center; } /* explicit: match Version 2 */
+#pageTitle{ font-family:'Jersey 10',sans-serif;font-size:92px;font-style:italic;margin:6px 0 6px;color:var(--yellow);text-align:center; } /* matched to Version 2 */
 main{max-width:960px;margin:24px auto;padding:12px;text-align:center;}
 footer{border-top:4px solid rgba(0,246,255,0.03);padding:12px 0;text-align:center;}
 footer a{color:var(--yellow);text-decoration:underline;font-size:10px;}
@@ -63,10 +62,10 @@ footer a{color:var(--yellow);text-decoration:underline;font-size:10px;}
 /* active (WELCOME) - filled neon blue */
 .nav-box.active .nav-link-box{ background: var(--cyan); color:#0A0A1A; border-color: var(--cyan); box-shadow:0 0 30px rgba(0,246,255,0.95), inset 0 0 12px rgba(0,246,255,0.18); }
 
-/* disabled boxes: still show neon outline but are not interactive */
-.nav-box.disabled .nav-link-box{ cursor:default; opacity:1; pointer-events:none; filter:grayscale(0); }
+/* disabled boxes: visible neon outline but not interactive */
+.nav-box.disabled .nav-link-box{ cursor:default; pointer-events:none; opacity:1; }
 
-/* subtle hover for the active/available item only */
+/* hover subtle lift for interactive item only */
 .nav-link-box:hover{ transform:translateY(-2px); filter:brightness(1.03); }
 
 /* responsive */
@@ -80,6 +79,7 @@ footer a{color:var(--yellow);text-decoration:underline;font-size:10px;}
 <body>
 <header class="site-header">
   <nav class="main-nav" aria-label="Main navigation">
+    <!-- HOME should be lit up on this page (active) -->
     <a class="nav-link active" href="index.html">HOME</a>
     <a class="nav-link" href="predict.html">PICK</a>
     <a class="nav-link" href="standings.html">SCORES</a>
@@ -93,23 +93,57 @@ footer a{color:var(--yellow);text-decoration:underline;font-size:10px;}
 
 <main>
   <div class="form-card" id="predictCard">
-    <!-- inputs and controls removed per instructions; content moved up -->
+    <!-- All input fields and controls removed (username, email, pin, combo, tiebreaker, clear, submit) per instructions. -->
 
-    <!-- NAV BOXES: only the first (WELCOME) is an active hyperlink; others are non-clickable but have neon outlines -->
+    <!-- NAV BOXES: only the first (WELCOME) is an active hyperlink; other boxes show neon outlines but are not clickable. -->
     <div class="nav-boxes" id="navBoxes">
-      <a class="nav-box border-blue active" href="WELCOME.html"><div class="nav-link-box">WELCOME</div></a>
+      <a class="nav-box border-blue active" href="WELCOME.html" aria-current="page">
+        <div class="nav-link-box">WELCOME</div>
+      </a>
 
-      <div class="nav-box border-yellow disabled"><div class="nav-link-box">COMPETITION PREVIEW</div></div>
-      <div class="nav-box border-pink disabled"><div class="nav-link-box">ROUND 1 PICKS</div></div>
-      <div class="nav-box border-green disabled"><div class="nav-link-box">ROUND 1 RESULTS</div></div>
-      <div class="nav-box border-blue disabled"><div class="nav-link-box">ROUND 1 ROUND UP</div></div>
-      <div class="nav-box border-yellow disabled"><div class="nav-link-box">ROUND 2 PICKS</div></div>
-      <div class="nav-box border-pink disabled"><div class="nav-link-box">ROUND 2 RESULTS</div></div>
-      <div class="nav-box border-green disabled"><div class="nav-link-box">ROUND 2 ROUND UP</div></div>
-      <div class="nav-box border-blue disabled"><div class="nav-link-box">ROUND 3 PICKS</div></div>
-      <div class="nav-box border-yellow disabled"><div class="nav-link-box">ROUND 3 RESULTS</div></div>
-      <div class="nav-box border-pink disabled"><div class="nav-link-box">ROUND 3 ROUND UP</div></div>
-      <div class="nav-box border-green disabled"><div class="nav-link-box">WINNERS</div></div>
+      <div class="nav-box border-yellow disabled" aria-disabled="true" role="link" tabindex="-1">
+        <div class="nav-link-box">COMPETITION PREVIEW</div>
+      </div>
+
+      <div class="nav-box border-pink disabled" aria-disabled="true" role="link" tabindex="-1">
+        <div class="nav-link-box">ROUND 1 PICKS</div>
+      </div>
+
+      <div class="nav-box border-green disabled" aria-disabled="true" role="link" tabindex="-1">
+        <div class="nav-link-box">ROUND 1 RESULTS</div>
+      </div>
+
+      <div class="nav-box border-blue disabled" aria-disabled="true" role="link" tabindex="-1">
+        <div class="nav-link-box">ROUND 1 ROUND UP</div>
+      </div>
+
+      <div class="nav-box border-yellow disabled" aria-disabled="true" role="link" tabindex="-1">
+        <div class="nav-link-box">ROUND 2 PICKS</div>
+      </div>
+
+      <div class="nav-box border-pink disabled" aria-disabled="true" role="link" tabindex="-1">
+        <div class="nav-link-box">ROUND 2 RESULTS</div>
+      </div>
+
+      <div class="nav-box border-green disabled" aria-disabled="true" role="link" tabindex="-1">
+        <div class="nav-link-box">ROUND 2 ROUND UP</div>
+      </div>
+
+      <div class="nav-box border-blue disabled" aria-disabled="true" role="link" tabindex="-1">
+        <div class="nav-link-box">ROUND 3 PICKS</div>
+      </div>
+
+      <div class="nav-box border-yellow disabled" aria-disabled="true" role="link" tabindex="-1">
+        <div class="nav-link-box">ROUND 3 RESULTS</div>
+      </div>
+
+      <div class="nav-box border-pink disabled" aria-disabled="true" role="link" tabindex="-1">
+        <div class="nav-link-box">ROUND 3 ROUND UP</div>
+      </div>
+
+      <div class="nav-box border-green disabled" aria-disabled="true" role="link" tabindex="-1">
+        <div class="nav-link-box">WINNERS</div>
+      </div>
     </div>
 
   </div>
@@ -117,13 +151,43 @@ footer a{color:var(--yellow);text-decoration:underline;font-size:10px;}
 
 <footer><a href="privacy.html">Privacy Policy</a></footer>
 
-<!-- Autoplay audio -->
-<audio id="goAudio" src="go.mp3" autoplay playsinline></audio>
+<!-- Autoplay audio: attempts to play on load; if blocked by browser policy it will attach a one-time user interaction to start playback. -->
+<audio id="goAudio" src="go.mp3" loop preload="auto"></audio>
 
 <script>
-/* Minimal script — navigation items other than WELCOME are intentionally non-interactive.
-   File will be named index.html in the repo as requested; no client-side activation for disabled items. */
 'use strict';
+
+/* Autoplay handling:
+   Modern browsers block autoplay of unmuted audio without user interaction.
+   This script attempts to play immediately; if blocked, it will play on first user gesture.
+*/
+(function(){
+  const audio = document.getElementById('goAudio');
+
+  function tryPlay() {
+    const p = audio.play();
+    if (p !== undefined) {
+      p.then(()=> {
+        // playing
+      }).catch(()=> {
+        // autoplay blocked — wait for first user gesture.
+        const startOnUser = () => {
+          audio.play().catch(()=>{/* ignore */});
+          window.removeEventListener('click', startOnUser, {capture:true});
+          window.removeEventListener('keydown', startOnUser, {capture:true});
+        };
+        window.addEventListener('click', startOnUser, {capture:true, once:true});
+        window.addEventListener('keydown', startOnUser, {capture:true, once:true});
+      });
+    }
+  }
+
+  // small delay to let page rendering complete, then attempt
+  window.addEventListener('load', ()=> {
+    // attempt unmuted play (as requested). If it fails, fallback to user interaction.
+    tryPlay();
+  });
+})();
 </script>
 </body>
 </html>
