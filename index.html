@@ -115,17 +115,16 @@ footer a{color:var(--yellow);text-decoration:underline;font-size:10px;}
 'use strict';
 (function(){
   const audio = document.getElementById('goAudio');
-  function tryPlay() {
-    const p = audio.play();
-    if (p !== undefined) {
-      p.catch(()=> {
-        const start = () => { audio.play().catch(()=>{}); window.removeEventListener('click', start); window.removeEventListener('keydown', start); };
-        window.addEventListener('click', start, {once:true});
-        window.addEventListener('keydown', start, {once:true});
-      });
-    }
+  
+  // Play audio on first user interaction
+  function startAudio() {
+    audio.play().catch(()=>{}); 
+    window.removeEventListener('click', startAudio);
+    window.removeEventListener('keydown', startAudio);
   }
-  window.addEventListener('load', tryPlay);
+
+  window.addEventListener('click', startAudio, {once:true});
+  window.addEventListener('keydown', startAudio, {once:true});
 })();
 </script>
 </body>
