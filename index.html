@@ -1,134 +1,242 @@
-<!doctype html>
+<!doctype html> 
 <html lang="en">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Home — Retro Football</title>
-<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+<title>Predict — GOALSTORM!</title>
+
+<!-- Fonts -->
+<link href="https://fonts.googleapis.com/css2?family=Jersey+10&family=Orbitron:wght@400;700&family=Press+Start+2P&display=swap" rel="stylesheet">
+
 <style>
 :root{
   --bg:#0A0A1A;
+  --cyan:#00F6FF;
   --yellow:#FFD60A;
-  --cyan:#00FFFF;
-  --nav-text:var(--yellow);
-  --nav-active-bg:var(--yellow);
-  --nav-active-text:#0A0A1A;
-  --error:#FF3B3B;
+  --pink:#FF2FC7;
+  --third-pink:#FF6EC7;
+  --green:#2AFF6B;
+  --muted:#F7F7F2;
+  --nav-text:var(--muted);
+  --input-border: rgba(0,246,255,0.08);
+  --card-border: rgba(0,246,255,0.06);
   font-family:'Press Start 2P',monospace;
 }
-*{box-sizing:border-box;margin:0;padding:0}
-html,body{height:100%;background:var(--bg);color:var(--yellow);font-family:'Press Start 2P',monospace;}
-header.site-header{position:sticky;top:0;z-index:50}
-nav.main-nav{display:flex;width:100%;justify-content:space-between;background:#0A0A1A;border-bottom:4px solid rgba(0,255,255,0.12)}
-.nav-link{flex:1;text-align:center;padding:14px 0;text-decoration:none;color:var(--nav-text);border-right:1px solid rgba(0,255,255,0.06);transition:all .2s; font-size:11px;}
-.nav-link:last-child{border-right:none;}
-.nav-link:hover{color:var(--cyan);text-shadow:0 0 8px var(--cyan);}
-.nav-link.active{background:var(--nav-active-bg);color:var(--nav-active-text);outline:3px solid var(--cyan);}
-.banner{width:100%;height:160px;background-image:url('assets/home.jpg');background-size:cover;background-position:center;margin-top:0;box-shadow:0 6px 18px rgba(0,255,255,0.1);}
+*{box-sizing:border-box;margin:0;padding:0;}
+html,body{height:100%;background:var(--bg);color:var(--muted);}
+header.site-header{position:static;padding:12px 0;}
+nav.main-nav{display:flex;width:100%;justify-content:space-between;background:transparent;border-bottom:0;padding:6px 0;}
+.nav-link{flex:1;text-align:center;padding:14px 0;text-decoration:none;color:var(--nav-text);transition:all .18s;font-size:11px;cursor:pointer;}
+.nav-link.active{ color:var(--cyan); text-shadow:0 0 10px rgba(0,246,255,0.95); }
+#subTitle{ font-family:'Orbitron',sans-serif;font-weight:700;font-size:20px;color:var(--third-pink);margin:6px 0 0;text-align:center; }
+#pageTitle{ font-family:'Jersey 10',sans-serif;font-size:92px;font-style:italic;margin:6px 0 6px;color:var(--yellow);text-align:center; }
 main{max-width:960px;margin:24px auto;padding:12px;text-align:center;}
-.cta{display:inline-block;padding:20px 28px;border-radius:6px;background:var(--yellow);color:#0A0A1A;border:6px solid transparent;font-size:12px;cursor:pointer;box-shadow:0 6px 0 rgba(0,0,0,0.5),0 0 18px rgba(0,255,255,0.12);transition:all .15s;}
-.cta:hover{transform:scale(1.03);box-shadow:0 10px 30px rgba(0,255,255,0.18),inset 0 0 24px rgba(255,255,255,0.02);}
-.cta:active{transform:translateY(2px);box-shadow:inset 0 6px 0 rgba(0,0,0,0.45);}
-footer{border-top:4px solid rgba(0,255,255,0.06);padding:18px 0;text-align:center;}
-footer a{color:var(--yellow);text-decoration:underline;font-size:11px;}
+footer{border-top:4px solid rgba(0,246,255,0.03);padding:12px 0;text-align:center;}
+footer a{color:var(--yellow);text-decoration:underline;font-size:10px;}
+.form-card{
+  background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(0,0,0,0.06));
+  border:6px solid var(--card-border);
+  padding:18px;
+  border-radius:12px;
+  display:flex;
+  flex-direction:column;
+  gap:14px;
+}
+.row{display:flex;flex-wrap:wrap;gap:12px;justify-content:center;margin-bottom:6px;}
+.input{width:260px;display:flex;flex-direction:column;align-items:flex-start;font-size:10px;color:var(--muted);}
+.input.center{align-items:center;}
+.input label{font-size:10px;margin-bottom:6px;color:rgba(247,247,242,0.9);text-align:left;width:100%;}
+.input.center label{text-align:center;}
+.input input,.input select{
+  width:100%;padding:12px;border-radius:8px;border:2px solid var(--input-border);
+  background:transparent;color:var(--muted);font-family:'Press Start 2P',monospace;font-size:11px;outline:none;
+  transition:all .18s;min-height:44px;box-shadow: inset 0 1px 0 rgba(255,255,255,0.02);
+}
+.input input::placeholder,.input select{color:rgba(255,214,10,0.35);}
+.input input:focus-visible,.input select:focus-visible{
+  border-color: var(--green);
+  box-shadow:0 0 10px var(--green),0 0 20px var(--green) inset;
+}
+.top-instruction{font-size:10px;margin-bottom:6px;color:var(--yellow);}
+.controls{display:flex;justify-content:center;margin-top:8px;gap:12px;}
+.button-clear{padding:10px 12px;border-radius:8px;background:transparent;border:3px solid rgba(255,214,10,0.12);color:var(--yellow);cursor:pointer;font-size:10px;}
+.button-clear:hover{ background: rgba(255,214,10,0.06); border-color:rgba(255,214,10,0.28);}
+.submit-btn{padding:10px 14px;border-radius:8px;background:transparent;border:6px solid rgba(255,214,10,0.12);font-size:10px;cursor:not-allowed;color:rgba(255,214,10,0.35);}
+.submit-btn.lit{cursor:pointer;color:#0A0A1A;background:var(--yellow);border-color:rgba(255,214,10,0.95);}
 
-/* Modal */
-.modal-backdrop{position:fixed;inset:0;background:rgba(0,0,0,0.8);display:none;align-items:center;justify-content:center;z-index:100}
-.modal{background:#0a0a1a;padding:22px;border:4px solid rgba(0,255,255,0.12);border-radius:6px;min-width:320px;max-width:500px;position:relative;box-shadow:0 10px 30px rgba(0,255,255,0.2)}
-.close-btn{position:absolute;right:10px;top:10px;background:transparent;border:none;color:var(--yellow);cursor:pointer;font-size:11px;}
-label{display:block;text-align:left;font-size:9px;margin-bottom:6px;}
-input[type=email]{width:100%;padding:10px;border:4px solid rgba(0,255,255,0.06);border-radius:4px;background:transparent;color:var(--yellow);font-size:11px;}
-input[type=checkbox]{transform:scale(1.2);margin-right:8px;}
-.submit-btn{display:inline-block;padding:10px 14px;border-radius:6px;border:0;background:var(--yellow);color:#0A0A1A;font-size:11px;cursor:pointer;opacity:0.6;}
-.submit-btn.enabled{opacity:1;}
-.field-error{color:var(--error);font-size:9px;margin-top:4px;}
-.success{padding:18px;border:4px solid rgba(0,255,255,0.06);border-radius:6px;font-size:10px;color:var(--yellow);}
-@media(max-width:480px){.banner{height:120px}.nav-link{font-size:9px;padding:12px 0;}}
+/* NAV BOXES (new) */
+.nav-boxes{display:flex;flex-direction:column;gap:12px;align-items:center;margin-top:8px;}
+.nav-box{width:260px;min-height:44px;border-radius:8px;display:block;text-decoration:none;position:relative;overflow:visible;padding:0;}
+.nav-link-box{
+  display:flex;align-items:center;justify-content:center;height:100%;width:100%;
+  border-radius:8px;background:#05050b;color:var(--muted);font-family:'Press Start 2P',monospace;font-size:11px;
+  text-decoration:none;padding:12px;border:2px solid rgba(255,255,255,0.02);
+  box-shadow:0 0 10px rgba(0,0,0,0.6);
+  transition:all .16s;
+}
+/* neon borders and glow */
+.border-blue .nav-link-box{ border-color: rgba(0,246,255,0.6); box-shadow:0 0 12px rgba(0,246,255,0.12), 0 0 24px rgba(0,246,255,0.06); }
+.border-yellow .nav-link-box{ border-color: rgba(255,214,10,0.6); box-shadow:0 0 12px rgba(255,214,10,0.12), 0 0 24px rgba(255,214,10,0.06); }
+.border-pink .nav-link-box{ border-color: rgba(255,47,199,0.6); box-shadow:0 0 12px rgba(255,47,199,0.12), 0 0 24px rgba(255,47,199,0.06); }
+.border-green .nav-link-box{ border-color: rgba(42,255,107,0.6); box-shadow:0 0 12px rgba(42,255,107,0.12), 0 0 24px rgba(42,255,107,0.06); }
+
+/* active (WELCOME) - filled neon blue */
+.nav-box.active .nav-link-box{ background: var(--cyan); color:#0A0A1A; border-color: var(--cyan); box-shadow:0 0 22px rgba(0,246,255,0.95), inset 0 0 12px rgba(0,246,255,0.18); }
+
+/* hover visual */
+.nav-link-box:hover{ transform:translateY(-2px); filter:brightness(1.03); cursor:pointer; }
+
+/* responsive small screens: make boxes full width where appropriate */
+@media (max-width:520px){
+  .input{width:100%;}
+  .nav-box{width:100%;}
+  .form-card{padding:14px;}
+  #pageTitle{font-size:56px;}
+}
 </style>
 </head>
 <body>
 <header class="site-header">
   <nav class="main-nav" aria-label="Main navigation">
-    <a class="nav-link active" href="index.html">HOME</a>
-    <a class="nav-link" href="predict.html">PREDICT</a>
-    <a class="nav-link" href="standings.html">STANDINGS</a>
+    <a class="nav-link" href="index.html">HOME</a>
+    <a class="nav-link active" href="predict.html">PICK</a>
+    <a class="nav-link" href="standings.html">SCORES</a>
     <a class="nav-link" href="rules.html">RULES</a>
   </nav>
-  <div class="banner"></div>
+  <div style="text-align:center;margin-top:6px;">
+    <div id="pageTitle">GOALSTORM!</div>
+    <div id="subTitle">WORLD CUP 2026</div>
+  </div>
 </header>
 
 <main>
-<h1 style="font-size:14px;margin-bottom:24px">WELCOME</h1>
-<button id="openModal" class="cta" aria-haspopup="dialog">REGISTER INTEREST</button>
+  <div class="form-card" id="predictCard">
+    <div class="row" id="inputsRow">
+      <div class="input">
+        <label for="nameInput">USERNAME</label>
+        <input id="nameInput" type="text" placeholder="YOUR USERNAME" />
+      </div>
+      <div class="input">
+        <label for="emailInput">EMAIL</label>
+        <input id="emailInput" type="email" placeholder="EMAIL@EXAMPLE.COM" />
+      </div>
+      <div class="input">
+        <label for="pinInput">4 DIGIT PIN</label>
+        <input id="pinInput" type="text" maxlength="4" inputmode="numeric" pattern="\d{4}" placeholder="1234" />
+      </div>
+      <div class="input center">
+        <label for="comboSelect">Pick the combination you think will score the most goals in the whole tournament</label>
+        <select id="comboSelect">
+          <option value="">-- SELECT COMBO --</option>
+          ${Array.from({length:30},(_,i)=>`<option>Combo ${i+1}</option>`).join('')}
+        </select>
+      </div>
+      <div class="input">
+        <label for="goalsInput">How many goals will be scored in the group stage? (Tiebreaker)</label>
+        <input id="goalsInput" type="number" min="0" placeholder="TOTAL GOALS" />
+      </div>
+    </div>
+
+    <div class="controls">
+      <button id="clearBtn" class="button-clear">CLEAR</button>
+      <button id="submitBtn" class="submit-btn">SUBMIT</button>
+    </div>
+
+    <!-- NAV BOXES: 13 stacked text links -->
+    <div class="nav-boxes" id="navBoxes">
+      <a class="nav-box border-blue active" href="WELCOME.html"><div class="nav-link-box">WELCOME</div></a>
+      <a class="nav-box border-yellow" href="COMPETITION PREVIEW.html"><div class="nav-link-box">COMPETITION PREVIEW</div></a>
+      <a class="nav-box border-pink" href="ROUND 1 PICKS.html"><div class="nav-link-box">ROUND 1 PICKS</div></a>
+      <a class="nav-box border-green" href="ROUND 1 RESULTS.html"><div class="nav-link-box">ROUND 1 RESULTS</div></a>
+      <a class="nav-box border-blue" href="ROUND 1 ROUND UP.html"><div class="nav-link-box">ROUND 1 ROUND UP</div></a>
+      <a class="nav-box border-yellow" href="ROUND 2 PICKS.html"><div class="nav-link-box">ROUND 2 PICKS</div></a>
+      <a class="nav-box border-pink" href="ROUND 2 RESULTS.html"><div class="nav-link-box">ROUND 2 RESULTS</div></a>
+      <a class="nav-box border-green" href="ROUND 2 ROUND UP.html"><div class="nav-link-box">ROUND 2 ROUND UP</div></a>
+      <a class="nav-box border-blue" href="ROUND 3 PICKS.html"><div class="nav-link-box">ROUND 3 PICKS</div></a>
+      <a class="nav-box border-yellow" href="ROUND 3 RESULTS.html"><div class="nav-link-box">ROUND 3 RESULTS</div></a>
+      <a class="nav-box border-pink" href="ROUND 3 ROUND UP.html"><div class="nav-link-box">ROUND 3 ROUND UP</div></a>
+      <a class="nav-box border-green" href="WINNERS.html"><div class="nav-link-box">WINNERS</div></a>
+    </div>
+
+  </div>
 </main>
 
-<footer>
-  <a href="privacy.html">Privacy Policy</a>
-</footer>
+<footer><a href="privacy.html">Privacy Policy</a></footer>
 
-<audio id="bgAudio" src="assets/go.mp3" preload="auto" playsinline></audio>
-
-<div id="modalBackdrop" class="modal-backdrop" role="dialog" aria-modal="true" aria-hidden="true">
-  <div class="modal" role="document" aria-labelledby="modalTitle">
-    <button class="close-btn" id="closeModal">✕</button>
-    <h2 id="modalTitle">REGISTER INTEREST</h2>
-    <form id="interestForm">
-      <div class="form-row">
-        <label for="email">Email address</label>
-        <input id="email" type="email" required>
-        <div id="emailError" class="field-error"></div>
-      </div>
-      <div class="form-row">
-        <label><input id="agree" type="checkbox"> I agree to the <a href="privacy.html" target="_blank" style="color:var(--cyan)">Privacy Policy</a></label>
-        <div id="agreeError" class="field-error"></div>
-      </div>
-      <button type="submit" id="submitBtn" class="submit-btn" disabled>SUBMIT</button>
-    </form>
-  </div>
-</div>
+<!-- Autoplay audio -->
+<audio id="goAudio" src="go.mp3" autoplay playsinline></audio>
 
 <script>
-// Audio autoplay
-const audio=document.getElementById('bgAudio');
-function tryPlay(){audio.play().catch(()=>{});}
-window.addEventListener('load',tryPlay);
-document.addEventListener('visibilitychange',()=>{if(!document.hidden){tryPlay();}});
+'use strict';
 
-// Modal
-const openModal=document.getElementById('openModal'),
-      modalBackdrop=document.getElementById('modalBackdrop'),
-      closeModal=document.getElementById('closeModal'),
-      email=document.getElementById('email'),
-      agree=document.getElementById('agree'),
-      submitBtn=document.getElementById('submitBtn'),
-      emailError=document.getElementById('emailError'),
-      agreeError=document.getElementById('agreeError');
-let lastFocused=null;
-openModal.addEventListener('click',()=>{lastFocused=document.activeElement;modalBackdrop.style.display='flex';email.focus();});
-closeModal.addEventListener('click',()=>{modalBackdrop.style.display='none';if(lastFocused) lastFocused.focus();});
-modalBackdrop.addEventListener('click',e=>{if(e.target===modalBackdrop){modalBackdrop.style.display='none';if(lastFocused) lastFocused.focus();}});
+const clearBtn = document.getElementById('clearBtn');
+const submitBtn = document.getElementById('submitBtn');
+const nameInput = document.getElementById('nameInput');
+const emailInput = document.getElementById('emailInput');
+const pinInput = document.getElementById('pinInput');
+const comboSelect = document.getElementById('comboSelect');
+const goalsInput = document.getElementById('goalsInput');
+const navBoxes = document.getElementById('navBoxes');
 
-// Validation
-function validateEmail(v){return /[^@\s]+@[^@\s]+\.[^@\s]+/.test(v);}
-function updateState(){
-  const okEmail=validateEmail(email.value);
-  email.style.borderColor=okEmail?'':'var(--error)';
-  emailError.textContent=okEmail?'':'Please enter a valid email.';
-  agreeError.textContent=agree.checked?'':'You must agree.';
-  submitBtn.disabled=!(okEmail && agree.checked);
-  submitBtn.classList.toggle('enabled',okEmail && agree.checked);
+/* simple input validation to enable/disable submit */
+function checkForSubmit(){
+  const allFilled = nameInput.value.trim() !== '' &&
+                    emailInput.value.trim() !== '' &&
+                    pinInput.value.trim().length === 4 &&
+                    comboSelect.value !== '' &&
+                    goalsInput.value.trim() !== '';
+  setSubmitState(allFilled);
 }
-email.addEventListener('input',updateState);
-agree.addEventListener('change',updateState);
 
-document.getElementById('interestForm').addEventListener('submit',e=>{
-  e.preventDefault();updateState();
-  if(submitBtn.disabled)return;
-  console.log('Submission:',{email:email.value,agree:agree.checked});
-  const modal=modalBackdrop.querySelector('.modal');
-  modal.innerHTML=`<div class="success">Thank you! Your interest has been registered. ✔</div>`;
-  setTimeout(()=>{modalBackdrop.style.display='none';},3000);
+function setSubmitState(enabled){
+  submitBtn.disabled = !enabled;
+  if(enabled) submitBtn.classList.add('lit'); else submitBtn.classList.remove('lit');
+}
+
+/* submit — simplified payload (no group picks) */
+submitBtn.addEventListener('click', ()=>{
+  if(submitBtn.disabled) return;
+  const payload = {
+    username: nameInput.value.trim(),
+    email: emailInput.value.trim(),
+    pin: pinInput.value,
+    combo: comboSelect.value,
+    goals: goalsInput.value
+  };
+  console.log('SUBMIT payload', payload);
+  // simple visual feedback
+  submitBtn.textContent = 'SUBMITTED';
+  setTimeout(()=> submitBtn.textContent = 'SUBMIT', 1200);
 });
+
+/* clear inputs only */
+clearBtn.addEventListener('click', ()=>{
+  nameInput.value = '';
+  emailInput.value = '';
+  pinInput.value = '';
+  comboSelect.value = '';
+  goalsInput.value = '';
+  setSubmitState(false);
+  nameInput.focus();
+});
+
+/* enable submit checks on input */
+[nameInput, emailInput, pinInput, comboSelect, goalsInput].forEach(el=>{
+  el.addEventListener('input', checkForSubmit);
+});
+
+/* make nav boxes visually toggle active on click (client-side only) */
+navBoxes.addEventListener('click', (e)=>{
+  const box = e.target.closest('.nav-box');
+  if(!box) return;
+  // remove active class from all
+  navBoxes.querySelectorAll('.nav-box').forEach(b=>b.classList.remove('active'));
+  box.classList.add('active');
+  // update visual (first box was intended to be active by default)
+});
+
+/* autofocus name on load */
+window.addEventListener('load', ()=>{ nameInput.focus(); /* audio will attempt to autoplay */ });
 </script>
 </body>
 </html>
