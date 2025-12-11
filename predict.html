@@ -22,26 +22,14 @@
   font-family:'Press Start 2P',monospace;
 }
 *{box-sizing:border-box;margin:0;padding:0;}
-html,body{height:100%;background:var(--bg);color:var(--muted);-webkit-font-smoothing:antialiased;}
+html,body{height:100%;background:var(--bg);color:var(--muted);}
 header.site-header{position:static;padding:12px 0;}
 nav.main-nav{display:flex;width:100%;justify-content:space-between;background:transparent;border-bottom:0;padding:6px 0;}
 .nav-link{flex:1;text-align:center;padding:14px 0;text-decoration:none;color:var(--nav-text);transition:all .18s;font-size:11px;cursor:pointer;}
 .nav-link.active{ color:var(--cyan); text-shadow:0 0 10px rgba(0,246,255,0.95); }
-/* subtle glowy line under active PICK */
-.nav-link.active::after{
-  content:'';
-  display:block;
-  height:2px;
-  width:40%;
-  margin:6px auto 0;
-  background:linear-gradient(90deg,var(--cyan), rgba(0,246,255,0.6));
-  border-radius:3px;
-  box-shadow:0 0 12px rgba(0,246,255,0.28);
-}
-
-#subTitle{ font-family:'Orbitron',sans-serif;font-weight:700;font-size:20px;color:var(--third-pink);margin:2px 0 0;text-align:center; }
-#pageTitle{ font-family:'Jersey 10',sans-serif;font-size:92px;font-style:italic;margin:2px 0 6px;color:var(--yellow);text-align:center; }
-main{max-width:960px;margin:12px auto;padding:12px;text-align:center;} /* moved up to sit closer to header/subtitle */
+#subTitle{ font-family:'Orbitron',sans-serif;font-weight:700;font-size:20px;color:var(--third-pink);margin:6px 0 0;text-align:center; }
+#pageTitle{ font-family:'Jersey 10',sans-serif;font-size:92px;font-style:italic;margin:6px 0 6px;color:var(--yellow);text-align:center; }
+main{max-width:960px;margin:24px auto;padding:12px;text-align:center;}
 footer{border-top:4px solid rgba(0,246,255,0.03);padding:12px 0;text-align:center;}
 footer a{color:var(--yellow);text-decoration:underline;font-size:10px;}
 .form-card{
@@ -74,35 +62,16 @@ footer a{color:var(--yellow);text-decoration:underline;font-size:10px;}
 .button-clear:hover{ background: rgba(255,214,10,0.06); border-color:rgba(255,214,10,0.28);}
 .submit-btn{padding:10px 14px;border-radius:8px;background:transparent;border:6px solid rgba(255,214,10,0.12);font-size:10px;cursor:not-allowed;color:rgba(255,214,10,0.35);}
 .submit-btn.lit{cursor:pointer;color:#0A0A1A;background:var(--yellow);border-color:rgba(255,214,10,0.95);}
-
-/* grid / groups */
 .groups-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px;margin-top:10px;}
-.group{background:linear-gradient(180deg, rgba(255,255,255,0.01), rgba(0,0,0,0.04));border:3px solid rgba(0,246,255,0.04);padding:8px;border-radius:10px;min-height:120px;display:flex;flex-direction:column;align-items:center;}
+.group{background:linear-gradient(180deg, rgba(255,255,255,0.01), rgba(0,0,0,0.04));border:3px solid rgba(0,246,255,0.04);padding:8px;border-radius:10px;min-height:110px;display:flex;flex-direction:column;align-items:center;}
 .group h4{font-size:10px;margin-bottom:6px;color:var(--yellow);text-transform:uppercase;}
-.team-list{display:flex;flex-direction:column;gap:6px;width:100%;}
-.team-row{display:flex;justify-content:space-between;align-items:center;gap:6px;padding:4px;}
-/* block visual for team identity (uniform size) */
-.team-name{font-size:10px;flex:0 0 120px;height:44px;border-radius:8px;display:flex;align-items:center;justify-content:center;padding:6px;box-sizing:border-box;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-family:'Press Start 2P',monospace;}
-/* small action buttons remain as before */
+.team-list{display:flex;flex-direction:column;gap:4px;width:100%;}
+.team-row{display:flex;justify-content:space-between;align-items:center;gap:4px;}
+.team-name{font-size:10px;flex:1;}
 .team-btn{font-family:'Press Start 2P',monospace;font-size:10px;padding:4px 6px;border-radius:6px;border:2px solid rgba(0,246,255,0.06);background:transparent;color:var(--muted);cursor:pointer;text-align:center;outline:none;min-height:28px;transition:all .12s;}
 .team-btn.selected-2{background:var(--yellow);color:#0A0A1A;box-shadow:0 6px 18px rgba(255,214,10,0.16);}
 .team-btn.selected-3{background: var(--third-pink);color:#0A0A1A;box-shadow:0 6px 18px rgba(255,110,199,0.18);}
 .team-btn:focus-visible{outline:3px solid rgba(0,246,255,0.16);outline-offset:3px;border-radius:6px;}
-
-/* visual badge overlay on the block when selected via JS toggles (non-intrusive) */
-.team-name.block-selected-2{ box-shadow: 0 0 0 3px rgba(255,214,10,0.12) inset, 0 6px 18px rgba(255,214,10,0.06); }
-.team-name.block-selected-3{ box-shadow: 0 0 0 3px rgba(255,110,199,0.12) inset, 0 6px 18px rgba(255,110,199,0.06); }
-
-/* ensure reduced motion respected */
-@media (prefers-reduced-motion: reduce){
-  .team-btn, .team-name, .nav-link{ transition:none !important; animation:none !important; }
-}
-
-/* smaller screens tweak */
-@media(max-width:520px){
-  .team-name{flex-basis:110px;height:40px;font-size:9px;}
-  .team-row{gap:4px;}
-}
 </style>
 </head>
 <body>
@@ -134,7 +103,36 @@ footer a{color:var(--yellow);text-decoration:underline;font-size:10px;}
         <label for="comboSelect">Pick your group stage goal-scoring duo!</label>
         <select id="comboSelect">
           <option value="">-- SELECT COMBO --</option>
-          ${Array.from({length:30},(_,i)=>`<option>Combo ${i+1}</option>`).join('')}
+          <option>Combo 1</option>
+          <option>Combo 2</option>
+          <option>Combo 3</option>
+          <option>Combo 4</option>
+          <option>Combo 5</option>
+          <option>Combo 6</option>
+          <option>Combo 7</option>
+          <option>Combo 8</option>
+          <option>Combo 9</option>
+          <option>Combo 10</option>
+          <option>Combo 11</option>
+          <option>Combo 12</option>
+          <option>Combo 13</option>
+          <option>Combo 14</option>
+          <option>Combo 15</option>
+          <option>Combo 16</option>
+          <option>Combo 17</option>
+          <option>Combo 18</option>
+          <option>Combo 19</option>
+          <option>Combo 20</option>
+          <option>Combo 21</option>
+          <option>Combo 22</option>
+          <option>Combo 23</option>
+          <option>Combo 24</option>
+          <option>Combo 25</option>
+          <option>Combo 26</option>
+          <option>Combo 27</option>
+          <option>Combo 28</option>
+          <option>Combo 29</option>
+          <option>Combo 30</option>
         </select>
       </div>
       <div class="input">
@@ -159,7 +157,6 @@ footer a{color:var(--yellow);text-decoration:underline;font-size:10px;}
 <script>
 'use strict';
 
-/* Groups A-L, capitalised exactly as requested */
 const GROUPS = [
   ["MEXICO","SOUTH AFRICA","SOUTH KOREA","DEN/MAC/CZE/IRL"],
   ["CANADA","ITA/NIR/WAL/BOS","QATAR","SWITZERLAND"],
@@ -175,67 +172,55 @@ const GROUPS = [
   ["ENGLAND","CROATIA","GHANA","PANAMA"]
 ];
 
-/* TEAM_COLORS mapping: each entry: { bg: '#hex', text: '#hex' } */
 const TEAM_COLORS = {
-  "MEXICO": { bg: "#006847", text: "#FFFFFF" },
-  "SOUTH AFRICA": { bg: "#007749", text: "#FFFFFF" },
-  "SOUTH KOREA": { bg: "#C60C30", text: "#FFFFFF" },
-  "DEN/MAC/CZE/IRL": { bg: "#6C757D", text: "#FFFFFF" },
-
-  "CANADA": { bg: "#FF0000", text: "#FFFFFF" },
-  "ITA/NIR/WAL/BOS": { bg: "#0052B4", text: "#FFFFFF" },
-  "QATAR": { bg: "#8A1538", text: "#FFFFFF" },
-  "SWITZERLAND": { bg: "#FF0000", text: "#FFFFFF" },
-
-  "BRAZIL": { bg: "#FFCC29", text: "#006400" },
-  "MOROCCO": { bg: "#C1272D", text: "#FFFFFF" },
-  "HAITI": { bg: "#00209F", text: "#FFFFFF" },
-  "SCOTLAND": { bg: "#005EB8", text: "#FFFFFF" },
-
-  "USA": { bg: "#002868", text: "#FFFFFF" },
-  "PARAGUAY": { bg: "#D7141A", text: "#FFFFFF" },
-  "AUSTRALIA": { bg: "#FFCC00", text: "#006400" },
-  "TUR/ROU/SVK/KOS": { bg: "#0D4092", text: "#FFFFFF" },
-
-  "GERMANY": { bg: "#000000", text: "#FFD60A" },
-  "CURAÇAO": { bg: "#00AEEF", text: "#FFFFFF" },
-  "IVORY COAST": { bg: "#F77F00", text: "#0A0A1A" },
-  "ECUADOR": { bg: "#FFD100", text: "#002A5C" },
-
-  "NETHERLANDS": { bg: "#FF6600", text: "#FFFFFF" },
-  "JAPAN": { bg: "#FFFFFF", text: "#BC002D" },
-  "UKR/SWE/POL/ALB": { bg: "#005BBB", text: "#FFFFFF" },
-  "TUNISIA": { bg: "#E70013", text: "#FFFFFF" },
-
-  "BELGIUM": { bg: "#000000", text: "#FFD100" },
-  "EGYPT": { bg: "#CE1126", text: "#FFFFFF" },
-  "IRAN": { bg: "#239F40", text: "#FFFFFF" },
-  "NEW ZEALAND": { bg: "#000000", text: "#FFFFFF" },
-
-  "SPAIN": { bg: "#AA151B", text: "#FFD100" },
-  "CAPE VERDE": { bg: "#003893", text: "#FFFFFF" },
-  "SAUDI ARABIA": { bg: "#006C35", text: "#FFFFFF" },
-  "URUGUAY": { bg: "#6ECFF6", text: "#002A5C" },
-
-  "FRANCE": { bg: "#0055A4", text: "#FFFFFF" },
-  "SENEGAL": { bg: "#00853F", text: "#FFD100" },
-  "BOL/SUR/IRQ": { bg: "#D52B1E", text: "#FFFFFF" },
-  "NORWAY": { bg: "#BA0C2F", text: "#FFFFFF" },
-
-  "ARGENTINA": { bg: "#74ACDF", text: "#FFFFFF" },
-  "ALGERIA": { bg: "#006233", text: "#FFFFFF" },
-  "AUSTRIA": { bg: "#ED2939", text: "#FFFFFF" },
-  "JORDAN": { bg: "#1F305E", text: "#FFFFFF" },
-
-  "PORTUGAL": { bg: "#006600", text: "#FFD100" },
-  "JAM/NCL/DRC": { bg: "#007847", text: "#FFFFFF" },
-  "UZBEKISTAN": { bg: "#1EB53A", text: "#FFFFFF" },
-  "COLOMBIA": { bg: "#FFD700", text: "#0033A0" },
-
-  "ENGLAND": { bg: "#FFFFFF", text: "#CF142B" },
-  "CROATIA": { bg: "#D21F26", text: "#FFFFFF" },
-  "GHANA": { bg: "#FFB400", text: "#000000" },
-  "PANAMA": { bg: "#D21034", text: "#FFFFFF" }
+  "MEXICO":"#006847",
+  "SOUTH AFRICA":"#007749",
+  "SOUTH KOREA":"#003478",
+  "DEN/MAC/CZE/IRL":"#C60C30",
+  "CANADA":"#FF0000",
+  "ITA/NIR/WAL/BOS":"#0052B4",
+  "QATAR":"#8A1538",
+  "SWITZERLAND":"#FF0000",
+  "BRAZIL":"#FFCC29",
+  "MOROCCO":"#C1272D",
+  "HAITI":"#00209F",
+  "SCOTLAND":"#0065BD",
+  "USA":"#B22234",
+  "PARAGUAY":"#D7141A",
+  "AUSTRALIA":"#FFD700",
+  "TUR/ROU/SVK/KOS":"#0D4092",
+  "GERMANY":"#000000",
+  "CURAÇAO":"#00AEEF",
+  "IVORY COAST":"#F77F00",
+  "ECUADOR":"#FFD100",
+  "NETHERLANDS":"#FF6600",
+  "JAPAN":"#BC002D",
+  "UKR/SWE/POL/ALB":"#005BBB",
+  "TUNISIA":"#E70013",
+  "BELGIUM":"#FFD700",
+  "EGYPT":"#CE1126",
+  "IRAN":"#239F40",
+  "NEW ZEALAND":"#000000",
+  "SPAIN":"#AA151B",
+  "CAPE VERDE":"#003893",
+  "SAUDI ARABIA":"#006C35",
+  "URUGUAY":"#00AEEF",
+  "FRANCE":"#0055A4",
+  "SENEGAL":"#00853F",
+  "BOL/SUR/IRQ":"#D52B1E",
+  "NORWAY":"#BA0C2F",
+  "ARGENTINA":"#74ACDF",
+  "ALGERIA":"#006233",
+  "AUSTRIA":"#ED2939",
+  "JORDAN":"#1F305E",
+  "PORTUGAL":"#FF0000",
+  "JAM/NCL/DRC":"#007847",
+  "UZBEKISTAN":"#1EB53A",
+  "COLOMBIA":"#FFD700",
+  "ENGLAND":"#CF142B",
+  "CROATIA":"#FF0000",
+  "GHANA":"#FCD116",
+  "PANAMA":"#D21034"
 };
 
 const MAX_THIRD = 8;
@@ -244,7 +229,6 @@ const state = {
   thirdPicksIndex: Array(GROUPS.length).fill(null)
 };
 
-/* DOM refs */
 const groupsGrid=document.getElementById('groupsGrid');
 const instructionEl=document.getElementById('instruction');
 const clearBtn=document.getElementById('clearBtn');
@@ -254,47 +238,27 @@ const emailInput=document.getElementById('emailInput');
 const comboSelect=document.getElementById('comboSelect');
 const goalsInput=document.getElementById('goalsInput');
 
-/* Flash helper */
 function flashInstruction(msg){
   const orig=instructionEl.textContent;
   instructionEl.textContent=msg;
   instructionEl.style.color='white';
-  clearTimeout(window.__flashTimer);
-  window.__flashTimer = setTimeout(()=>{ instructionEl.textContent=orig; instructionEl.style.color='var(--yellow)'; },1200);
+  setTimeout(()=>{ instructionEl.textContent=orig; instructionEl.style.color='var(--yellow)'; },1200);
 }
 
-/* Create group element: header uses letters A-L */
-function createGroupEl(i, teams){
+function createGroupEl(i,teams){
   const g=document.createElement('div');
   g.className='group';
   g.setAttribute('data-group',i);
-  const letter = String.fromCharCode(65 + i); // A-L
-  g.innerHTML=`<h4>GROUP ${letter}</h4><div class="team-list"></div>`;
+  g.innerHTML=`<h4>GROUP ${i+1}</h4><div class="team-list"></div>`;
   const list=g.querySelector('.team-list');
-  teams.forEach((team, idx)=>{
+  teams.forEach((team,idx)=>{
     const row=document.createElement('div');
     row.className='team-row';
-
     const nameSpan=document.createElement('span');
-    nameSpan.className='team-name team-block';
-    nameSpan.textContent = team;
-
-    // apply colours from TEAM_COLORS map (bg + text)
-    const col = TEAM_COLORS[team];
-    if(col){
-      nameSpan.style.backgroundColor = col.bg;
-      nameSpan.style.color = col.text;
-      // if background is white and text is white/near-white, ensure border for visibility
-      if(col.bg.toUpperCase() === '#FFFFFF' && (col.text === '#FFFFFF' || col.text === 'white')){
-        nameSpan.style.border = '1px solid rgba(0,0,0,0.12)';
-      }
-    } else {
-      nameSpan.style.color = 'var(--muted)';
-      nameSpan.style.backgroundColor = 'transparent';
-    }
-
-    // keep the decorative block non-focusable (controls remain the accessible elements)
-    nameSpan.setAttribute('aria-hidden','true');
+    nameSpan.className='team-name';
+    nameSpan.textContent=team;
+    // apply the team colour to the text
+    nameSpan.style.color = TEAM_COLORS[team] || 'var(--muted)';
 
     const btn2=document.createElement('button');
     btn2.className='team-btn';
@@ -322,63 +286,24 @@ function createGroupEl(i, teams){
   return g;
 }
 
-function renderGroups(){
-  groupsGrid.innerHTML = '';
-  GROUPS.forEach((g,i) => groupsGrid.appendChild(createGroupEl(i,g)));
-}
+function renderGroups(){ groupsGrid.innerHTML=''; GROUPS.forEach((g,i)=>groupsGrid.appendChild(createGroupEl(i,g))); }
 renderGroups();
 
-/* Helper to get the team-name element for a group/team */
-function nameSpanFor(group, teamIndex){
-  return document.querySelector(`.team-row:nth-child(${0})`); // placeholder, replaced below if needed
-}
-function getNameSpan(group, teamIndex){
-  // safer selector: find the group container then nth .team-row
-  const groupEl = document.querySelector(`.group[data-group="${group}"]`);
-  if(!groupEl) return null;
-  const rows = groupEl.querySelectorAll('.team-row');
-  return rows[teamIndex] ? rows[teamIndex].querySelector('.team-name') : null;
-}
-
-/* ---------- Toggle Logic (unchanged behaviour, only small cosmetic class toggles added) ---------- */
+/* ---------- Toggle Logic (unchanged) ---------- */
 function toggleSecond(group,team,btn){
   if(state.thirdPicksIndex[group]===team){
     flashInstruction('This team is already selected as 3rd-place');
     return;
   }
-  const nameEl = getNameSpan(group, team);
-
   if(state.secondPicks[group]===team){
-    // deselect
     state.secondPicks[group]=null;
     btn.classList.remove('selected-2');
     btn.setAttribute('aria-pressed','false');
-    if(nameEl) nameEl.classList.remove('block-selected-2');
   } else {
-    // select new second for group: remove any previous selected-2 button & block state in this group
-    const prevIndex = state.secondPicks[group];
-    if(prevIndex !== null){
-      const prevBtn = document.querySelector(`.team-btn[data-group="${group}"][data-index="${prevIndex}"]`);
-      if(prevBtn) { prevBtn.classList.remove('selected-2'); prevBtn.setAttribute('aria-pressed','false'); }
-      const prevName = getNameSpan(group, prevIndex);
-      if(prevName) prevName.classList.remove('block-selected-2');
-    }
     state.secondPicks[group]=team;
     document.querySelectorAll(`.team-btn[data-group="${group}"].selected-2`).forEach(b=>b.classList.remove('selected-2'));
     btn.classList.add('selected-2');
     btn.setAttribute('aria-pressed','true');
-    if(nameEl) nameEl.classList.add('block-selected-2');
-
-    // ensure we don't leave a 3rd badge on the same name (shouldn't happen as prevented earlier, but safe)
-    const prevThird = state.thirdPicksIndex[group];
-    if(prevThird !== null && prevThird === team){
-      // remove third
-      const prevThirdBtn = document.querySelector(`.team-btn[data-group="${group}"][data-index="${prevThird}"]`);
-      if(prevThirdBtn){ prevThirdBtn.classList.remove('selected-3'); prevThirdBtn.setAttribute('aria-pressed','false'); }
-      const prevThirdName = getNameSpan(group, prevThird);
-      if(prevThirdName) prevThirdName.classList.remove('block-selected-3');
-      state.thirdPicksIndex[group] = null;
-    }
   }
   checkForSubmit();
 }
@@ -389,36 +314,26 @@ function toggleThird(group,team,btn){
     return;
   }
   const totalThird = state.thirdPicksIndex.filter(x=>x!==null).length;
-  const nameEl = getNameSpan(group, team);
-
   if(state.thirdPicksIndex[group]===team){
-    // deselect
     state.thirdPicksIndex[group]=null;
     btn.classList.remove('selected-3');
     btn.setAttribute('aria-pressed','false');
-    if(nameEl) nameEl.classList.remove('block-selected-3');
   } else {
     if(totalThird>=MAX_THIRD){
       flashInstruction('You have already selected 8 third-place teams');
       return;
     }
-    // deselect any previous third in this group
-    const prev = state.thirdPicksIndex[group];
-    if(prev!==null){
-      const prevBtn = document.querySelector(`.team-btn[data-group="${group}"][data-index="${prev}"]`);
-      if(prevBtn){ prevBtn.classList.remove('selected-3'); prevBtn.setAttribute('aria-pressed','false'); }
-      const prevName = getNameSpan(group, prev);
-      if(prevName) prevName.classList.remove('block-selected-3');
+    if(state.thirdPicksIndex[group]!==null){
+      const prevBtn = document.querySelector(`.team-btn[data-group="${group}"][aria-pressed="true"].selected-3`);
+      if(prevBtn) prevBtn.classList.remove('selected-3');
     }
     state.thirdPicksIndex[group]=team;
     btn.classList.add('selected-3');
     btn.setAttribute('aria-pressed','true');
-    if(nameEl) nameEl.classList.add('block-selected-3');
   }
   checkForSubmit();
 }
 
-/* ---------- Submit / validation ---------- */
 function checkForSubmit(){
   const allFilled = nameInput.value.trim() && emailInput.value.trim() && comboSelect.value && goalsInput.value.trim()!=='';
   const secondComplete = state.secondPicks.filter(x=>x!==null).length===GROUPS.length;
@@ -427,41 +342,33 @@ function checkForSubmit(){
 }
 
 function setSubmitState(enabled){
-  submitBtn.disabled = !enabled;
+  submitBtn.disabled=!enabled;
   if(enabled) submitBtn.classList.add('lit'); else submitBtn.classList.remove('lit');
 }
 
-/* Submit payload (no pin included) */
-submitBtn.addEventListener('click', ()=>{
+submitBtn.addEventListener('click',()=>{
   if(submitBtn.disabled) return;
-  const payload = {
-    username: nameInput.value.trim(),
-    email: emailInput.value.trim(),
-    combo: comboSelect.value,
-    goals: goalsInput.value,
-    seconds: state.secondPicks.map((t,i)=> t!==null ? GROUPS[i][t] : null),
-    thirds: state.thirdPicksIndex.map((t,i)=> t!==null ? GROUPS[i][t] : null).filter(t=>t!==null)
+  const payload={
+    username:nameInput.value.trim(),
+    email:emailInput.value.trim(),
+    combo:comboSelect.value,
+    goals:goalsInput.value,
+    seconds:state.secondPicks.map((t,i)=>t!==null?GROUPS[i][t]:null),
+    thirds: state.thirdPicksIndex.map((t,i)=>t!==null?GROUPS[i][t]:null).filter(t=>t!==null)
   };
-  console.log('SUBMIT payload', payload);
+  console.log('SUBMIT payload',payload);
   flashInstruction('SUBMITTED! THANKS');
 });
 
-/* Clear resets (PIN removed from UI so nothing to clear) */
-clearBtn.addEventListener('click', ()=>{
+clearBtn.addEventListener('click',()=>{
   state.secondPicks.fill(null);
   state.thirdPicksIndex.fill(null);
   document.querySelectorAll('.team-btn').forEach(b=>b.classList.remove('selected-2','selected-3'));
-  // also clear block-selected classes
-  document.querySelectorAll('.team-name').forEach(n=>n.classList.remove('block-selected-2','block-selected-3'));
   nameInput.value=''; emailInput.value=''; comboSelect.value=''; goalsInput.value='';
   setSubmitState(false);
 });
 
-/* Keyboard access already preserved by existing button focus/keydown handlers (unchanged) */
-
-/* focus username on load */
-window.addEventListener('load', ()=>{ nameInput.focus(); });
-
+window.addEventListener('load',()=>{nameInput.focus();});
 </script>
 </body>
 </html>
