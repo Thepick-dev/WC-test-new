@@ -63,13 +63,12 @@ footer a{color:var(--yellow);text-decoration:underline;font-size:10px;}
 .submit-btn{padding:10px 14px;border-radius:8px;background:transparent;border:6px solid rgba(255,214,10,0.12);font-size:10px;cursor:not-allowed;color:rgba(255,214,10,0.35);}
 .submit-btn.lit{cursor:pointer;color:#0A0A1A;background:var(--yellow);border-color:rgba(255,214,10,0.95);}
 
-/* grid / groups */
 .groups-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:10px;margin-top:10px;}
-.group{background:linear-gradient(180deg, rgba(255,255,255,0.01), rgba(0,0,0,0.04));border:3px solid rgba(0,246,255,0.04);padding:6px 8px;border-radius:10px;min-height:120px;display:flex;flex-direction:column;align-items:center;}
+.group{background:linear-gradient(180deg, rgba(255,255,255,0.01), rgba(0,0,0,0.04));border:3px solid rgba(0,246,255,0.04);padding:8px;border-radius:10px;min-height:140px;display:flex;flex-direction:column;align-items:center;}
 .group h4{font-size:10px;margin-bottom:6px;color:var(--yellow);text-transform:uppercase;}
 .team-list{display:flex;flex-direction:column;gap:6px;width:100%;}
 .team-row{display:flex;justify-content:space-between;align-items:center;gap:6px;padding:4px;}
-.team-name{font-size:10px;flex:1;min-width:100px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;padding:4px;box-sizing:border-box;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-family:'Press Start 2P',monospace;}
+.team-name{font-size:10px;flex:1 1 100px;height:36px;border-radius:8px;display:flex;align-items:center;justify-content:center;padding:6px;box-sizing:border-box;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-family:'Press Start 2P',monospace;}
 .team-btn{font-family:'Press Start 2P',monospace;font-size:10px;padding:4px 6px;border-radius:6px;border:2px solid rgba(0,246,255,0.06);background:transparent;color:var(--muted);cursor:pointer;text-align:center;outline:none;min-height:28px;transition:all .12s;}
 .team-btn.selected-2{background:var(--yellow);color:#0A0A1A;box-shadow:0 6px 18px rgba(255,214,10,0.16);}
 .team-btn.selected-3{background: var(--third-pink);color:#0A0A1A;box-shadow:0 6px 18px rgba(255,110,199,0.18);}
@@ -80,8 +79,9 @@ footer a{color:var(--yellow);text-decoration:underline;font-size:10px;}
 @media (prefers-reduced-motion: reduce){
   .team-btn, .team-name, .nav-link{ transition:none !important; animation:none !important; }
 }
+
 @media(max-width:520px){
-  .team-name{height:28px;font-size:9px;}
+  .team-name{flex-basis:110px;height:32px;font-size:9px;}
   .team-row{gap:4px;}
 }
 </style>
@@ -156,69 +156,73 @@ const GROUPS = [
 ];
 
 const TEAM_COLORS = {
-  "MEXICO": { bg:"#006847", text:"#CE1126" },
-  "SOUTH AFRICA": { bg:"#00843D", text:"#FFD700" },
-  "SOUTH KOREA": { bg:"#CD1041", text:"#FFFFFF" },
-  "DEN/MAC/CZE/IRL": { bg:"#C8102E", text:"#FFFFFF" },
+  "MEXICO": { bg: "#006847", text: "#CE1126" },
+  "SOUTH AFRICA": { bg: "#00843D", text: "#FFD700" },
+  "SOUTH KOREA": { bg: "#CD1041", text: "#FFFFFF" },
+  "DEN/MAC/CZE/IRL": { bg: "#C8102E", text: "#FFFFFF" },
 
-  "CANADA": { bg:"#FF0000", text:"#FFFFFF" },
-  "ITA/NIR/WAL/BOS": { bg:"#0033A0", text:"#FFFFFF" },
-  "QATAR": { bg:"#8A1538", text:"#FFFFFF" },
-  "SWITZERLAND": { bg:"#FF0000", text:"#FFFFFF" },
+  "CANADA": { bg: "#FF0000", text: "#FFFFFF" },
+  "ITA/NIR/WAL/BOS": { bg: "#0033A0", text: "#FFFFFF" },
+  "QATAR": { bg: "#8A1538", text: "#FFFFFF" },
+  "SWITZERLAND": { bg: "#FF0000", text: "#FFFFFF" },
 
-  "BRAZIL": { bg:"#FFCC29", text:"#006400" },
-  "MOROCCO": { bg:"#C1272D", text:"#006233" },
-  "HAITI": { bg:"#00209F", text:"#FFD700" },
-  "SCOTLAND": { bg:"#0065BD", text:"#FFFFFF" },
+  "BRAZIL": { bg: "#FFCC29", text: "#006400" },
+  "MOROCCO": { bg: "#C1272D", text: "#006233" },
+  "HAITI": { bg: "#00209F", text: "#FFD700" },
+  "SCOTLAND": { bg: "#0065BD", text: "#FFFFFF" },
 
-  "USA": { bg:"#002868", text:"#FFFFFF" },
-  "PARAGUAY": { bg:"#D7141A", text:"#FFFFFF" },
-  "AUSTRALIA": { bg:"#FFCC00", text:"#006400" },
-  "TUR/ROU/SVK/KOS": { bg:"#E30B17", text:"#FFFFFF" },
+  "USA": { bg: "#002868", text: "#FFFFFF" },
+  "PARAGUAY": { bg: "#D7141A", text: "#FFFFFF" },
+  "AUSTRALIA": { bg: "#FFCC00", text: "#006400" },
+  "TUR/ROU/SVK/KOS": { bg: "#E30B17", text: "#FFFFFF" },
 
-  "GERMANY": { bg:"#FFFFFF", text:"#000000" },
-  "CURAÇAO": { bg:"#00AEEF", text:"#FFD700" },
-  "IVORY COAST": { bg:"#F77F00", text:"#FFFFFF" },
-  "ECUADOR": { bg:"#FFD100", text:"#0033A0" },
+  "GERMANY": { bg: "#FFFFFF", text: "#000000" },
+  "CURAÇAO": { bg: "#00AEEF", text: "#FFD700" },
+  "IVORY COAST": { bg: "#F77F00", text: "#FFFFFF" },
+  "ECUADOR": { bg: "#FFD100", text: "#0033A0" },
 
-  "NETHERLANDS": { bg:"#FF6600", text:"#FFFFFF" },
-  "JAPAN": { bg:"#001B7A", text:"#FFFFFF" },
-  "UKR/SWE/POL/ALB": { bg:"#005BBB", text:"#FFD700" },
-  "TUNISIA": { bg:"#E70013", text:"#FFFFFF" },
+  "NETHERLANDS": { bg: "#FF6600", text: "#FFFFFF" },
+  "JAPAN": { bg: "#001B7A", text: "#FFFFFF" },
+  "UKR/SWE/POL/ALB": { bg: "#005BBB", text: "#FFD700" },
+  "TUNISIA": { bg: "#E70013", text: "#FFFFFF" },
 
-  "BELGIUM": { bg:"#FF0000", text:"#FFD700" },
-  "EGYPT": { bg:"#CE1126", text:"#FFFFFF" },
-  "IRAN": { bg:"#239F40", text:"#FFFFFF" },
-  "NEW ZEALAND": { bg:"#000000", text:"#FFFFFF" },
+  "BELGIUM": { bg: "#FF0000", text: "#FFD700" },
+  "EGYPT": { bg: "#CE1126", text: "#FFFFFF" },
+  "IRAN": { bg: "#239F40", text: "#FFFFFF" },
+  "NEW ZEALAND": { bg: "#000000", text: "#FFFFFF" },
 
-  "SPAIN": { bg:"#AA151B", text:"#FFD700" },
-  "CAPE VERDE": { bg:"#003893", text:"#FFFFFF" },
-  "SAUDI ARABIA": { bg:"#006C35", text:"#FFFFFF" },
-  "URUGUAY": { bg:"#75AADB", text:"#FFFFFF" },
+  "SPAIN": { bg: "#AA151B", text: "#FFD700" },
+  "CAPE VERDE": { bg: "#003893", text: "#FFFFFF" },
+  "SAUDI ARABIA": { bg: "#006C35", text: "#FFFFFF" },
+  "URUGUAY": { bg: "#75AADB", text: "#FFFFFF" },
 
-  "FRANCE": { bg:"#0055A4", text:"#FFFFFF" },
-  "SENEGAL": { bg:"#00853F", text:"#FFD700" },
-  "BOL/SUR/IRQ": { bg:"#D52B1E", text:"#FFFFFF" },
-  "NORWAY": { bg:"#BA0C2F", text:"#FFFFFF" },
+  "FRANCE": { bg: "#0055A4", text: "#FFFFFF" },
+  "SENEGAL": { bg: "#00853F", text: "#FFD700" },
+  "BOL/SUR/IRQ": { bg: "#D52B1E", text: "#FFFFFF" },
+  "NORWAY": { bg: "#BA0C2F", text: "#FFFFFF" },
 
-  "ARGENTINA": { bg:"#74ACDF", text:"#FFFFFF" },
-  "ALGERIA": { bg:"#006233", text:"#FFFFFF" },
-  "AUSTRIA": { bg:"#ED2939", text:"#FFFFFF" },
-  "JORDAN": { bg:"#1F305E", text:"#FFFFFF" },
+  "ARGENTINA": { bg: "#74ACDF", text: "#FFFFFF" },
+  "ALGERIA": { bg: "#006233", text: "#FFFFFF" },
+  "AUSTRIA": { bg: "#ED2939", text: "#FFFFFF" },
+  "JORDAN": { bg: "#1F305E", text: "#FFFFFF" },
 
-  "PORTUGAL": { bg:"#006600", text:"#FFD700" },
-  "JAM/NCL/DRC": { bg:"#007847", text:"#FFD700" },
-  "UZBEKISTAN": { bg:"#1EB53A", text:"#FFFFFF" },
-  "COLOMBIA": { bg:"#FFD700", text:"#0033A0" },
+  "PORTUGAL": { bg: "#006600", text: "#FFD700" },
+  "JAM/NCL/DRC": { bg: "#007847", text: "#FFD700" },
+  "UZBEKISTAN": { bg: "#1EB53A", text: "#FFFFFF" },
+  "COLOMBIA": { bg: "#FFD700", text: "#0033A0" },
 
-  "ENGLAND": { bg:"#FFFFFF", text:"#CF142B" },
-  "CROATIA": { bg:"#D21F26", text:"#FFFFFF" },
-  "GHANA": { bg:"#FFB400", text:"#000000" },
-  "PANAMA": { bg:"#D21034", text:"#FFFFFF" }
+  "ENGLAND": { bg: "#FFFFFF", text: "#CF142B" },
+  "CROATIA": { bg: "#D21F26", text: "#FFFFFF" },
+  "GHANA": { bg: "#FFB400", text: "#000000" },
+  "PANAMA": { bg: "#D21034", text: "#FFFFFF" }
 };
 
 const MAX_THIRD = 8;
-const state = { secondPicks:Array(GROUPS.length).fill(null), thirdPicksIndex:Array(GROUPS.length).fill(null) };
+const state = {
+  secondPicks: Array(GROUPS.length).fill(null),
+  thirdPicksIndex: Array(GROUPS.length).fill(null)
+};
+
 const groupsGrid=document.getElementById('groupsGrid');
 const instructionEl=document.getElementById('instruction');
 const clearBtn=document.getElementById('clearBtn');
@@ -233,24 +237,63 @@ function flashInstruction(msg){
   instructionEl.textContent=msg;
   instructionEl.style.color='white';
   clearTimeout(window.__flashTimer);
-  window.__flashTimer=setTimeout(()=>{instructionEl.textContent=orig;instructionEl.style.color='var(--yellow)';},1200);
+  window.__flashTimer = setTimeout(()=>{ instructionEl.textContent=orig; instructionEl.style.color='var(--yellow)'; },1200);
 }
 
 function createGroupEl(i, teams){
-  const g=document.createElement('div');g.className='group';g.setAttribute('data-group',i);
-  const letter=String.fromCharCode(65+i);
+  const g=document.createElement('div');
+  g.className='group';
+  g.setAttribute('data-group',i);
+  const letter = String.fromCharCode(65 + i);
   g.innerHTML=`<h4>GROUP ${letter}</h4><div class="team-list"></div>`;
   const list=g.querySelector('.team-list');
   teams.forEach((team, idx)=>{
-    const row=document.createElement('div');row.className='team-row';
-    const nameSpan=document.createElement('span');nameSpan.className='team-name team-block';nameSpan.textContent=team;
-    const col=TEAM_COLORS[team];
-    if(col){ nameSpan.style.backgroundColor=col.bg;nameSpan.style.color=col.text; }
+    const row=document.createElement('div');
+    row.className='team-row';
+
+    const nameSpan=document.createElement('span');
+    nameSpan.className='team-name team-block';
+    nameSpan.textContent = team;
+
+    const col = TEAM_COLORS[team];
+    if(col){
+      nameSpan.style.backgroundColor = col.bg;
+      nameSpan.style.color = col.text;
+    } else {
+      nameSpan.style.color = 'var(--muted)';
+      nameSpan.style.backgroundColor = 'transparent';
+    }
+
     nameSpan.setAttribute('aria-hidden','true');
-    const btn2=document.createElement('button');btn2.className='team-btn';btn2.type='button';btn2.textContent='2nd';
-    btn2.setAttribute('data-group',i);btn2.setAttribute('data-index',idx);btn2.setAttribute('aria-pressed','false');
+
+    const btn2=document.createElement('button');
+    btn2.className='team-btn';
+    btn2.type='button';
+    btn2.textContent='2nd';
+    btn2.setAttribute('data-group',i);
+    btn2.setAttribute('data-index',idx);
+    btn2.setAttribute('aria-pressed','false');
     btn2.addEventListener('click',()=>toggleSecond(i,idx,btn2));
-    const btn3=document.createElement('button');btn3.className='team-btn';btn3.type='button';btn3.textContent='3rd';
-    btn3.setAttribute('data-group',i);btn3.setAttribute('data-index',idx);btn3.setAttribute('aria-pressed','false');
+
+    const btn3=document.createElement('button');
+    btn3.className='team-btn';
+    btn3.type='button';
+    btn3.textContent='3rd';
+    btn3.setAttribute('data-group',i);
+    btn3.setAttribute('data-index',idx);
+    btn3.setAttribute('aria-pressed','false');
     btn3.addEventListener('click',()=>toggleThird(i,idx,btn3));
-    row.appendChild(nameSpan);row.appendChild(btn
+
+    row.appendChild(nameSpan);
+    row.appendChild(btn2);
+    row.appendChild(btn3);
+    list.appendChild(row);
+  });
+  groupsGrid.appendChild(g);
+}
+
+// remaining functions toggleSecond, toggleThird, renderTeams etc. go here
+GROUPS.forEach((teams,i)=>createGroupEl(i,teams));
+</script>
+</body>
+</html>
