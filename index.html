@@ -14,7 +14,7 @@
   --cyan:#00F6FF;
   --yellow:#FFD60A;
   --pink:#FF2FC7;
-  --third-pink:#FF6EC7;
+  --third-pink:#FF6EC7; /* used for pink neon borders */
   --muted:#F7F7F2;
   --card-border: rgba(0,246,255,0.06);
   font-family:'Press Start 2P',monospace;
@@ -26,7 +26,7 @@ html,body{height:100%;background:var(--bg) url('football-pattern.png') repeat ce
 header.site-header{position:static;padding:12px 0;}
 nav.main-nav{display:flex;width:100%;justify-content:space-between;background:transparent;border-bottom:0;padding:6px 0;}
 .nav-link{flex:1;text-align:center;padding:14px 0;text-decoration:none;color:var(--muted);transition:all .18s;font-size:11px;cursor:pointer;}
-.nav-link.active{ color:var(--cyan); text-shadow:0 0 10px rgba(0,246,255,0.95); }
+.nav-link.active{ color:var(--cyan); text-shadow:0 0 14px rgba(0,246,255,1); }
 
 #pageTitle{ font-family:'Jersey 10',sans-serif;font-size:92px;font-style:italic;margin:6px 0 6px;color:var(--yellow);text-align:center; }
 #subTitle{ font-family:'Orbitron',sans-serif;font-weight:700;font-size:20px;color:var(--third-pink);margin:6px 0 0;text-align:center; }
@@ -41,13 +41,6 @@ main{max-width:960px;margin:24px auto;padding:12px;text-align:center;}
   display:flex;
   flex-direction:column;
   gap:14px;
-  opacity:0;
-  transform: translateY(20px);
-  animation: fadeInUp 0.6s forwards;
-}
-
-@keyframes fadeInUp {
-  to { opacity:1; transform:translateY(0); }
 }
 
 .nav-boxes{display:flex;flex-direction:column;gap:12px;align-items:center;margin-top:8px;}
@@ -56,29 +49,29 @@ main{max-width:960px;margin:24px auto;padding:12px;text-align:center;}
   display:flex;align-items:center;justify-content:center;height:100%;width:100%;
   border-radius:8px;background:#05050b;color:var(--muted);font-family:'Press Start 2P',monospace;font-size:11px;
   text-decoration:none;padding:12px;border:2px solid rgba(255,255,255,0.02);
-  box-shadow:0 0 6px rgba(0,0,0,0.6) inset;
+  box-shadow:0 0 8px rgba(0,0,0,0.6) inset;
   transition:all .16s;
 }
-.border-blue .nav-link-box{ border-color: rgba(0,246,255,0.6); box-shadow:0 0 18px rgba(0,246,255,0.12), 0 0 36px rgba(0,246,255,0.06); }
-.border-yellow .nav-link-box{ border-color: rgba(255,214,10,0.6); box-shadow:0 0 18px rgba(255,214,10,0.12), 0 0 36px rgba(255,214,10,0.06); }
-.border-pink .nav-link-box{ border-color: rgba(255,47,199,0.6); box-shadow:0 0 18px rgba(255,47,199,0.12), 0 0 36px rgba(255,47,199,0.06); }
-.border-green .nav-link-box{ border-color: rgba(42,255,107,0.6); box-shadow:0 0 18px rgba(42,255,107,0.12), 0 0 36px rgba(42,255,107,0.06); }
+.border-blue .nav-link-box{ border-color: rgba(0,246,255,1); box-shadow:0 0 24px rgba(0,246,255,0.5), 0 0 48px rgba(0,246,255,0.3); }
+.border-yellow .nav-link-box{ border-color: rgba(255,214,10,1); box-shadow:0 0 24px rgba(255,214,10,0.5), 0 0 48px rgba(255,214,10,0.3); }
+.border-pink .nav-link-box{ border-color: var(--third-pink); box-shadow:0 0 24px var(--third-pink, #FF6EC7), 0 0 48px var(--third-pink, #FF6EC7); }
+.border-green .nav-link-box{ border-color: rgba(42,255,107,1); box-shadow:0 0 24px rgba(42,255,107,0.5), 0 0 48px rgba(42,255,107,0.3); }
 
 .nav-box.active .nav-link-box{
   background: var(--cyan);
   color:#0A0A1A;
   border-color: var(--cyan);
-  box-shadow:0 0 30px rgba(0,246,255,0.95), inset 0 0 12px rgba(0,246,255,0.18);
+  box-shadow:0 0 36px rgba(0,246,255,1), inset 0 0 16px rgba(0,246,255,0.3);
   animation: activeBorder 1.5s ease-in-out infinite alternate;
 }
 
 @keyframes activeBorder {
-  0% { box-shadow:0 0 30px rgba(0,246,255,0.7), inset 0 0 12px rgba(0,246,255,0.1);}
-  100% { box-shadow:0 0 30px rgba(0,246,255,0.95), inset 0 0 12px rgba(0,246,255,0.18);}
+  0% { box-shadow:0 0 36px rgba(0,246,255,0.7), inset 0 0 16px rgba(0,246,255,0.2);}
+  100% { box-shadow:0 0 36px rgba(0,246,255,1), inset 0 0 16px rgba(0,246,255,0.3);}
 }
 
 .nav-box.disabled .nav-link-box{ cursor:default; pointer-events:none; opacity:1; }
-.nav-link-box:hover{ transform:translateY(-2px); filter:brightness(1.03); }
+.nav-link-box:hover{ transform:translateY(-2px); filter:brightness(1.05); }
 
 footer{border-top:4px solid rgba(0,246,255,0.03);padding:12px 0;text-align:center;}
 footer a{color:var(--yellow);text-decoration:underline;font-size:10px;}
