@@ -43,19 +43,20 @@ footer a{color:var(--yellow);text-decoration:underline;font-size:10px;}
   text-align:left;
 }
 .kicker{font-size:10px;color:var(--yellow);letter-spacing:0.06em;text-transform:uppercase;}
+.kicker.center{ text-align:center; } /* added class to center RULES */
 .general-copy{font-size:10px;line-height:1.6;color:var(--muted);white-space:pre-wrap;}
 .carousel{margin-top:6px;position:relative;overflow:hidden;border-radius:10px;min-height:240px;}
 .slides{display:flex;transition:transform .28s ease-in-out;}
 .slide{flex:0 0 100%;padding:18px;box-sizing:border-box;}
 .slide-title{font-size:12px;color:var(--cyan);margin-bottom:8px;text-transform:uppercase;}
+.slide-title.center{ text-align:center; } /* added class to center slide titles */
 .block{background:linear-gradient(180deg, rgba(255,255,255,0.01), rgba(0,0,0,0.02));border:2px solid rgba(0,246,255,0.04);padding:12px;border-radius:8px;margin-bottom:10px;}
 .block h3{font-size:10px;color:var(--yellow);margin-bottom:6px;text-transform:uppercase;}
 .block p{font-size:10px;color:var(--muted);line-height:1.5;margin-bottom:6px;}
-.controls{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-top:6px;}
+.controls{display:flex;justify-content:center;align-items:center;gap:12px;margin-top:6px;} /* keep only dots area centered */
 .controls .dots{display:flex;gap:6px;}
 .dot{width:10px;height:10px;border-radius:3px;background:rgba(255,255,255,0.04);border:2px solid rgba(0,246,255,0.04);cursor:pointer;}
 .dot.active{background:var(--cyan);box-shadow:0 0 10px rgba(0,246,255,0.25);border-color:rgba(0,246,255,0.35);}
-.nav-btn{padding:8px 10px;border-radius:8px;background:transparent;border:3px solid rgba(255,214,10,0.08);color:var(--yellow);cursor:pointer;font-size:10px;}
 .quick-ref{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-top:8px;}
 .ref-item{background:rgba(255,255,255,0.01);padding:8px 10px;border-radius:8px;border:2px solid rgba(0,246,255,0.03);font-size:10px;color:var(--muted);}
 .small{font-size:9px;color:rgba(247,247,242,0.9);}
@@ -66,12 +67,11 @@ footer a{color:var(--yellow);text-decoration:underline;font-size:10px;}
   padding:10px 14px;border-radius:8px;border:2px solid rgba(0,246,255,0.04);
   background:transparent;color:var(--muted);font-size:10px;text-transform:uppercase;cursor:pointer;transition:all .12s;
   box-shadow: inset 0 -6px 10px rgba(0,0,0,0.12);
+  font-family: 'Press Start 2P', monospace; /* ensure pills use Press Start 2P */
 }
 .neon-pill:hover{transform:translateY(-2px);border-color:rgba(0,246,255,0.12);}
 .neon-pill.active{background:var(--cyan);color:#0A0A1A;border-color:rgba(0,246,255,0.95);box-shadow:var(--neon);font-weight:700;}
-.neon-label{font-family:'Orbitron',sans-serif;font-size:11px;display:block;}
-.neon-sub{font-size:8px;color:rgba(255,255,255,0.9);display:block;margin-top:4px;}
-/* keep responsive smaller gaps on mobile */
+.neon-label{display:block;} /* label uses inherited Press Start 2P */
 @media (max-width:640px){
   .neon-selector{flex-direction:column;gap:6px;}
   .neon-pill{width:100%;}
@@ -94,13 +94,12 @@ footer a{color:var(--yellow);text-decoration:underline;font-size:10px;}
 
 <main>
   <div class="card" role="main" aria-labelledby="rulesHeading">
-    <div class="kicker" id="rulesHeading">RULES</div>
+    <div class="kicker center" id="rulesHeading">RULES</div>
 
-    <!-- Top static statement -->
+    <!-- Top static statement (NOTICE heading removed as requested) -->
     <div class="block" aria-live="polite">
-      <h3>NOTICE</h3>
       <p class="general-copy">
-THE PLAYER WITH THE MOST POINTS AT THE END OF THE THREE ROUNDS WILL BE CROWNED THE CHAMPION. DON'T WORRY IF YOU MISS A ROUND - THERE ARE PRIZES AVALIABLE FOR THE WINNERS OF THE INDIVIDUAL ROUNDS.
+The player with the most points at the end of the three rounds will be crowned the champion. Don't worry if you miss a round - there are prizes avaliable for the winners of the individual rounds.
       </p>
     </div>
 
@@ -108,15 +107,12 @@ THE PLAYER WITH THE MOST POINTS AT THE END OF THE THREE ROUNDS WILL BE CROWNED T
     <div class="neon-selector" aria-hidden="false" id="neonSelector" role="tablist" aria-label="Round selector">
       <button class="neon-pill" data-index="0" role="tab" aria-selected="true" id="pill-0">
         <span class="neon-label">ROUND 1</span>
-        <span class="neon-sub">GROUP STAGE</span>
       </button>
       <button class="neon-pill" data-index="1" role="tab" aria-selected="false" id="pill-1">
         <span class="neon-label">ROUND 2</span>
-        <span class="neon-sub">KNOCKOUTS</span>
       </button>
       <button class="neon-pill" data-index="2" role="tab" aria-selected="false" id="pill-2">
         <span class="neon-label">ROUND 3</span>
-        <span class="neon-sub">FINAL STAGE</span>
       </button>
     </div>
 
@@ -126,81 +122,71 @@ THE PLAYER WITH THE MOST POINTS AT THE END OF THE THREE ROUNDS WILL BE CROWNED T
 
         <!-- Slide 1: Round 1 -->
         <section class="slide" aria-labelledby="r1title" id="slide-1">
-          <div class="slide-title" id="r1title">ROUND 1 — TEAM PICKS</div>
+          <div class="slide-title center" id="r1title">ROUND 1</div>
 
           <div class="block" role="region" aria-label="Round 1 description">
             <h3>TEAM PICKS</h3>
             <p class="general-copy">
-PICK THE 12 TEAMS YOU THINK WILL FINISH SECOND IN THE GROUP STAGE AND THE 8 TEAMS YOU THINK WILL QUALIFY AS THE BEST 3RD PLACED TEAMS.
+Pick the 12 teams you think will finish second in the group stage and the 8 teams you think will qualify as the best 3rd placed teams.
 
-FOR EVERY TEAM YOU PICK WHO QUALIFIES FOR THE LAST 32 YOU WIN 2 POINTS. 
+For every team you pick who qualifies for the last 32 you win 2 points. 
 
-FOR EVERY TEAM YOU PLACE CORRECTLY YOU ALSO WIN 2 POINTS.
+For every team you place correctly you also win 2 points.
 
-THEREFORE, IF YOU CORRECTLY PREDICT A TEAM WILL QUALIFY IN 2ND OR 3RD PLACE YOU WILL WIN 4 POINTS. YOU WILL WIN 2 POINTS IF A CHOSEN TEAM QUALIFIES BUT NOT IN THE POSITION YOU PREDICTED. YOU WILL WIN 2 POINTS IF YOU CORRECTLY PREDICT A TEAM TO FINISH 3RD BUT THEY DO NOT QUALIFY.
+Therefore, if you correctly predict a team will qualify in 2nd or 3rd place you will win 4 points. You will win 2 points if a chosen team qualifies but not in the position you predicted. You will win 2 points if you correctly predict a team to finish 3rd but they do not qualify.
             </p>
           </div>
 
           <div class="block">
             <h3>PLAYER PICKS</h3>
             <p class="general-copy">
-PICK ONE COMBO OF PLAYERS FROM THE PRE-SET LIST. YOU WILL GET 2 POINTS FOR EACH GOAL SCORED BY THOSE PLAYERS IN THE GROUP STAGE (SUBJECT TO A COMBINED CAP OF 20 POINTS).
+Pick one combo of players from the pre-set list. You will get 2 points for each goal scored by those players in the group stage (subject to a combined cap of 20 points).
             </p>
           </div>
 
           <div class="block">
             <h3>TIEBREAKER</h3>
             <p class="general-copy">
-SELECT THE TOTAL NUMBER OF GOALS YOU THINK WILL BE SCORED IN THE GROUP STAGE. THIS WILL DETERMINE THE WINNER OF THE ROUND IF TWO OR MORE PLAYERS ARE TIED ON POINTS.
+Select the total number of goals you think will be scored in the group stage. This will determine the winner of the round if two or more players are tied on points.
             </p>
           </div>
 
-          <div class="quick-ref small">
-            <div class="ref-item">Picks: 20</div>
-            <div class="ref-item">Max points: (as stated in rules)</div>
-            <div class="ref-item">Type: team & player picks</div>
-          </div>
         </section>
 
         <!-- Slide 2: Round 2 -->
         <section class="slide" aria-labelledby="r2title" id="slide-2">
-          <div class="slide-title" id="r2title">ROUND 2 — KNOCKOUTS</div>
+          <div class="slide-title center" id="r2title">ROUND 2</div>
 
           <div class="block">
             <h3>TEAM PICKS</h3>
             <p class="general-copy">
-PREDICT THE WINNER OF EACH MATCH IN THE LAST 32, LAST 16 AND QUARTER FINALS. PREDICT WHETHER THAT TEAM WILL WIN THE MATCH IN NORMAL TIME, IN EXTRA TIME OR ON PENALTIES! 
+Predict the winner of each match in the last 32, last 16 and quarter finals. Predict whether that team will win the match in normal time, in extra time or on penalties!
 
-YOU WIN 2 POINTS FOR CORRECTLY PREDICTING THE WINNER OF A MATCH AND A BONUS POINT IF YOU CORRECTLY PREDICT WHETHER THEY DO IT IN NORMAL TIME, IN EXTRA TIME OR ON PENALTIES.
+You win 2 points for correctly predicting the winner of a match and a bonus point if you correctly predict whether they do it in normal time, in extra time or on penalties.
 
-IN THE LAST 16 AND QUARTER FINALS, YOU DO NOT NEED YOUR PREDICTED WINNER TO BEAT THE TEAM THAT YOU PREDICTED THEY WOULD BE PLAYING - YOU WILL STILL EARN POINTS IF THEY BEAT A DIFFERENT TEAM. 
+In the last 16 and quarter finals, you do not need your predicted winner to beat the team that you predicted they would be playing - you will still earn points if they beat a different team.
             </p>
           </div>
 
           <div class="block">
             <h3>PLAYER PICKS</h3>
             <p class="general-copy">
-PICK ONE COMBO OF PLAYERS FROM THE PRE-SET LIST. YOU WILL GET 2 POINTS FOR EACH GOAL SCORED BY THOSE PLAYERS IN THE GROUP STAGE (SUBJECT TO A COMBINED CAP OF 16 POINTS).
+Pick one combo of players from the pre-set list. You will get 2 points for each goal scored by those players in the group stage (subject to a combined cap of 16 points).
             </p>
           </div>
 
           <div class="block">
             <h3>TIEBREAKER</h3>
             <p class="general-copy">
-SELECT THE TOTAL NUMBER OF GOALS YOU THINK WILL BE SCORED IN THE LAST 32, LAST 16 AND QUARTERS (NOT INCLUDING PENALTIES IN SHOOTOUTS). THIS WILL DETERMINE THE WINNER OF THE ROUND IF TWO OR MORE PLAYERS ARE TIED ON POINTS.
+Select the total number of goals you think will be scored in the last 32, last 16 and quarters (not including penalties in shootouts). This will determine the winner of the round if two or more players are tied on points.
             </p>
           </div>
 
-          <div class="quick-ref small">
-            <div class="ref-item">Stage: L32 → L16 → QF</div>
-            <div class="ref-item">Bonus: method of victory</div>
-            <div class="ref-item">Player cap: as stated</div>
-          </div>
         </section>
 
         <!-- Slide 3: Round 3 -->
         <section class="slide" aria-labelledby="r3title" id="slide-3">
-          <div class="slide-title" id="r3title">ROUND 3 — FINAL STAGE</div>
+          <div class="slide-title center" id="r3title">ROUND 3</div>
 
           <div class="block">
             <h3>ANSWER THE FOLLOWING QUESTIONS TO WIN POINTS</h3>
@@ -209,25 +195,17 @@ TBC
             </p>
           </div>
 
-          <div class="quick-ref small">
-            <div class="ref-item">Format: multiple-choice / props</div>
-            <div class="ref-item">High-value final round</div>
-            <div class="ref-item">See top notice for prize details</div>
+          <div class="quick-ref small" aria-hidden="true">
+            <!-- left intentionally minimal for final round -->
           </div>
         </section>
 
       </div> <!-- slides -->
     </div> <!-- carousel -->
 
-    <!-- controls -->
+    <!-- dots only (triangular nav removed) -->
     <div class="controls" aria-hidden="false">
-      <button id="prevBtn" class="nav-btn" aria-label="Previous slide">◀</button>
       <div class="dots" id="dots" role="tablist" aria-label="Carousel slides"></div>
-      <button id="nextBtn" class="nav-btn" aria-label="Next slide">▶</button>
-    </div>
-
-    <div class="small" style="text-align:center;margin-top:6px;">
-      Use left / right arrows to navigate slides. A text-only rules summary is available on request.
     </div>
 
   </div>
@@ -241,8 +219,6 @@ TBC
 
   const slidesEl = document.getElementById('slides');
   const dotsEl = document.getElementById('dots');
-  const prevBtn = document.getElementById('prevBtn');
-  const nextBtn = document.getElementById('nextBtn');
   const pillButtons = Array.from(document.querySelectorAll('.neon-pill'));
   const totalSlides = slidesEl.children.length;
   let index = 0;
@@ -270,11 +246,7 @@ TBC
     });
     // announce for accessibility
     slidesEl.setAttribute('aria-live','polite');
-    // ensure the carousel is visible when switching
-    const carousel = document.querySelector('.carousel');
-    if(carousel){
-      carousel.scrollIntoView({ behavior: 'smooth', block: 'center' });
-    }
+    // note: no scrolling is performed when changing slides (per strict request)
   }
 
   function goTo(i){
@@ -282,23 +254,26 @@ TBC
     update();
   }
 
-  prevBtn.addEventListener('click', ()=>goTo(index - 1));
-  nextBtn.addEventListener('click', ()=>goTo(index + 1));
-
   // neon pill navigation
   pillButtons.forEach(btn=>{
     btn.addEventListener('click', (e)=>{
       const idx = parseInt(btn.getAttribute('data-index'), 10);
       if(!Number.isNaN(idx)) goTo(idx);
+      // prevent any native focus-based scrolling
+      btn.focus({preventScroll:true});
     });
   });
 
-  // keyboard nav (preserve original behavior + number keys)
+  // keyboard nav (number keys)
   window.addEventListener('keydown', (e)=>{
-    if(e.key === 'ArrowLeft') goTo(index - 1);
-    if(e.key === 'ArrowRight') goTo(index + 1);
     if(e.key >= '1' && e.key <= String(totalSlides)) {
       goTo(parseInt(e.key,10) - 1);
+    }
+    if(e.key === 'ArrowLeft') {
+      goTo(index - 1);
+    }
+    if(e.key === 'ArrowRight') {
+      goTo(index + 1);
     }
   });
 
