@@ -27,18 +27,6 @@ header.site-header{position:static;padding:12px 0;}
 nav.main-nav{display:flex;width:100%;justify-content:space-between;background:transparent;border-bottom:0;padding:6px 0;}
 .nav-link{flex:1;text-align:center;padding:14px 0;text-decoration:none;color:var(--nav-text);transition:all .18s;font-size:11px;cursor:pointer;}
 .nav-link.active{ color:var(--cyan); text-shadow:0 0 10px rgba(0,246,255,0.95); }
-/* subtle glowy line under active PICK */
-.nav-link.active::after{
-  content:'';
-  display:block;
-  height:2px;
-  width:40%;
-  margin:6px auto 0;
-  background:linear-gradient(90deg,var(--cyan), rgba(0,246,255,0.6));
-  border-radius:3px;
-  box-shadow:0 0 12px rgba(0,246,255,0.28);
-}
-
 #subTitle{ font-family:'Orbitron',sans-serif;font-weight:700;font-size:20px;color:var(--third-pink);margin:2px 0 0;text-align:center; }
 #pageTitle{ font-family:'Jersey 10',sans-serif;font-size:92px;font-style:italic;margin:2px 0 6px;color:var(--yellow);text-align:center; }
 main{max-width:960px;margin:12px auto;padding:12px;text-align:center;} /* moved up to sit closer to header/subtitle */
