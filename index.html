@@ -1,8 +1,8 @@
-<!doctype html> 
+<!doctype html>
 <html lang="en">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
 <title>Predict — GOALSTORM!</title>
 
 <!-- Fonts -->
@@ -29,7 +29,7 @@ nav.main-nav{display:flex;width:100%;justify-content:space-between;background:tr
 .nav-link{flex:1;text-align:center;padding:14px 0;text-decoration:none;color:var(--nav-text);transition:all .18s;font-size:11px;cursor:pointer;}
 .nav-link.active{ color:var(--cyan); text-shadow:0 0 10px rgba(0,246,255,0.95); }
 #subTitle{ font-family:'Orbitron',sans-serif;font-weight:700;font-size:20px;color:var(--third-pink);margin:6px 0 0;text-align:center; }
-#pageTitle{ font-family:'Jersey 10',sans-serif;font-size:92px;font-style:italic;margin:6px 0 6px;color:var(--yellow);text-align:center; }
+#pageTitle{ font-family:'Jersey 10',sans-serif;font-size:92px;font-style:italic;margin:6px 0 6px;color:var(--yellow);text-align:center; } /* explicit: match Version 2 */
 main{max-width:960px;margin:24px auto;padding:12px;text-align:center;}
 footer{border-top:4px solid rgba(0,246,255,0.03);padding:12px 0;text-align:center;}
 footer a{color:var(--yellow);text-decoration:underline;font-size:10px;}
@@ -42,53 +42,35 @@ footer a{color:var(--yellow);text-decoration:underline;font-size:10px;}
   flex-direction:column;
   gap:14px;
 }
-.row{display:flex;flex-wrap:wrap;gap:12px;justify-content:center;margin-bottom:6px;}
-.input{width:260px;display:flex;flex-direction:column;align-items:flex-start;font-size:10px;color:var(--muted);}
-.input.center{align-items:center;}
-.input label{font-size:10px;margin-bottom:6px;color:rgba(247,247,242,0.9);text-align:left;width:100%;}
-.input.center label{text-align:center;}
-.input input,.input select{
-  width:100%;padding:12px;border-radius:8px;border:2px solid var(--input-border);
-  background:transparent;color:var(--muted);font-family:'Press Start 2P',monospace;font-size:11px;outline:none;
-  transition:all .18s;min-height:44px;box-shadow: inset 0 1px 0 rgba(255,255,255,0.02);
-}
-.input input::placeholder,.input select{color:rgba(255,214,10,0.35);}
-.input input:focus-visible,.input select:focus-visible{
-  border-color: var(--green);
-  box-shadow:0 0 10px var(--green),0 0 20px var(--green) inset;
-}
-.top-instruction{font-size:10px;margin-bottom:6px;color:var(--yellow);}
-.controls{display:flex;justify-content:center;margin-top:8px;gap:12px;}
-.button-clear{padding:10px 12px;border-radius:8px;background:transparent;border:3px solid rgba(255,214,10,0.12);color:var(--yellow);cursor:pointer;font-size:10px;}
-.button-clear:hover{ background: rgba(255,214,10,0.06); border-color:rgba(255,214,10,0.28);}
-.submit-btn{padding:10px 14px;border-radius:8px;background:transparent;border:6px solid rgba(255,214,10,0.12);font-size:10px;cursor:not-allowed;color:rgba(255,214,10,0.35);}
-.submit-btn.lit{cursor:pointer;color:#0A0A1A;background:var(--yellow);border-color:rgba(255,214,10,0.95);}
 
-/* NAV BOXES (new) */
+/* NAV BOXES */
 .nav-boxes{display:flex;flex-direction:column;gap:12px;align-items:center;margin-top:8px;}
-.nav-box{width:260px;min-height:44px;border-radius:8px;display:block;text-decoration:none;position:relative;overflow:visible;padding:0;}
+.nav-box{width:260px;min-height:44px;border-radius:8px;display:block;text-decoration:none;position:relative;padding:0;}
 .nav-link-box{
   display:flex;align-items:center;justify-content:center;height:100%;width:100%;
   border-radius:8px;background:#05050b;color:var(--muted);font-family:'Press Start 2P',monospace;font-size:11px;
   text-decoration:none;padding:12px;border:2px solid rgba(255,255,255,0.02);
-  box-shadow:0 0 10px rgba(0,0,0,0.6);
+  box-shadow:0 0 6px rgba(0,0,0,0.6) inset;
   transition:all .16s;
 }
-/* neon borders and glow */
-.border-blue .nav-link-box{ border-color: rgba(0,246,255,0.6); box-shadow:0 0 12px rgba(0,246,255,0.12), 0 0 24px rgba(0,246,255,0.06); }
-.border-yellow .nav-link-box{ border-color: rgba(255,214,10,0.6); box-shadow:0 0 12px rgba(255,214,10,0.12), 0 0 24px rgba(255,214,10,0.06); }
-.border-pink .nav-link-box{ border-color: rgba(255,47,199,0.6); box-shadow:0 0 12px rgba(255,47,199,0.12), 0 0 24px rgba(255,47,199,0.06); }
-.border-green .nav-link-box{ border-color: rgba(42,255,107,0.6); box-shadow:0 0 12px rgba(42,255,107,0.12), 0 0 24px rgba(42,255,107,0.06); }
+
+/* neon borders and glow for all boxes (including inactive) */
+.border-blue .nav-link-box{ border-color: rgba(0,246,255,0.6); box-shadow:0 0 18px rgba(0,246,255,0.12), 0 0 36px rgba(0,246,255,0.06); }
+.border-yellow .nav-link-box{ border-color: rgba(255,214,10,0.6); box-shadow:0 0 18px rgba(255,214,10,0.12), 0 0 36px rgba(255,214,10,0.06); }
+.border-pink .nav-link-box{ border-color: rgba(255,47,199,0.6); box-shadow:0 0 18px rgba(255,47,199,0.12), 0 0 36px rgba(255,47,199,0.06); }
+.border-green .nav-link-box{ border-color: rgba(42,255,107,0.6); box-shadow:0 0 18px rgba(42,255,107,0.12), 0 0 36px rgba(42,255,107,0.06); }
 
 /* active (WELCOME) - filled neon blue */
-.nav-box.active .nav-link-box{ background: var(--cyan); color:#0A0A1A; border-color: var(--cyan); box-shadow:0 0 22px rgba(0,246,255,0.95), inset 0 0 12px rgba(0,246,255,0.18); }
+.nav-box.active .nav-link-box{ background: var(--cyan); color:#0A0A1A; border-color: var(--cyan); box-shadow:0 0 30px rgba(0,246,255,0.95), inset 0 0 12px rgba(0,246,255,0.18); }
 
-/* hover visual */
-.nav-link-box:hover{ transform:translateY(-2px); filter:brightness(1.03); cursor:pointer; }
+/* disabled boxes: still show neon outline but are not interactive */
+.nav-box.disabled .nav-link-box{ cursor:default; opacity:1; pointer-events:none; filter:grayscale(0); }
 
-/* responsive small screens: make boxes full width where appropriate */
+/* subtle hover for the active/available item only */
+.nav-link-box:hover{ transform:translateY(-2px); filter:brightness(1.03); }
+
+/* responsive */
 @media (max-width:520px){
-  .input{width:100%;}
   .nav-box{width:100%;}
   .form-card{padding:14px;}
   #pageTitle{font-size:56px;}
@@ -98,8 +80,8 @@ footer a{color:var(--yellow);text-decoration:underline;font-size:10px;}
 <body>
 <header class="site-header">
   <nav class="main-nav" aria-label="Main navigation">
-    <a class="nav-link" href="index.html">HOME</a>
-    <a class="nav-link active" href="predict.html">PICK</a>
+    <a class="nav-link active" href="index.html">HOME</a>
+    <a class="nav-link" href="predict.html">PICK</a>
     <a class="nav-link" href="standings.html">SCORES</a>
     <a class="nav-link" href="rules.html">RULES</a>
   </nav>
@@ -111,51 +93,23 @@ footer a{color:var(--yellow);text-decoration:underline;font-size:10px;}
 
 <main>
   <div class="form-card" id="predictCard">
-    <div class="row" id="inputsRow">
-      <div class="input">
-        <label for="nameInput">USERNAME</label>
-        <input id="nameInput" type="text" placeholder="YOUR USERNAME" />
-      </div>
-      <div class="input">
-        <label for="emailInput">EMAIL</label>
-        <input id="emailInput" type="email" placeholder="EMAIL@EXAMPLE.COM" />
-      </div>
-      <div class="input">
-        <label for="pinInput">4 DIGIT PIN</label>
-        <input id="pinInput" type="text" maxlength="4" inputmode="numeric" pattern="\d{4}" placeholder="1234" />
-      </div>
-      <div class="input center">
-        <label for="comboSelect">Pick the combination you think will score the most goals in the whole tournament</label>
-        <select id="comboSelect">
-          <option value="">-- SELECT COMBO --</option>
-          ${Array.from({length:30},(_,i)=>`<option>Combo ${i+1}</option>`).join('')}
-        </select>
-      </div>
-      <div class="input">
-        <label for="goalsInput">How many goals will be scored in the group stage? (Tiebreaker)</label>
-        <input id="goalsInput" type="number" min="0" placeholder="TOTAL GOALS" />
-      </div>
-    </div>
+    <!-- inputs and controls removed per instructions; content moved up -->
 
-    <div class="controls">
-      <button id="clearBtn" class="button-clear">CLEAR</button>
-      <button id="submitBtn" class="submit-btn">SUBMIT</button>
-    </div>
-
-    <!-- NAV BOXES: 13 stacked text links -->
+    <!-- NAV BOXES: only the first (WELCOME) is an active hyperlink; others are non-clickable but have neon outlines -->
     <div class="nav-boxes" id="navBoxes">
       <a class="nav-box border-blue active" href="WELCOME.html"><div class="nav-link-box">WELCOME</div></a>
-      <a class="nav-box border-yellow" href="COMPETITION PREVIEW.html"><div class="nav-link-box">COMPETITION PREVIEW</div></a>
-      <a class="nav-box border-pink" href="ROUND 1 PICKS.html"><div class="nav-link-box">ROUND 1 PICKS</div></a>
-      <a class="nav-box border-green" href="ROUND 1 RESULTS.html"><div class="nav-link-box">ROUND 1 RESULTS</div></a>
-      <a class="nav-box border-blue" href="ROUND 1 ROUND UP.html"><div class="nav-link-box">ROUND 1 ROUND UP</div></a>
-      <a class="nav-box border-yellow" href="ROUND 2 PICKS.html"><div class="nav-link-box">ROUND 2 PICKS</div></a>
-      <a class="nav-box border-pink" href="ROUND 2 RESULTS.html"><div class="nav-link-box">ROUND 2 RESULTS</div></a>
-      <a class="nav-box border-green" href="ROUND 2 ROUND UP.html"><div class="nav-link-box">ROUND 2 ROUND UP</div></a>
-      <a class="nav-box border-blue" href="ROUND 3 PICKS.html"><div class="nav-link-box">ROUND 3 PICKS</div></a>
-      <a class="nav-box border-yellow" href="ROUND 3 RESULTS.html"><div class="nav-link-box">ROUND 3 RESULTS</div></a>
-      <a class="nav-box border-pink" href="ROUND 3 ROUND UP.html"><div class="nav-link-box">ROUND 3 ROUND UP</div></a>
-      <a class="nav-box border-green" href="WINNERS.html"><div class="nav-link-box">WINNERS</div></a>
+
+      <div class="nav-box border-yellow disabled"><div class="nav-link-box">COMPETITION PREVIEW</div></div>
+      <div class="nav-box border-pink disabled"><div class="nav-link-box">ROUND 1 PICKS</div></div>
+      <div class="nav-box border-green disabled"><div class="nav-link-box">ROUND 1 RESULTS</div></div>
+      <div class="nav-box border-blue disabled"><div class="nav-link-box">ROUND 1 ROUND UP</div></div>
+      <div class="nav-box border-yellow disabled"><div class="nav-link-box">ROUND 2 PICKS</div></div>
+      <div class="nav-box border-pink disabled"><div class="nav-link-box">ROUND 2 RESULTS</div></div>
+      <div class="nav-box border-green disabled"><div class="nav-link-box">ROUND 2 ROUND UP</div></div>
+      <div class="nav-box border-blue disabled"><div class="nav-link-box">ROUND 3 PICKS</div></div>
+      <div class="nav-box border-yellow disabled"><div class="nav-link-box">ROUND 3 RESULTS</div></div>
+      <div class="nav-box border-pink disabled"><div class="nav-link-box">ROUND 3 ROUND UP</div></div>
+      <div class="nav-box border-green disabled"><div class="nav-link-box">WINNERS</div></div>
     </div>
 
   </div>
@@ -167,76 +121,9 @@ footer a{color:var(--yellow);text-decoration:underline;font-size:10px;}
 <audio id="goAudio" src="go.mp3" autoplay playsinline></audio>
 
 <script>
+/* Minimal script — navigation items other than WELCOME are intentionally non-interactive.
+   File will be named index.html in the repo as requested; no client-side activation for disabled items. */
 'use strict';
-
-const clearBtn = document.getElementById('clearBtn');
-const submitBtn = document.getElementById('submitBtn');
-const nameInput = document.getElementById('nameInput');
-const emailInput = document.getElementById('emailInput');
-const pinInput = document.getElementById('pinInput');
-const comboSelect = document.getElementById('comboSelect');
-const goalsInput = document.getElementById('goalsInput');
-const navBoxes = document.getElementById('navBoxes');
-
-/* simple input validation to enable/disable submit */
-function checkForSubmit(){
-  const allFilled = nameInput.value.trim() !== '' &&
-                    emailInput.value.trim() !== '' &&
-                    pinInput.value.trim().length === 4 &&
-                    comboSelect.value !== '' &&
-                    goalsInput.value.trim() !== '';
-  setSubmitState(allFilled);
-}
-
-function setSubmitState(enabled){
-  submitBtn.disabled = !enabled;
-  if(enabled) submitBtn.classList.add('lit'); else submitBtn.classList.remove('lit');
-}
-
-/* submit — simplified payload (no group picks) */
-submitBtn.addEventListener('click', ()=>{
-  if(submitBtn.disabled) return;
-  const payload = {
-    username: nameInput.value.trim(),
-    email: emailInput.value.trim(),
-    pin: pinInput.value,
-    combo: comboSelect.value,
-    goals: goalsInput.value
-  };
-  console.log('SUBMIT payload', payload);
-  // simple visual feedback
-  submitBtn.textContent = 'SUBMITTED';
-  setTimeout(()=> submitBtn.textContent = 'SUBMIT', 1200);
-});
-
-/* clear inputs only */
-clearBtn.addEventListener('click', ()=>{
-  nameInput.value = '';
-  emailInput.value = '';
-  pinInput.value = '';
-  comboSelect.value = '';
-  goalsInput.value = '';
-  setSubmitState(false);
-  nameInput.focus();
-});
-
-/* enable submit checks on input */
-[nameInput, emailInput, pinInput, comboSelect, goalsInput].forEach(el=>{
-  el.addEventListener('input', checkForSubmit);
-});
-
-/* make nav boxes visually toggle active on click (client-side only) */
-navBoxes.addEventListener('click', (e)=>{
-  const box = e.target.closest('.nav-box');
-  if(!box) return;
-  // remove active class from all
-  navBoxes.querySelectorAll('.nav-box').forEach(b=>b.classList.remove('active'));
-  box.classList.add('active');
-  // update visual (first box was intended to be active by default)
-});
-
-/* autofocus name on load */
-window.addEventListener('load', ()=>{ nameInput.focus(); /* audio will attempt to autoplay */ });
 </script>
 </body>
 </html>
