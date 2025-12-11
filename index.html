@@ -16,18 +16,17 @@
   --pink:#FF2FC7;
   --third-pink:#FF6EC7;
   --muted:#F7F7F2;
-  --nav-text:var(--muted);
   --card-border: rgba(0,246,255,0.06);
   font-family:'Press Start 2P',monospace;
 }
 
 *{box-sizing:border-box;margin:0;padding:0;}
-html,body{height:100%;background:var(--bg);color:var(--muted);}
+html,body{height:100%;background:var(--bg) url('football-pattern.png') repeat center/cover;color:var(--muted);}
 
 header.site-header{position:static;padding:12px 0;}
 nav.main-nav{display:flex;width:100%;justify-content:space-between;background:transparent;border-bottom:0;padding:6px 0;}
-.nav-link{flex:1;text-align:center;padding:14px 0;text-decoration:none;color:var(--nav-text);transition:all .18s;font-size:11px;cursor:pointer;}
-.nav-link.active{ color:var(--cyan); text-shadow:0 0 10px var(--cyan); }
+.nav-link{flex:1;text-align:center;padding:14px 0;text-decoration:none;color:var(--muted);transition:all .18s;font-size:11px;cursor:pointer;}
+.nav-link.active{ color:var(--cyan); text-shadow:0 0 10px rgba(0,246,255,0.95); }
 
 #pageTitle{ font-family:'Jersey 10',sans-serif;font-size:92px;font-style:italic;margin:6px 0 6px;color:var(--yellow);text-align:center; }
 #subTitle{ font-family:'Orbitron',sans-serif;font-weight:700;font-size:20px;color:var(--third-pink);margin:6px 0 0;text-align:center; }
@@ -42,6 +41,13 @@ main{max-width:960px;margin:24px auto;padding:12px;text-align:center;}
   display:flex;
   flex-direction:column;
   gap:14px;
+  opacity:0;
+  transform: translateY(20px);
+  animation: fadeInUp 0.6s forwards;
+}
+
+@keyframes fadeInUp {
+  to { opacity:1; transform:translateY(0); }
 }
 
 .nav-boxes{display:flex;flex-direction:column;gap:12px;align-items:center;margin-top:8px;}
@@ -63,6 +69,12 @@ main{max-width:960px;margin:24px auto;padding:12px;text-align:center;}
   color:#0A0A1A;
   border-color: var(--cyan);
   box-shadow:0 0 30px rgba(0,246,255,0.95), inset 0 0 12px rgba(0,246,255,0.18);
+  animation: activeBorder 1.5s ease-in-out infinite alternate;
+}
+
+@keyframes activeBorder {
+  0% { box-shadow:0 0 30px rgba(0,246,255,0.7), inset 0 0 12px rgba(0,246,255,0.1);}
+  100% { box-shadow:0 0 30px rgba(0,246,255,0.95), inset 0 0 12px rgba(0,246,255,0.18);}
 }
 
 .nav-box.disabled .nav-link-box{ cursor:default; pointer-events:none; opacity:1; }
@@ -70,6 +82,10 @@ main{max-width:960px;margin:24px auto;padding:12px;text-align:center;}
 
 footer{border-top:4px solid rgba(0,246,255,0.03);padding:12px 0;text-align:center;}
 footer a{color:var(--yellow);text-decoration:underline;font-size:10px;}
+
+@media (max-width:520px){
+  .nav-box{width:100%;}
+}
 </style>
 </head>
 <body>
@@ -106,5 +122,25 @@ footer a{color:var(--yellow);text-decoration:underline;font-size:10px;}
 </main>
 
 <footer><a href="privacy.html">Privacy Policy</a></footer>
+
+<audio id="goAudio" src="go.mp3" loop preload="auto"></audio>
+
+<script>
+'use strict';
+(function(){
+  const audio = document.getElementById('goAudio');
+  function tryPlay() {
+    const p = audio.play();
+    if (p !== undefined) {
+      p.catch(()=> {
+        const start = () => { audio.play().catch(()=>{}); window.removeEventListener('click', start); window.removeEventListener('keydown', start); };
+        window.addEventListener('click', start, {once:true});
+        window.addEventListener('keydown', start, {once:true});
+      });
+    }
+  }
+  window.addEventListener('load', tryPlay);
+})();
+</script>
 </body>
 </html>
