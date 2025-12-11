@@ -103,7 +103,36 @@ footer a{color:var(--yellow);text-decoration:underline;font-size:10px;}
         <label for="comboSelect">Pick your group stage goal-scoring duo!</label>
         <select id="comboSelect">
           <option value="">-- SELECT COMBO --</option>
-          ${Array.from({length:30},(_,i)=>`<option>Combo ${i+1}</option>`).join('')}
+          <option>Combo 1</option>
+          <option>Combo 2</option>
+          <option>Combo 3</option>
+          <option>Combo 4</option>
+          <option>Combo 5</option>
+          <option>Combo 6</option>
+          <option>Combo 7</option>
+          <option>Combo 8</option>
+          <option>Combo 9</option>
+          <option>Combo 10</option>
+          <option>Combo 11</option>
+          <option>Combo 12</option>
+          <option>Combo 13</option>
+          <option>Combo 14</option>
+          <option>Combo 15</option>
+          <option>Combo 16</option>
+          <option>Combo 17</option>
+          <option>Combo 18</option>
+          <option>Combo 19</option>
+          <option>Combo 20</option>
+          <option>Combo 21</option>
+          <option>Combo 22</option>
+          <option>Combo 23</option>
+          <option>Combo 24</option>
+          <option>Combo 25</option>
+          <option>Combo 26</option>
+          <option>Combo 27</option>
+          <option>Combo 28</option>
+          <option>Combo 29</option>
+          <option>Combo 30</option>
         </select>
       </div>
       <div class="input">
@@ -228,7 +257,8 @@ function createGroupEl(i,teams){
     const nameSpan=document.createElement('span');
     nameSpan.className='team-name';
     nameSpan.textContent=team;
-    nameSpan.style.color=TEAM_COLORS[team] || 'var(--muted)';
+    // apply the team colour to the text
+    nameSpan.style.color = TEAM_COLORS[team] || 'var(--muted)';
 
     const btn2=document.createElement('button');
     btn2.className='team-btn';
@@ -259,7 +289,7 @@ function createGroupEl(i,teams){
 function renderGroups(){ groupsGrid.innerHTML=''; GROUPS.forEach((g,i)=>groupsGrid.appendChild(createGroupEl(i,g))); }
 renderGroups();
 
-/* ---------- Toggle Logic ---------- */
+/* ---------- Toggle Logic (unchanged) ---------- */
 function toggleSecond(group,team,btn){
   if(state.thirdPicksIndex[group]===team){
     flashInstruction('This team is already selected as 3rd-place');
@@ -342,3 +372,4 @@ window.addEventListener('load',()=>{nameInput.focus();});
 </script>
 </body>
 </html>
+
