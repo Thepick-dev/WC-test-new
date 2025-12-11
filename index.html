@@ -10,28 +10,75 @@
 
 <style>
 :root{
-  --bg:#0A0A1A;
-  --cyan:#00F6FF;
-  --yellow:#FFD60A;
-  --pink:#FF2FC7;
-  --third-pink:#FF6EC7;
-  --green:#2AFF6B;
-  --muted:#F7F7F2;
-  --nav-text:var(--muted);
+  /* color tokens */
+  --bg: #0A0A1A;
+  --cyan: #00F6FF;
+  --yellow: #FFD60A;
+  --pink: #FF2FC7;
+  --third-pink: #FF6EC7;
+  --muted: #F7F7F2;
+
+  /* other tokens */
+  --nav-text: var(--muted);
   --card-border: rgba(0,246,255,0.06);
-  font-family:'Press Start 2P',monospace;
+  --nav-active-glow: rgba(0,246,255,0.95);
+  font-family: 'Press Start 2P', monospace;
 }
+
+/* reset & base */
 *{box-sizing:border-box;margin:0;padding:0;}
 html,body{height:100%;background:var(--bg);color:var(--muted);}
-header.site-header{position:static;padding:12px 0;}
-nav.main-nav{display:flex;width:100%;justify-content:space-between;background:transparent;border-bottom:0;padding:6px 0;}
-.nav-link{flex:1;text-align:center;padding:14px 0;text-decoration:none;color:var(--nav-text);transition:all .18s;font-size:11px;cursor:pointer;}
-.nav-link.active{ color:var(--cyan); text-shadow:0 0 10px rgba(0,246,255,0.95); }
-#subTitle{ font-family:'Orbitron',sans-serif;font-weight:700;font-size:20px;color:var(--third-pink);margin:6px 0 0;text-align:center; }
-#pageTitle{ font-family:'Jersey 10',sans-serif;font-size:92px;font-style:italic;margin:6px 0 6px;color:var(--yellow);text-align:center; } /* matched to Version 2 */
+
+/* header layout */
+header.site-header{position:static;padding:12px 0;} /* header padding 12px */
+
+/* nav */
+nav.main-nav{
+  display:flex;
+  width:100%;
+  justify-content:space-between;
+  background:transparent;
+  border-bottom:0;
+  padding:6px 0; /* nav padding Y: 6px */
+}
+.nav-link{
+  flex:1; /* four equal links */
+  text-align:center;
+  padding:14px 0; /* nav link vertical padding 14px */
+  text-decoration:none;
+  color:var(--nav-text);
+  transition:all .18s;
+  font-size:11px; /* nav font-size 11px (Press Start 2P used globally) */
+  cursor:pointer;
+}
+.nav-link.active{
+  color:var(--cyan); /* active color #00F6FF */
+  text-shadow:0 0 10px var(--nav-active-glow); /* neon glow */
+}
+
+/* title block */
+#subTitle{
+  font-family:'Orbitron',sans-serif; /* subtitle font */
+  font-weight:700;
+  font-size:20px; /* subtitle 20px */
+  color:var(--third-pink); /* #FF6EC7 */
+  margin:6px 0 0; /* margin 6px 0 0 */
+  text-align:center;
+}
+#pageTitle{
+  font-family:'Jersey 10',sans-serif; /* title font */
+  font-size:92px; /* canonical title size 92px */
+  font-style:italic;
+  margin:6px 0 6px;
+  color:var(--yellow); /* #FFD60A */
+  text-align:center;
+  line-height:1;
+}
+
+/* main layout */
 main{max-width:960px;margin:24px auto;padding:12px;text-align:center;}
-footer{border-top:4px solid rgba(0,246,255,0.03);padding:12px 0;text-align:center;}
-footer a{color:var(--yellow);text-decoration:underline;font-size:10px;}
+
+/* card */
 .form-card{
   background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(0,0,0,0.06));
   border:6px solid var(--card-border);
@@ -42,7 +89,7 @@ footer a{color:var(--yellow);text-decoration:underline;font-size:10px;}
   gap:14px;
 }
 
-/* NAV BOXES */
+/* nav boxes (kept present) */
 .nav-boxes{display:flex;flex-direction:column;gap:12px;align-items:center;margin-top:8px;}
 .nav-box{width:260px;min-height:44px;border-radius:8px;display:block;text-decoration:none;position:relative;padding:0;}
 .nav-link-box{
@@ -53,38 +100,56 @@ footer a{color:var(--yellow);text-decoration:underline;font-size:10px;}
   transition:all .16s;
 }
 
-/* neon borders and glow for all boxes (including inactive) */
+/* neon borders and glow for boxes (keeps page lively) */
 .border-blue .nav-link-box{ border-color: rgba(0,246,255,0.6); box-shadow:0 0 18px rgba(0,246,255,0.12), 0 0 36px rgba(0,246,255,0.06); }
 .border-yellow .nav-link-box{ border-color: rgba(255,214,10,0.6); box-shadow:0 0 18px rgba(255,214,10,0.12), 0 0 36px rgba(255,214,10,0.06); }
 .border-pink .nav-link-box{ border-color: rgba(255,47,199,0.6); box-shadow:0 0 18px rgba(255,47,199,0.12), 0 0 36px rgba(255,47,199,0.06); }
 .border-green .nav-link-box{ border-color: rgba(42,255,107,0.6); box-shadow:0 0 18px rgba(42,255,107,0.12), 0 0 36px rgba(42,255,107,0.06); }
 
-/* active (WELCOME) - filled neon blue */
-.nav-box.active .nav-link-box{ background: var(--cyan); color:#0A0A1A; border-color: var(--cyan); box-shadow:0 0 30px rgba(0,246,255,0.95), inset 0 0 12px rgba(0,246,255,0.18); }
+/* active box visual (WELCOME) */
+.nav-box.active .nav-link-box{
+  background: var(--cyan);
+  color:#0A0A1A;
+  border-color: var(--cyan);
+  box-shadow:0 0 30px rgba(0,246,255,0.95), inset 0 0 12px rgba(0,246,255,0.18);
+}
 
-/* disabled boxes: visible neon outline but not interactive */
+/* disabled boxes still show neon outline but are not interactive */
 .nav-box.disabled .nav-link-box{ cursor:default; pointer-events:none; opacity:1; }
 
-/* hover subtle lift for interactive item only */
+/* small hover for interactive item(s) */
 .nav-link-box:hover{ transform:translateY(-2px); filter:brightness(1.03); }
 
-/* responsive */
+/* footer */
+footer{
+  border-top:4px solid rgba(0,246,255,0.03); /* footer border-top per checklist */
+  padding:12px 0; /* footer padding 12px */
+  text-align:center;
+}
+footer a{
+  color:var(--yellow); /* footer link color #FFD60A */
+  text-decoration:underline;
+  font-size:10px;
+}
+
+/* responsive: exact rule from spec (title becomes 56px at <=520px) */
 @media (max-width:520px){
   .nav-box{width:100%;}
   .form-card{padding:14px;}
-  #pageTitle{font-size:56px;}
+  #pageTitle{font-size:56px;} /* mobile title size per checklist */
 }
 </style>
 </head>
 <body>
 <header class="site-header">
   <nav class="main-nav" aria-label="Main navigation">
-    <!-- HOME should be lit up on this page (active) -->
+    <!-- HOME lit (active) on this page -->
     <a class="nav-link active" href="index.html">HOME</a>
     <a class="nav-link" href="predict.html">PICK</a>
     <a class="nav-link" href="standings.html">SCORES</a>
     <a class="nav-link" href="rules.html">RULES</a>
   </nav>
+
   <div style="text-align:center;margin-top:6px;">
     <div id="pageTitle">GOALSTORM!</div>
     <div id="subTitle">WORLD CUP 2026</div>
@@ -93,9 +158,7 @@ footer a{color:var(--yellow);text-decoration:underline;font-size:10px;}
 
 <main>
   <div class="form-card" id="predictCard">
-    <!-- All input fields and controls removed (username, email, pin, combo, tiebreaker, clear, submit) per instructions. -->
-
-    <!-- NAV BOXES: only the first (WELCOME) is an active hyperlink; other boxes show neon outlines but are not clickable. -->
+    <!-- inputs removed as requested; nav boxes remain -->
     <div class="nav-boxes" id="navBoxes">
       <a class="nav-box border-blue active" href="WELCOME.html" aria-current="page">
         <div class="nav-link-box">WELCOME</div>
@@ -145,48 +208,29 @@ footer a{color:var(--yellow);text-decoration:underline;font-size:10px;}
         <div class="nav-link-box">WINNERS</div>
       </div>
     </div>
-
   </div>
 </main>
 
 <footer><a href="privacy.html">Privacy Policy</a></footer>
 
-<!-- Autoplay audio: attempts to play on load; if blocked by browser policy it will attach a one-time user interaction to start playback. -->
+<!-- audio: attempt autoplay; will fallback to play on first user gesture if browser blocks -->
 <audio id="goAudio" src="go.mp3" loop preload="auto"></audio>
 
 <script>
 'use strict';
-
-/* Autoplay handling:
-   Modern browsers block autoplay of unmuted audio without user interaction.
-   This script attempts to play immediately; if blocked, it will play on first user gesture.
-*/
 (function(){
   const audio = document.getElementById('goAudio');
-
   function tryPlay() {
     const p = audio.play();
     if (p !== undefined) {
-      p.then(()=> {
-        // playing
-      }).catch(()=> {
-        // autoplay blocked — wait for first user gesture.
-        const startOnUser = () => {
-          audio.play().catch(()=>{/* ignore */});
-          window.removeEventListener('click', startOnUser, {capture:true});
-          window.removeEventListener('keydown', startOnUser, {capture:true});
-        };
-        window.addEventListener('click', startOnUser, {capture:true, once:true});
-        window.addEventListener('keydown', startOnUser, {capture:true, once:true});
+      p.catch(()=> {
+        const start = () => { audio.play().catch(()=>{}); window.removeEventListener('click', start); window.removeEventListener('keydown', start); };
+        window.addEventListener('click', start, {once:true});
+        window.addEventListener('keydown', start, {once:true});
       });
     }
   }
-
-  // small delay to let page rendering complete, then attempt
-  window.addEventListener('load', ()=> {
-    // attempt unmuted play (as requested). If it fails, fallback to user interaction.
-    tryPlay();
-  });
+  window.addEventListener('load', tryPlay);
 })();
 </script>
 </body>
