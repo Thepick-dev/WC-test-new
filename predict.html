@@ -9,50 +9,40 @@
 <link href="https://fonts.googleapis.com/css2?family=Jersey+10&family=Orbitron:wght@400;700&family=Press+Start+2P&display=swap" rel="stylesheet">
 
 <style>
-:root {
-  --bg: #0A0A1A;
-  --cyan: #00F6FF;
-  --yellow: #FFD60A;
-  --pink: #FF2FC7;
-  --third-pink: #FF6EC7;
-  --muted: #F7F7F2;
-  --nav-text: var(--muted);
+:root{
+  --bg:#0A0A1A;
+  --cyan:#00F6FF;
+  --yellow:#FFD60A;
+  --pink:#FF2FC7;
+  --third-pink:#FF6EC7;
+  --muted:#F7F7F2;
+  --nav-text:var(--muted);
   --input-border: rgba(0,246,255,0.08);
   --card-border: rgba(0,246,255,0.06);
-  --panel-border: #9aa7b2;
-  --accent: #39ff14;
-  --warn: #ffcc00;
-  --error: #ff3355;
-  font-family: 'Press Start 2P', monospace;
+  font-family:'Press Start 2P',monospace;
 }
-* { box-sizing: border-box; margin:0; padding:0; }
-
-html, body { height:100%; background:var(--bg); color:var(--muted); font-family: 'Press Start 2P', monospace; }
-
-body.crt::before {
+*{box-sizing:border-box;margin:0;padding:0;}
+html,body{height:100%;background:var(--bg);color:var(--muted);}
+body.crt::before{
   content:"";
-  position:fixed; inset:0; pointer-events:none;
+  position:fixed;
+  inset:0;
+  pointer-events:none;
   background:
     repeating-linear-gradient(0deg, rgba(255,255,255,.03), rgba(255,255,255,.03) 1px, transparent 1px, transparent 3px),
     radial-gradient(ellipse at center, rgba(255,255,255,.06), rgba(0,0,0,.35));
-  mix-blend-mode: overlay;
+  mix-blend-mode:overlay;
 }
-
-header.site-header { position: static; padding:12px 0; }
-nav.main-nav { display:flex; justify-content:space-between; padding:6px 0; }
-.nav-link { flex:1; text-align:center; padding:14px 0; text-decoration:none; color:var(--nav-text); transition:all .18s; font-size:11px; cursor:pointer; }
-.nav-link.active { color:var(--cyan); text-shadow:0 0 10px rgba(0,246,255,0.95); text-decoration:none; }
-
-#subTitle { font-family:'Orbitron',sans-serif; font-weight:700; font-size:20px; color:var(--third-pink); margin:6px 0 0; text-align:center; }
-#pageTitle { font-family:'Jersey 10',sans-serif; font-size:92px; font-style:italic; margin:0 0 6px; color:var(--yellow); text-align:center; }
-
-main { max-width:960px; margin:24px auto; padding:12px; text-align:center; }
-footer { border-top:4px solid rgba(0,246,255,0.03); padding:12px 0; text-align:center; }
-footer a { color:var(--yellow); text-decoration:underline; font-size:10px; }
-
-.panel { border:2px solid var(--panel-border); padding:12px; margin:12px 0; box-shadow: inset 2px 2px 0 #fff3, inset -2px -2px 0 #0008; }
-
-.form-card {
+header.site-header{position:static;padding:12px 0;}
+nav.main-nav{display:flex;width:100%;justify-content:space-between;background:transparent;border-bottom:0;padding:6px 0;}
+.nav-link{flex:1;text-align:center;padding:14px 0;text-decoration:none;color:var(--nav-text);transition:all .18s;font-size:11px;cursor:pointer;}
+.nav-link.active{ color:var(--cyan); text-shadow:0 0 10px rgba(0,246,255,0.95); }
+#subTitle{ font-family:'Orbitron',sans-serif;font-weight:700;font-size:20px;color:var(--third-pink);margin:6px 0 0;text-align:center; }
+#pageTitle{ font-family:'Jersey 10',sans-serif;font-size:92px;font-style:italic;margin:6px 0 6px;color:var(--yellow);text-align:center; }
+main{max-width:960px;margin:24px auto;padding:12px;text-align:center;}
+footer{border-top:4px solid rgba(0,246,255,0.03);padding:12px 0;text-align:center;}
+footer a{color:var(--yellow);text-decoration:underline;font-size:10px;}
+.form-card{
   background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(0,0,0,0.06));
   border:6px solid var(--card-border);
   padding:18px;
@@ -60,63 +50,42 @@ footer a { color:var(--yellow); text-decoration:underline; font-size:10px; }
   display:flex;
   flex-direction:column;
   gap:14px;
+  box-shadow: inset 2px 2px 0 #fff3, inset -2px -2px 0 #0008;
 }
-
-.row { display:flex; flex-wrap:wrap; gap:12px; justify-content:center; margin-bottom:6px; }
-.input { width:260px; display:flex; flex-direction:column; align-items:flex-start; font-size:10px; color:var(--muted); }
-.input.center { align-items:center; }
-.input label { font-size:10px; margin-bottom:6px; color:rgba(247,247,242,0.9); text-align:left; width:100%; }
-.input.center label { text-align:center; }
-.input input, .input select {
-  width:100%; padding:12px; border-radius:8px; border:2px solid var(--input-border);
-  background:transparent; color:var(--muted); font-family:'Press Start 2P',monospace; font-size:11px; outline:none;
-  transition:all .18s; min-height:44px; box-shadow: inset 0 1px 0 rgba(255,255,255,0.02);
+.row{display:flex;flex-wrap:wrap;gap:12px;justify-content:center;margin-bottom:6px;}
+.input{width:260px;display:flex;flex-direction:column;align-items:flex-start;font-size:10px;color:var(--muted);}
+.input.center{align-items:center;}
+.input label{font-size:10px;margin-bottom:6px;color:rgba(247,247,242,0.9);text-align:left;width:100%;}
+.input.center label{text-align:center;}
+.input input,.input select{
+  width:100%;padding:12px;border-radius:8px;border:2px solid var(--input-border);
+  background:transparent;color:var(--muted);font-family:'Press Start 2P',monospace;font-size:11px;outline:none;
+  transition:all .18s;min-height:44px;box-shadow: inset 0 1px 0 rgba(255,255,255,0.02);
 }
-.input input::placeholder, .input select { color:rgba(255,214,10,0.35); }
-.input input:focus-visible, .input select:focus-visible {
+.input input::placeholder,.input select{color:rgba(255,214,10,0.35);}
+.input input:focus-visible,.input select:focus-visible{
   border-color: #2AFF6B;
   box-shadow:0 0 10px #2AFF6B,0 0 20px #2AFF6B inset;
 }
-
-.top-instruction { font-size:10px; margin-bottom:6px; color:var(--yellow); }
-
-.controls { display:flex; justify-content:center; margin-top:8px; gap:12px; }
-.button-clear, .team-btn { 
-  background:#1b2330; color:var(--muted); border:2px solid var(--panel-border);
-  padding:10px 12px; cursor:pointer; text-transform:uppercase;
-  box-shadow: inset 2px 2px 0 #fff3, inset -2px -2px 0 #0008; 
-  border-radius:6px; transition: all .12s;
-}
-.button-clear:hover { background: rgba(255,214,10,0.06); border-color:rgba(255,214,10,0.28); }
-.submit-btn { padding:10px 14px; border-radius:8px; background:transparent; border:6px solid rgba(255,214,10,0.12); font-size:10px; cursor:not-allowed; color:rgba(255,214,10,0.35); }
-.submit-btn.lit { cursor:pointer; color:#0A0A1A; background:var(--yellow); border-color:rgba(255,214,10,0.95); }
-
-.groups-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(180px,1fr)); gap:10px; margin-top:10px; }
-.group { background:linear-gradient(180deg, rgba(255,255,255,0.01), rgba(0,0,0,0.04)); border:3px solid rgba(0,246,255,0.04); padding:8px; border-radius:10px; min-height:110px; display:flex; flex-direction:column; align-items:center; }
-.group h4 { font-size:10px; margin-bottom:6px; color:var(--yellow); text-transform:uppercase; }
-.team-list { display:flex; flex-direction:column; gap:4px; width:100%; }
-.team-row { display:flex; justify-content:space-between; align-items:center; gap:4px; }
-.team-name { font-size:10px; color:var(--muted); flex:1; }
-.team-btn.selected-2 { background:var(--yellow); color:#0A0A1A; box-shadow:0 6px 18px rgba(255,214,10,0.16); }
-.team-btn.selected-3 { background: var(--third-pink); color:#0A0A1A; box-shadow:0 6px 18px rgba(255,110,199,0.18); }
-
-.progress-container { display:flex; justify-content:space-between; align-items:center; margin:12px 0; }
-.progress { flex:1; height:14px; background:#111; border:2px solid var(--panel-border); margin-left:12px; margin-right:12px; }
-.progress > i { display:block; height:100%; width:0%; background:var(--cyan); box-shadow: 0 0 6px var(--cyan), 0 0 12px var(--cyan) inset; }
-
-.console { background:#02040a; border:2px solid var(--panel-border); padding:8px; font-size:10px; max-height:150px; overflow-y:auto; }
-.console p { margin:0 0 6px; }
-.blink { animation:blink 1s steps(2,end) infinite; }
-@keyframes blink { 50% {opacity:0} }
-
-@media(max-width:600px){
-  .groups-grid { grid-template-columns:repeat(auto-fit,minmax(140px,1fr)); }
-  #pageTitle { font-size:48px; }
-}
+.top-instruction{font-size:10px;margin-bottom:6px;color:var(--yellow);}
+.controls{display:flex;justify-content:center;margin-top:8px;gap:12px;}
+.button-clear{padding:10px 12px;border-radius:8px;background:transparent;border:3px solid rgba(255,214,10,0.12);color:var(--yellow);cursor:pointer;font-size:10px;box-shadow: inset 2px 2px 0 #fff3, inset -2px -2px 0 #0008;}
+.button-clear:hover{ background: rgba(255,214,10,0.06); border-color:rgba(255,214,10,0.28);}
+.submit-btn{padding:10px 14px;border-radius:8px;background:transparent;border:6px solid rgba(255,214,10,0.12);font-size:10px;cursor:not-allowed;color:rgba(255,214,10,0.35);box-shadow: inset 2px 2px 0 #fff3, inset -2px -2px 0 #0008;}
+.submit-btn.lit{cursor:pointer;color:#0A0A1A;background:var(--yellow);border-color:rgba(255,214,10,0.95);}
+.groups-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px;margin-top:10px;}
+.group{background:linear-gradient(180deg, rgba(255,255,255,0.01), rgba(0,0,0,0.04));border:3px solid rgba(0,246,255,0.04);padding:8px;border-radius:10px;min-height:110px;display:flex;flex-direction:column;align-items:center;box-shadow: inset 2px 2px 0 #fff3, inset -2px -2px 0 #0008;}
+.group h4{font-size:10px;margin-bottom:6px;color:var(--yellow);text-transform:uppercase;}
+.team-list{display:flex;flex-direction:column;gap:4px;width:100%;}
+.team-row{display:flex;justify-content:space-between;align-items:center;gap:4px;}
+.team-name{font-size:10px;color:var(--muted);flex:1;}
+.team-btn{font-family:'Press Start 2P',monospace;font-size:10px;padding:4px 6px;border-radius:6px;border:2px solid rgba(0,246,255,0.06);background:transparent;color:var(--muted);cursor:pointer;text-align:center;outline:none;min-height:28px;transition:all .12s;box-shadow: inset 2px 2px 0 #fff3, inset -2px -2px 0 #0008;}
+.team-btn.selected-2{background:var(--yellow);color:#0A0A1A;box-shadow:0 6px 18px rgba(255,214,10,0.16);}
+.team-btn.selected-3{background: var(--third-pink);color:#0A0A1A;box-shadow:0 6px 18px rgba(255,110,199,0.18);}
+.team-btn:focus-visible{outline:3px solid rgba(0,246,255,0.16);outline-offset:3px;border-radius:6px;}
 </style>
 </head>
 <body class="crt">
-
 <header class="site-header">
   <nav class="main-nav" aria-label="Main navigation">
     <a class="nav-link" href="index.html">HOME</a>
@@ -132,16 +101,6 @@ footer a { color:var(--yellow); text-decoration:underline; font-size:10px; }
 
 <main>
   <div class="form-card" id="predictCard">
-    <div class="panel progress-container">
-      <span>SLOTS USED: <b id="slots">0/20</b></span>
-      <div class="progress"><i id="bar"></i></div>
-    </div>
-
-    <div class="panel console" id="console">
-      <p>BOOT SEQUENCE… OK</p>
-      <p class="blink">AWAITING INPUT_</p>
-    </div>
-
     <div class="row" id="inputsRow">
       <div class="input">
         <label for="nameInput">USERNAME</label>
@@ -184,7 +143,6 @@ footer a { color:var(--yellow); text-decoration:underline; font-size:10px; }
 <script>
 'use strict';
 
-/* Original functionality preserved exactly */
 const GROUPS = [
   ["MEXICO 🇲🇽","SOUTH AFRICA 🇿🇦","SOUTH KOREA 🇰🇷","DEN/MAC/CZE/IRL"],
   ["CANADA 🇨🇦","ITA/NIR/WAL/BOS","QATAR 🇶🇦","SWITZERLAND 🇨🇭"],
@@ -199,8 +157,13 @@ const GROUPS = [
   ["PORTUGAL 🇵🇹","JAM/NCL/DRC","UZBEKISTAN 🇺🇿","COLOMBIA 🇨🇴"],
   ["ENGLAND 🏴","CROATIA 🇭🇷","GHANA 🇬🇭","PANAMA 🇵🇦"]
 ];
+
 const MAX_THIRD = 8;
-const state = { secondPicks:Array(GROUPS.length).fill(null), thirdPicksIndex:Array(GROUPS.length).fill(null) };
+
+const state = {
+  secondPicks: Array(GROUPS.length).fill(null),
+  thirdPicksIndex: Array(GROUPS.length).fill(null)
+};
 
 const groupsGrid=document.getElementById('groupsGrid');
 const instructionEl=document.getElementById('instruction');
@@ -211,23 +174,12 @@ const emailInput=document.getElementById('emailInput');
 const pinInput=document.getElementById('pinInput');
 const comboSelect=document.getElementById('comboSelect');
 const goalsInput=document.getElementById('goalsInput');
-const slots=document.getElementById('slots');
-const bar=document.getElementById('bar');
-const log=document.getElementById('console');
 
 function flashInstruction(msg){
   const orig=instructionEl.textContent;
   instructionEl.textContent=msg;
   instructionEl.style.color='white';
   setTimeout(()=>{ instructionEl.textContent=orig; instructionEl.style.color='var(--yellow)'; },1200);
-}
-
-function msg(t){ const p=document.createElement('p'); p.textContent=t; log.prepend(p); }
-
-function updateSlots(){ 
-  const total=state.secondPicks.filter(x=>x!==null).length + state.thirdPicksIndex.filter(x=>x!==null).length;
-  slots.textContent=`${total}/20`; 
-  bar.style.width=(total/20*100)+'%';
 }
 
 function createGroupEl(i,teams){
@@ -237,18 +189,33 @@ function createGroupEl(i,teams){
   g.innerHTML=`<h4>GROUP ${i+1}</h4><div class="team-list"></div>`;
   const list=g.querySelector('.team-list');
   teams.forEach((team,idx)=>{
-    const row=document.createElement('div'); row.className='team-row';
-    const nameSpan=document.createElement('span'); nameSpan.className='team-name'; nameSpan.textContent=team;
+    const row=document.createElement('div');
+    row.className='team-row';
+    const nameSpan=document.createElement('span');
+    nameSpan.className='team-name';
+    nameSpan.textContent=team;
 
-    const btn2=document.createElement('button'); btn2.className='team-btn'; btn2.type='button'; btn2.textContent='2nd';
-    btn2.setAttribute('data-group',i); btn2.setAttribute('data-index',idx); btn2.setAttribute('aria-pressed','false');
-    btn2.addEventListener('click',()=>{ toggleSecond(i,idx,btn2); msg('INPUT RECEIVED… OK'); updateSlots(); });
+    const btn2=document.createElement('button');
+    btn2.className='team-btn';
+    btn2.type='button';
+    btn2.textContent='2nd';
+    btn2.setAttribute('data-group',i);
+    btn2.setAttribute('data-index',idx);
+    btn2.setAttribute('aria-pressed','false');
+    btn2.addEventListener('click',()=>toggleSecond(i,idx,btn2));
 
-    const btn3=document.createElement('button'); btn3.className='team-btn'; btn3.type='button'; btn3.textContent='3rd';
-    btn3.setAttribute('data-group',i); btn3.setAttribute('data-index',idx); btn3.setAttribute('aria-pressed','false');
-    btn3.addEventListener('click',()=>{ toggleThird(i,idx,btn3); msg('INPUT RECEIVED… OK'); updateSlots(); });
+    const btn3=document.createElement('button');
+    btn3.className='team-btn';
+    btn3.type='button';
+    btn3.textContent='3rd';
+    btn3.setAttribute('data-group',i);
+    btn3.setAttribute('data-index',idx);
+    btn3.setAttribute('aria-pressed','false');
+    btn3.addEventListener('click',()=>toggleThird(i,idx,btn3));
 
-    row.appendChild(nameSpan); row.appendChild(btn2); row.appendChild(btn3);
+    row.appendChild(nameSpan);
+    row.appendChild(btn2);
+    row.appendChild(btn3);
     list.appendChild(row);
   });
   return g;
@@ -257,23 +224,49 @@ function createGroupEl(i,teams){
 function renderGroups(){ groupsGrid.innerHTML=''; GROUPS.forEach((g,i)=>groupsGrid.appendChild(createGroupEl(i,g))); }
 renderGroups();
 
+/* ---------- Toggle Logic ---------- */
 function toggleSecond(group,team,btn){
-  if(state.thirdPicksIndex[group]===team){ flashInstruction('This team is already selected as 3rd-place'); return; }
-  if(state.secondPicks[group]===team){ state.secondPicks[group]=null; btn.classList.remove('selected-2'); btn.setAttribute('aria-pressed','false'); }
-  else{ state.secondPicks[group]=team; document.querySelectorAll(`.team-btn[data-group="${group}"].selected-2`).forEach(b=>b.classList.remove('selected-2')); btn.classList.add('selected-2'); btn.setAttribute('aria-pressed','true'); }
-  checkForSubmit(); updateSlots();
+  if(state.thirdPicksIndex[group]===team){
+    flashInstruction('This team is already selected as 3rd-place');
+    return;
+  }
+  if(state.secondPicks[group]===team){
+    state.secondPicks[group]=null;
+    btn.classList.remove('selected-2');
+    btn.setAttribute('aria-pressed','false');
+  } else {
+    state.secondPicks[group]=team;
+    document.querySelectorAll(`.team-btn[data-group="${group}"].selected-2`).forEach(b=>b.classList.remove('selected-2'));
+    btn.classList.add('selected-2');
+    btn.setAttribute('aria-pressed','true');
+  }
+  checkForSubmit();
 }
 
 function toggleThird(group,team,btn){
-  if(state.secondPicks[group]===team){ flashInstruction('This team is already selected as 2nd-place'); return; }
-  const totalThird = state.thirdPicksIndex.filter(x=>x!==null).length;
-  if(state.thirdPicksIndex[group]===team){ state.thirdPicksIndex[group]=null; btn.classList.remove('selected-3'); btn.setAttribute('aria-pressed','false'); }
-  else{
-    if(totalThird>=MAX_THIRD){ flashInstruction('You have already selected 8 third-place teams'); return; }
-    if(state.thirdPicksIndex[group]!==null){ const prevBtn=document.querySelector(`.team-btn[data-group="${group}"][aria-pressed="true"].selected-3`); if(prevBtn) prevBtn.classList.remove('selected-3'); }
-    state.thirdPicksIndex[group]=team; btn.classList.add('selected-3'); btn.setAttribute('aria-pressed','true');
+  if(state.secondPicks[group]===team){
+    flashInstruction('This team is already selected as 2nd-place');
+    return;
   }
-  checkForSubmit(); updateSlots();
+  const totalThird = state.thirdPicksIndex.filter(x=>x!==null).length;
+  if(state.thirdPicksIndex[group]===team){
+    state.thirdPicksIndex[group]=null;
+    btn.classList.remove('selected-3');
+    btn.setAttribute('aria-pressed','false');
+  } else {
+    if(totalThird>=MAX_THIRD){
+      flashInstruction('You have already selected 8 third-place teams');
+      return;
+    }
+    if(state.thirdPicksIndex[group]!==null){
+      const prevBtn = document.querySelector(`.team-btn[data-group="${group}"][aria-pressed="true"].selected-3`);
+      if(prevBtn) prevBtn.classList.remove('selected-3');
+    }
+    state.thirdPicksIndex[group]=team;
+    btn.classList.add('selected-3');
+    btn.setAttribute('aria-pressed','true');
+  }
+  checkForSubmit();
 }
 
 function checkForSubmit(){
@@ -283,26 +276,35 @@ function checkForSubmit(){
   setSubmitState(allFilled && secondComplete && thirdComplete);
 }
 
-function setSubmitState(enabled){ submitBtn.disabled=!enabled; if(enabled) submitBtn.classList.add('lit'); else submitBtn.classList.remove('lit'); }
+function setSubmitState(enabled){
+  submitBtn.disabled=!enabled;
+  if(enabled) submitBtn.classList.add('lit'); else submitBtn.classList.remove('lit');
+}
 
 submitBtn.addEventListener('click',()=>{
   if(submitBtn.disabled) return;
-  const payload={ username:nameInput.value.trim(), email:emailInput.value.trim(), pin:pinInput.value, combo:comboSelect.value, goals:goalsInput.value, seconds:state.secondPicks.map((t,i)=>t!==null?GROUPS[i][t]:null), thirds: state.thirdPicksIndex.map((t,i)=>t!==null?GROUPS[i][t]:null).filter(t=>t!==null) };
+  const payload={
+    username:nameInput.value.trim(),
+    email:emailInput.value.trim(),
+    pin:pinInput.value,
+    combo:comboSelect.value,
+    goals:goalsInput.value,
+    seconds:state.secondPicks.map((t,i)=>t!==null?GROUPS[i][t]:null),
+    thirds: state.thirdPicksIndex.map((t,i)=>t!==null?GROUPS[i][t]:null).filter(t=>t!==null)
+  };
   console.log('SUBMIT payload',payload);
   flashInstruction('SUBMITTED! THANKS');
-  msg('SUBMISSION SUCCESSFUL… OK');
 });
 
 clearBtn.addEventListener('click',()=>{
-  state.secondPicks.fill(null); state.thirdPicksIndex.fill(null);
+  state.secondPicks.fill(null);
+  state.thirdPicksIndex.fill(null);
   document.querySelectorAll('.team-btn').forEach(b=>b.classList.remove('selected-2','selected-3'));
   nameInput.value=''; emailInput.value=''; pinInput.value=''; comboSelect.value=''; goalsInput.value='';
-  setSubmitState(false); updateSlots();
-  msg('ALL INPUTS CLEARED_');
+  setSubmitState(false);
 });
 
-window.addEventListener('load',()=>{nameInput.focus(); updateSlots();});
+window.addEventListener('load',()=>{nameInput.focus();});
 </script>
-
 </body>
 </html>
