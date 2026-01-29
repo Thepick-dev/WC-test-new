@@ -3,275 +3,231 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-<title>GOALSTORM! — BONUS MODULES</title>
+<title>GOALSTORM! — FREE KICK</title>
 <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap" rel="stylesheet">
 <style>
-/* --- CORE PALETTE --- */
-:root{
-  --bg: #0f0e17;          
-  --neon-pink: #ff2a6d;   
-  --neon-cyan: #05d9e8;   
-  --neon-yellow: #ffc800; 
-  --panel: #1a1a2e;
-}
-
-*{box-sizing:border-box;margin:0;padding:0;}
-body{
-    background-color: var(--bg);
-    color: #d1d1d1; font-family:"VT323", monospace;
-    display:flex; flex-direction:column; align-items:center;
-    min-height: 100vh; padding: 20px;
-}
-
-h1 {
-    font-family: "Press Start 2P"; font-size: 16px; color: var(--neon-cyan);
-    margin-bottom: 20px; border-bottom: 4px solid #000; padding-bottom:10px;
-}
+:root{ --bg:#0f0e17; --neon-pink:#ff2a6d; --neon-cyan:#05d9e8; --neon-yellow:#ffc800; }
+body{ background:var(--bg); color:#fff; font-family:"VT323"; display:flex; flex-direction:column; align-items:center; min-height:100vh; margin:0; }
 
 .panel {
-    width: 100%; max-width: 500px; background: var(--panel);
-    border: 3px solid var(--neon-cyan); padding: 20px; margin-bottom: 40px;
-    box-shadow: 0 0 20px rgba(5, 217, 232, 0.1);
+    width: 95%; max-width: 600px; background: #1a1a2e;
+    border: 3px solid var(--neon-cyan); padding: 15px; margin-top: 20px;
+    box-shadow: 0 0 20px rgba(5, 217, 232, 0.2);
 }
 
-/* --- MODULE 1: SCRATCHPAD STYLES --- */
-.scratch-container {
-    position: relative;
-    width: 300px; height: 150px;
-    margin: 0 auto;
-    border: 4px solid #fff;
-    box-shadow: 4px 4px 0 var(--neon-pink);
-    user-select: none;
-}
+h1 { font-family:"Press Start 2P"; font-size:20px; color:var(--neon-yellow); text-align:center; margin-bottom:15px; }
 
-/* The Hidden Prize Layer */
-.scratch-prize {
-    position: absolute; inset: 0;
-    background: repeating-linear-gradient(45deg, #111, #111 10px, #222 10px, #222 20px);
-    display: flex; flex-direction: column; align-items: center; justify-content: center;
-    z-index: 1;
-}
-.prize-text {
-    font-family: "Press Start 2P"; font-size: 18px; color: var(--neon-yellow);
-    text-shadow: 2px 2px #000; text-align: center; line-height: 1.5;
-}
+/* GAME CANVAS */
+.game-container { position:relative; width:100%; height:300px; background:#1e5631; border:2px solid #fff; overflow:hidden; }
 
-/* The Canvas Cover Layer */
-canvas.scratch-canvas {
-    position: absolute; inset: 0;
-    z-index: 2; cursor: crosshair;
-    touch-action: none; /* Prevent scrolling on mobile while scratching */
-}
+/* HUD OVERLAYS */
+.hud { position:absolute; top:10px; left:10px; font-size:18px; z-index:10; text-shadow:1px 1px #000; pointer-events:none;}
 
-/* --- MODULE 2: SLOT MACHINE STYLES --- */
-.slot-machine {
-    display: flex; justify-content: center; gap: 10px;
-    background: #000; padding: 15px; border: 2px solid #333;
-    margin-bottom: 15px;
+/* POWER BAR */
+.power-wrapper {
+    position:absolute; bottom:10px; left:10px; right:10px; height:20px;
+    background:#000; border:2px solid #555; display:none;
 }
+.power-fill { height:100%; width:0%; background:linear-gradient(90deg, var(--neon-cyan), var(--neon-pink)); }
 
-.reel {
-    width: 80px; height: 100px;
-    background: #fff;
-    border: 4px solid #000;
-    overflow: hidden;
-    position: relative;
-    box-shadow: inset 0 0 20px rgba(0,0,0,0.5);
+/* CONTROLS */
+button {
+    width:100%; padding:20px; font-family:"Press Start 2P"; font-size:16px;
+    background:var(--neon-pink); color:#fff; border:none; border-bottom:5px solid #900;
+    cursor:pointer; margin-top:10px;
 }
-
-.reel-strip {
-    position: absolute; top: 0; left: 0; width: 100%;
-    /* No transition by default to allow infinite loop effect */
-}
-
-.reel-icon {
-    width: 100%; height: 100px;
-    display: flex; align-items: center; justify-content: center;
-    font-size: 40px; border-bottom: 1px solid #ccc;
-}
-
-.spin-btn {
-    width: 100%; padding: 15px;
-    background: var(--neon-yellow); color: #000;
-    font-family: "Press Start 2P"; border: none; cursor: pointer;
-    box-shadow: 4px 4px 0 #fff; transition: transform 0.1s;
-}
-.spin-btn:active { transform: translate(2px,2px); box-shadow: 2px 2px 0 #fff; }
-.spin-btn:disabled { background: #555; box-shadow: none; color: #888; cursor: not-allowed; }
-
-.slot-message {
-    text-align: center; margin-top: 15px; font-size: 24px; color: var(--neon-cyan); height: 30px;
-}
-
-/* Icons for Slots (Using Emojis for simplicity, but SVGs work too) */
-/* 🛡️ Defender, 👟 Midfielder, ⚽ Striker, 🟥 Red Card */
+button:active { transform:translateY(4px); border-bottom:1px solid #900; }
 </style>
 </head>
 <body>
 
 <div class="panel">
-    <h1>TACTICAL SCRATCHPAD</h1>
-    <div style="margin-bottom:15px; color:#888;">SCRATCH TO REVEAL YOUR BONUS CONDITION</div>
+    <h1>TRAJECTORY TITAN</h1>
+    <div style="text-align:center; margin-bottom:10px; color:#aaa;">TAP TO LOCK ANGLE &rarr; TAP TO LOCK POWER</div>
     
-    <div class="scratch-container" id="scratchCard">
-        <div class="scratch-prize">
-            <div class="prize-text" id="prizeText">???</div>
-            <div style="font-size:14px; color:#fff; margin-top:5px;">BONUS APPLIED</div>
-        </div>
-        <canvas class="scratch-canvas" id="scratchCanvas" width="300" height="150"></canvas>
-    </div>
-    
-    <button class="spin-btn" style="margin-top:20px; background:#333; color:#fff;" onclick="resetScratch()">NEW CARD</button>
-</div>
-
-<div class="panel">
-    <h1>SQUAD SLOTS</h1>
-    <div style="margin-bottom:15px; color:#888;">MATCH 3 ICONS FOR A SCORE MULTIPLIER</div>
-
-    <div class="slot-machine">
-        <div class="reel"><div class="reel-strip" id="reel1"></div></div>
-        <div class="reel"><div class="reel-strip" id="reel2"></div></div>
-        <div class="reel"><div class="reel-strip" id="reel3"></div></div>
+    <div class="game-container" id="gameBox">
+        <canvas id="canvas" width="600" height="300"></canvas>
+        <div class="hud" id="hud">WIND: <span id="windVal">0</span></div>
+        <div class="power-wrapper" id="pwrBar"><div class="power-fill" id="pwrFill"></div></div>
     </div>
 
-    <button class="spin-btn" id="slotBtn" onclick="spinSlots()">SPIN REELS</button>
-    <div class="slot-message" id="slotResult">READY...</div>
+    <button id="actionBtn" onclick="handleInput()">START TARGETING</button>
 </div>
 
 <script>
-/* =========================================
-   LOGIC 1: SCRATCH CARD
-   ========================================= */
-const canvas = document.getElementById('scratchCanvas');
-const ctx = canvas.getContext('2d');
-const prizeText = document.getElementById('prizeText');
-let isDrawing = false;
+const cvs = document.getElementById('canvas');
+const ctx = cvs.getContext('2d');
+const btn = document.getElementById('actionBtn');
+const pwrBar = document.getElementById('pwrBar');
+const pwrFill = document.getElementById('pwrFill');
+const windDisplay = document.getElementById('windVal');
 
-// 1. Setup the Cover
-function initScratch() {
-    ctx.globalCompositeOperation = 'source-over';
-    ctx.fillStyle = '#1a1a2e'; // Dark Blue Cover
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
-    
-    // Add "Grid/Pattern" to cover
-    ctx.fillStyle = '#05d9e8';
-    ctx.font = "20px VT323";
-    ctx.textAlign = "center";
-    ctx.fillText("/// TACTICAL COVER ///", 150, 75);
-    ctx.fillText("SCRATCH HERE", 150, 95);
-    
-    // Set a random prize
-    const prizes = ["DOUBLE POINTS", "IGNORE 1 LOSS", "+50% BONUS", "FREE HIT", "AUTO WIN"];
-    prizeText.innerText = prizes[Math.floor(Math.random() * prizes.length)];
+// GAME STATE
+let state = 'IDLE'; // IDLE, ANGLE, POWER, SHOOTING, END
+let ball = { x: 50, y: 270, r: 6, vx: 0, vy: 0 };
+let arrow = { angle: 0, dir: 1 }; // For angle selection
+let power = 0;
+let powerDir = 1;
+let wind = (Math.random() * 2 - 1).toFixed(1); // Random wind -1 to 1
+
+// CONFIG
+const WALL_X = 300;
+const WALL_H = 100; // Height of defenders
+const GOAL_X = 500;
+const GOAL_W = 15; // Width of goal line (top down view logic applied to side view)
+const GRAVITY = 0.25;
+
+// RESIZE CANVAS
+function resize() {
+    // Keep internal resolution but scale visuals
+    const rect = document.getElementById('gameBox').getBoundingClientRect();
+    cvs.width = rect.width;
+    cvs.height = rect.height;
+    resetBall();
+}
+window.onload = resize;
+
+function resetBall() {
+    ball.x = 40; 
+    ball.y = cvs.height - 20;
+    wind = (Math.random() * 1.5 - 0.75).toFixed(2); // New wind
+    windDisplay.innerText = wind;
+    windDisplay.style.color = wind > 0 ? '#05d9e8' : '#ff2a6d';
 }
 
-// 2. Scratch Logic
-function scratch(x, y) {
-    ctx.globalCompositeOperation = 'destination-out'; // This makes it transparent
-    ctx.beginPath();
-    ctx.arc(x, y, 20, 0, Math.PI * 2, false); // Brush size 20
-    ctx.fill();
-}
+// MAIN LOOP
+function loop() {
+    ctx.clearRect(0,0,cvs.width,cvs.height);
 
-// 3. Mouse/Touch Handlers
-function getPos(e) {
-    const rect = canvas.getBoundingClientRect();
-    const clientX = e.touches ? e.touches[0].clientX : e.clientX;
-    const clientY = e.touches ? e.touches[0].clientY : e.clientY;
-    return { x: clientX - rect.left, y: clientY - rect.top };
-}
+    // 1. DRAW SCENE
+    // Ground
+    ctx.fillStyle = "#164023";
+    ctx.fillRect(0, cvs.height-10, cvs.width, 10);
 
-canvas.addEventListener('mousedown', (e) => { isDrawing = true; const p = getPos(e); scratch(p.x, p.y); });
-canvas.addEventListener('touchstart', (e) => { isDrawing = true; const p = getPos(e); scratch(p.x, p.y); e.preventDefault(); });
-canvas.addEventListener('mousemove', (e) => { if (isDrawing) { const p = getPos(e); scratch(p.x, p.y); } });
-canvas.addEventListener('touchmove', (e) => { if (isDrawing) { const p = getPos(e); scratch(p.x, p.y); e.preventDefault(); } });
-window.addEventListener('mouseup', () => isDrawing = false);
-window.addEventListener('touchend', () => isDrawing = false);
+    // Wall (Defenders)
+    ctx.fillStyle = "#ff2a6d";
+    ctx.fillRect(WALL_X, cvs.height - 10 - WALL_H, 20, WALL_H);
+    ctx.fillStyle = "#fff"; // Heads
+    ctx.beginPath(); ctx.arc(WALL_X+10, cvs.height - 10 - WALL_H, 10, 0, Math.PI*2); ctx.fill();
 
-function resetScratch() { initScratch(); }
-initScratch();
+    // Goal
+    ctx.fillStyle = "#fff";
+    ctx.fillRect(cvs.width - 60, cvs.height - 110, 5, 100); // Post
+    ctx.strokeStyle = "#fff"; ctx.lineWidth=2;
+    ctx.beginPath(); // Net
+    ctx.moveTo(cvs.width - 60, cvs.height - 110);
+    ctx.lineTo(cvs.width - 10, cvs.height - 10);
+    ctx.stroke();
 
-
-/* =========================================
-   LOGIC 2: SLOT MACHINE
-   ========================================= */
-const icons = ["⚽", "🧤", "🟥", "🏆", "👟"]; // Striker, Keeper, Card, Cup, Mid
-const reels = [document.getElementById('reel1'), document.getElementById('reel2'), document.getElementById('reel3')];
-const slotBtn = document.getElementById('slotBtn');
-const slotResult = document.getElementById('slotResult');
-const iconHeight = 100;
-const numIcons = icons.length;
-
-// Initialize Reels
-reels.forEach(reel => {
-    let html = "";
-    // Duplicate list 4 times to create a long strip for spinning illusion
-    for(let k=0; k<4; k++) {
-        icons.forEach(icon => html += `<div class="reel-icon">${icon}</div>`);
-    }
-    reel.innerHTML = html;
-});
-
-function spinSlots() {
-    slotBtn.disabled = true;
-    slotResult.innerText = "SPINNING...";
-    slotResult.style.color = "#888";
-
-    // Results
-    const results = [
-        Math.floor(Math.random() * numIcons),
-        Math.floor(Math.random() * numIcons),
-        Math.floor(Math.random() * numIcons)
-    ];
-
-    // Spin each reel
-    reels.forEach((reel, i) => {
-        const targetIndex = results[i];
-        // Calculate position: (Full rotations) + (Target Index)
-        // We add extra rotations for delay (Reel 1 stops first, then 2, then 3)
-        const extraSpins = 2 + i; 
-        const totalIcons = (icons.length * extraSpins) + targetIndex;
-        const finalY = totalIcons * iconHeight;
-
-        // Reset position to 0 instantly before spinning
-        reel.style.transition = 'none';
-        reel.style.top = '0px';
+    // 2. STATE LOGIC
+    if (state === 'ANGLE') {
+        // Oscillate Arrow
+        arrow.angle += 1 * arrow.dir;
+        if(arrow.angle > 80) arrow.dir = -1;
+        if(arrow.angle < 10) arrow.dir = 1;
         
-        // Force reflow
-        void reel.offsetWidth;
+        drawArrow(ball.x, ball.y, arrow.angle, 60, '#ffc800');
+    } 
+    else if (state === 'POWER') {
+        // Freeze Arrow, Oscillate Power
+        drawArrow(ball.x, ball.y, arrow.angle, 60, '#555'); // Ghost arrow
+        
+        power += 2 * powerDir;
+        if(power > 100) powerDir = -1;
+        if(power < 0) powerDir = 1;
+        
+        pwrFill.style.width = power + "%";
+    }
+    else if (state === 'SHOOTING') {
+        // Physics
+        ball.vx -= parseFloat(wind) * 0.02; // Wind Resistance
+        ball.vy += GRAVITY; // Gravity
+        
+        ball.x += ball.vx;
+        ball.y += ball.vy;
 
-        // Animate
-        const duration = 1 + (i * 0.5); // 1s, 1.5s, 2s
-        reel.style.transition = `top ${duration}s cubic-bezier(0.5, 0, 0.2, 1)`; // Ease-out effect
-        reel.style.top = `-${finalY}px`;
-    });
+        // Collision: Floor
+        if(ball.y > cvs.height - 15) {
+            state = 'END';
+            checkWin();
+        }
 
-    // Check Win after longest spin (2s)
-    setTimeout(() => {
-        slotBtn.disabled = false;
-        checkWin(results);
-    }, 2100);
+        // Collision: Wall
+        if (ball.x > WALL_X && ball.x < WALL_X + 20 && ball.y > cvs.height - 10 - WALL_H) {
+             ball.vx *= -0.5; // Bounce back
+             state = 'END';
+             btn.innerText = "BLOCKED! RESET?";
+             btn.style.background = "#ff2a6d";
+        }
+    }
+
+    // Draw Ball
+    ctx.beginPath();
+    ctx.arc(ball.x, ball.y, ball.r, 0, Math.PI*2);
+    ctx.fillStyle = "#fff"; ctx.fill();
+    ctx.strokeStyle = "#000"; ctx.stroke();
+
+    requestAnimationFrame(loop);
 }
 
-function checkWin(results) {
-    const r1 = icons[results[0]];
-    const r2 = icons[results[1]];
-    const r3 = icons[results[2]];
+function drawArrow(x, y, ang, len, color) {
+    const rad = ang * Math.PI / 180;
+    const endX = x + len * Math.cos(-rad);
+    const endY = y + len * Math.sin(-rad);
+    
+    ctx.beginPath();
+    ctx.moveTo(x, y);
+    ctx.lineTo(endX, endY);
+    ctx.strokeStyle = color;
+    ctx.lineWidth = 4;
+    ctx.stroke();
+}
 
-    if(r1 === r2 && r2 === r3) {
-        slotResult.innerHTML = "JACKPOT! 3X MULTIPLIER!";
-        slotResult.style.color = "var(--neon-yellow)";
-        slotResult.style.textShadow = "0 0 10px var(--neon-yellow)";
-    } else if(r1 === r2 || r2 === r3 || r1 === r3) {
-        slotResult.innerHTML = "PAIR MATCH! +10 PTS";
-        slotResult.style.color = "var(--neon-cyan)";
-        slotResult.style.textShadow = "none";
-    } else {
-        slotResult.innerHTML = "NO MATCH.";
-        slotResult.style.color = "var(--neon-pink)";
-        slotResult.style.textShadow = "none";
+// INPUT HANDLER
+function handleInput() {
+    if (state === 'IDLE' || state === 'END') {
+        state = 'ANGLE';
+        resetBall();
+        btn.innerText = "LOCK ANGLE";
+        btn.style.background = "#05d9e8";
+        btn.style.color = "#000";
+        pwrBar.style.display = "none";
+    } 
+    else if (state === 'ANGLE') {
+        state = 'POWER';
+        btn.innerText = "LOCK POWER";
+        btn.style.background = "#ffc800";
+        pwrBar.style.display = "block";
+    } 
+    else if (state === 'POWER') {
+        state = 'SHOOTING';
+        btn.innerText = "SHOOTING...";
+        btn.style.background = "#555";
+        btn.style.color = "#fff";
+        
+        // Calculate Velocity
+        const rad = arrow.angle * Math.PI / 180;
+        const speed = power * 0.18; // Multiplier to tune speed
+        
+        ball.vx = speed * Math.cos(-rad);
+        ball.vy = speed * Math.sin(-rad);
     }
 }
+
+function checkWin() {
+    // Did it land in the goal area?
+    // Goal is between x=cvs.width-60 and cvs.width
+    if (ball.x > cvs.width - 60 && ball.x < cvs.width) {
+        btn.innerText = "GOAL!!! (+10 PTS)";
+        btn.style.background = "#05d9e8"; // Success Cyan
+    } else {
+        btn.innerText = "MISSED. TRY AGAIN.";
+        btn.style.background = "#ff2a6d"; // Fail Pink
+    }
+}
+
+// Start
+loop();
 </script>
 </body>
 </html>
