@@ -1,194 +1,298 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Spinning Roulette Wheel</title>
-    <style>
-        body {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            height: 100vh;
-            background-color: #2c3e50;
-            font-family: 'Arial', sans-serif;
-            margin: 0;
-            color: white;
-        }
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<title>GOALSTORM! — ROULETTE</title>
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap" rel="stylesheet">
+<style>
+/* --- 1. CORE PALETTE (MATCHING YOUR THEME) --- */
+:root{
+  --bg: #0f0e17;          
+  --panel: #1a1a2e;       
+  --neon-pink: #ff2a6d;   /* REPLACES RED */
+  --neon-cyan: #05d9e8;   /* BORDERS/TEXT */
+  --neon-yellow: #ffc800; /* DATA/POINTER */
+  --text-main: #d1d1d1;
+  --wheel-dark: #16213e;  /* REPLACES BLACK */
+}
 
-        .roulette-container {
-            position: relative;
-            width: 400px;
-            height: 400px;
-        }
+*{box-sizing:border-box;margin:0;padding:0;}
 
-        canvas {
-            border-radius: 50%;
-            box-shadow: 0 0 20px rgba(0,0,0,0.5);
-            transition: transform 4s cubic-bezier(0.25, 0.1, 0.25, 1); /* Smooth easing */
-        }
+body{
+    margin:0;
+    background-color: var(--bg);
+    background-image: 
+        linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+    background-size: 20px 20px;
+    color: var(--text-main);
+    font-family:"VT323", monospace;
+    font-size: 20px; 
+    text-align:center;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    min-height: 100vh;
+    padding-bottom: 60px;
+}
 
-        /* The Pointer (Triangle) */
-        .pointer {
-            position: absolute;
-            top: -10px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 0;
-            height: 0;
-            border-left: 15px solid transparent;
-            border-right: 15px solid transparent;
-            border-top: 30px solid #f1c40f;
-            z-index: 10;
-            filter: drop-shadow(0 2px 2px rgba(0,0,0,0.3));
-        }
+/* --- 2. HEADER & GLITCH --- */
+.hero-section {
+    width: 100%; max-width: 960px; padding: 30px 0; margin-bottom: 20px;
+    border-bottom: 4px solid var(--neon-cyan);
+    background: linear-gradient(180deg, rgba(5, 217, 232, 0) 0%, rgba(5, 217, 232, 0.1) 100%);
+    position: relative; overflow: hidden;
+    text-align: center;
+}
+.scanlines {
+    position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+    background: linear-gradient(to bottom, rgba(255,255,255,0), rgba(255,255,255,0) 50%, rgba(0,0,0,0.1) 50%, rgba(0,0,0,0.1));
+    background-size: 100% 4px; pointer-events: none; z-index: 2;
+}
+.glitch {
+    font-family: "Press Start 2P", cursive; font-size: 40px; 
+    color: var(--neon-yellow);
+    text-shadow: 4px 4px 0px var(--neon-pink), -3px -3px 0px var(--neon-cyan);
+    text-transform: uppercase; margin: 0; line-height: 1; letter-spacing: -2px;
+}
 
-        #spinBtn {
-            margin-top: 30px;
-            padding: 12px 30px;
-            font-size: 1.2rem;
-            background-color: #e74c3c;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            box-shadow: 0 4px #c0392b;
-            transition: transform 0.1s;
-        }
+/* --- 3. PANEL --- */
+.panel {
+    width: 95%; max-width: 500px; background: var(--panel);
+    border: 3px solid var(--neon-cyan); padding: 20px; margin-bottom: 25px;
+    box-shadow: 0 0 20px rgba(5, 217, 232, 0.1);
+    position: relative;
+}
+h1 {
+    font-family: "Press Start 2P", cursive; font-size: 16px; margin-bottom: 20px;
+    color: var(--neon-cyan); border-bottom: 4px solid #000; padding-bottom: 10px; text-align: left;
+}
 
-        #spinBtn:active {
-            transform: translateY(2px);
-            box-shadow: 0 2px #c0392b;
-        }
+/* --- 4. ROULETTE SPECIFIC STYLES --- */
+.roulette-wrapper {
+    position: relative;
+    width: 300px;
+    height: 300px;
+    margin: 0 auto 20px auto;
+}
 
-        #spinBtn:disabled {
-            background-color: #95a5a6;
-            cursor: not-allowed;
-            box-shadow: none;
-        }
+canvas {
+    border-radius: 50%;
+    border: 5px solid #000;
+    box-shadow: 0 0 15px var(--neon-pink), inset 0 0 20px rgba(0,0,0,0.8);
+    transition: transform 5s cubic-bezier(0.1, 0.7, 0.1, 1);
+}
 
-        #result {
-            margin-top: 20px;
-            font-size: 2rem;
-            font-weight: bold;
-            min-height: 40px;
-        }
-    </style>
+/* The Pointer (Neon Style) */
+.pointer {
+    position: absolute;
+    top: -15px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 0; 
+    height: 0; 
+    border-left: 15px solid transparent;
+    border-right: 15px solid transparent;
+    border-top: 30px solid var(--neon-yellow);
+    filter: drop-shadow(0 0 5px var(--neon-yellow));
+    z-index: 10;
+}
+
+/* The Center Hub */
+.hub {
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    width: 40px; height: 40px;
+    background: #000;
+    border: 2px solid var(--neon-cyan);
+    border-radius: 50%;
+    z-index: 5;
+    box-shadow: 0 0 10px var(--neon-cyan);
+}
+
+/* Controls */
+#spinBtn {
+    font-family: "Press Start 2P", cursive; font-size: 18px; padding: 20px 40px; margin: 10px 0;
+    color: #fff; background: var(--neon-pink); border: 2px solid #fff;
+    box-shadow: 6px 6px 0px #000; cursor: pointer; transition: all 0.05s; text-transform: uppercase;
+    width: 100%;
+}
+#spinBtn:hover { background: #ff5c8d; transform: translate(-2px, -2px); box-shadow: 8px 8px 0px #000; }
+#spinBtn:active { transform: translate(2px, 2px); box-shadow: 2px 2px 0px #000; }
+#spinBtn:disabled { opacity: 0.5; cursor: not-allowed; background: #333; border-color: #555; box-shadow: none; transform: none; }
+
+/* Result Display */
+.display-box {
+    background: #000;
+    border: 2px solid #333;
+    padding: 15px;
+    margin-top: 20px;
+    text-align: left;
+}
+.label { font-family: "Press Start 2P"; font-size: 10px; color: #666; margin-bottom: 5px;}
+#resultText { 
+    font-family: "VT323"; font-size: 32px; color: var(--neon-yellow); 
+    text-transform: uppercase; min-height: 32px;
+}
+.history {
+    margin-top: 10px; font-size: 14px; color: #666; border-top: 1px dashed #333; padding-top: 5px;
+    display: flex; gap: 5px;
+}
+.hist-badge { padding: 2px 6px; border: 1px solid #333; color: #fff;}
+
+/* Animations */
+@keyframes flicker { 0%{opacity:1;} 50%{opacity:0.5;} 100%{opacity:1;} }
+.winner-anim { animation: flicker 0.2s infinite; color: #fff !important; text-shadow: 0 0 10px var(--neon-cyan);}
+
+</style>
 </head>
 <body>
 
-    <div class="roulette-container">
+<div class="hero-section">
+    <div class="scanlines"></div>
+    <div class="hero-content">
+        <h1 class="glitch">ARCADE ROULETTE</h1>
+    </div>
+</div>
+
+<div class="panel">
+    <h1>GAME TERMINAL</h1>
+    
+    <div class="roulette-wrapper">
         <div class="pointer"></div>
-        <canvas id="wheel" width="400" height="400"></canvas>
+        <div class="hub"></div>
+        <canvas id="wheel" width="300" height="300"></canvas>
     </div>
 
-    <button id="spinBtn">SPIN</button>
-    <div id="result"></div>
+    <button id="spinBtn">INITIATE SPIN</button>
 
-    <script>
-        const canvas = document.getElementById('wheel');
-        const ctx = canvas.getContext('2d');
-        const spinBtn = document.getElementById('spinBtn');
-        const resultDiv = document.getElementById('result');
+    <div class="display-box">
+        <div class="label">SYSTEM OUTPUT</div>
+        <div id="resultText">READY...</div>
+        <div class="history" id="historyLog">
+            </div>
+    </div>
+</div>
 
-        // Standard European Roulette Numbers (0-36)
-        const segments = [
-            0, 32, 15, 19, 4, 21, 2, 25, 17, 34, 6, 27, 13, 36, 11, 30, 8, 23, 10, 
-            5, 24, 16, 33, 1, 20, 14, 31, 9, 22, 18, 29, 7, 28, 12, 35, 3, 26
-        ];
+<script>
+    // Theme Colors mapped for Canvas
+    const THEME = {
+        pink: '#ff2a6d',   // Replaces Red
+        dark: '#16213e',   // Replaces Black
+        cyan: '#05d9e8',   // Replaces Green (0)
+        text: '#ffffff',
+        grid: '#ecf0f1'
+    };
 
-        const colors = segments.map(number => {
-            if (number === 0) return '#2ecc71'; // Green for 0
-            // Red numbers in Roulette
-            const redNumbers = [1, 3, 5, 7, 9, 12, 14, 16, 18, 19, 21, 23, 25, 27, 30, 32, 34, 36];
-            return redNumbers.includes(number) ? '#e74c3c' : '#34495e'; // Red or Black
-        });
+    const canvas = document.getElementById('wheel');
+    const ctx = canvas.getContext('2d');
+    const spinBtn = document.getElementById('spinBtn');
+    const resultDiv = document.getElementById('resultText');
+    const historyDiv = document.getElementById('historyLog');
 
-        const totalSegments = segments.length;
-        const arcSize = (2 * Math.PI) / totalSegments;
-        let currentRotation = 0;
+    // Standard European Order
+    const segments = [
+        0, 32, 15, 19, 4, 21, 2, 25, 17, 34, 6, 27, 13, 36, 11, 30, 8, 23, 10, 
+        5, 24, 16, 33, 1, 20, 14, 31, 9, 22, 18, 29, 7, 28, 12, 35, 3, 26
+    ];
 
-        // 1. Draw the Wheel
-        function drawWheel() {
-            const radius = canvas.width / 2;
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
+    // Map numbers to Theme Colors
+    const colors = segments.map(number => {
+        if (number === 0) return THEME.cyan; 
+        const redNumbers = [1, 3, 5, 7, 9, 12, 14, 16, 18, 19, 21, 23, 25, 27, 30, 32, 34, 36];
+        return redNumbers.includes(number) ? THEME.pink : THEME.dark;
+    });
+
+    const totalSegments = segments.length;
+    const arcSize = (2 * Math.PI) / totalSegments;
+    let currentRotation = 0;
+
+    function drawWheel() {
+        const radius = canvas.width / 2;
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        
+        // Outer Rim (Dark)
+        ctx.beginPath();
+        ctx.arc(radius, radius, radius, 0, 2 * Math.PI);
+        ctx.fillStyle = "#000";
+        ctx.fill();
+
+        for (let i = 0; i < totalSegments; i++) {
+            const angle = i * arcSize - Math.PI / 2;
             
-            // Draw Outer Rim
             ctx.beginPath();
-            ctx.arc(radius, radius, radius, 0, 2 * Math.PI);
-            ctx.fillStyle = "#ecf0f1";
+            ctx.moveTo(radius, radius);
+            ctx.arc(radius, radius, radius - 5, angle, angle + arcSize);
+            ctx.fillStyle = colors[i];
             ctx.fill();
+            ctx.strokeStyle = "#000";
+            ctx.lineWidth = 2;
+            ctx.stroke();
 
-            // Draw Segments
-            for (let i = 0; i < totalSegments; i++) {
-                const angle = i * arcSize - Math.PI / 2; // Start at top (12 o'clock)
-                
-                ctx.beginPath();
-                ctx.moveTo(radius, radius);
-                ctx.arc(radius, radius, radius - 10, angle, angle + arcSize);
-                ctx.fillStyle = colors[i];
-                ctx.fill();
-                ctx.save();
-
-                // Draw Text
-                ctx.translate(radius, radius);
-                ctx.rotate(angle + arcSize / 2);
-                ctx.textAlign = "right";
-                ctx.fillStyle = "#fff";
-                ctx.font = "bold 14px Arial";
-                ctx.fillText(segments[i], radius - 25, 5);
-                ctx.restore();
-            }
-
-            // Draw Center Circle
-            ctx.beginPath();
-            ctx.arc(radius, radius, 20, 0, 2 * Math.PI);
-            ctx.fillStyle = "#fff";
-            ctx.fill();
+            ctx.save();
+            ctx.translate(radius, radius);
+            ctx.rotate(angle + arcSize / 2);
+            ctx.textAlign = "right";
+            ctx.fillStyle = (colors[i] === THEME.cyan) ? "#000" : "#fff"; // Dark text on Cyan
+            ctx.font = "20px 'VT323'"; // Theme Font
+            ctx.fillText(segments[i], radius - 15, 6);
+            ctx.restore();
         }
+    }
 
-        drawWheel();
+    drawWheel();
 
-        // 2. Handle Spin
-        spinBtn.addEventListener('click', () => {
-            // Disable button during spin
-            spinBtn.disabled = true;
-            resultDiv.innerText = "Spinning...";
+    spinBtn.addEventListener('click', () => {
+        spinBtn.disabled = true;
+        resultDiv.className = "";
+        resultDiv.style.color = "#888";
+        resultDiv.innerText = "CALCULATING TRAJECTORY...";
 
-            // Calculate random rotation:
-            // At least 5 full spins (1800 degrees) + random segment
-            const randomDegree = Math.floor(Math.random() * 360);
-            const extraSpins = 5 * 360; 
-            const newRotation = currentRotation + extraSpins + randomDegree;
-            
-            // Apply CSS transform for smooth animation
-            canvas.style.transform = `rotate(${newRotation}deg)`;
-            
-            currentRotation = newRotation;
+        // Add variance to landing position (center of wedge vs edge)
+        const randomDegree = Math.floor(Math.random() * 360);
+        // Spin 10 times (3600 deg) + random
+        const extraSpins = 10 * 360; 
+        const newRotation = currentRotation + extraSpins + randomDegree;
+        
+        canvas.style.transform = `rotate(${newRotation}deg)`;
+        currentRotation = newRotation;
 
-            // Wait for transition to end to determine winner
-            setTimeout(() => {
-                spinBtn.disabled = false;
-                determineWinner(newRotation);
-            }, 4000); // Matches CSS transition time (4s)
-        });
+        setTimeout(() => {
+            spinBtn.disabled = false;
+            determineWinner(newRotation);
+        }, 5000); // 5 seconds spin
+    });
 
-        // 3. Calculate Winner
-        function determineWinner(rotation) {
-            // Normalize rotation to 0-360
-            const degree = rotation % 360;
-            
-            // The pointer is at the top (0 degrees).
-            // Since the wheel rotates clockwise, the numbers pass the pointer in reverse order.
-            // We calculate how far the wheel traveled "past" the 0 mark relative to the pointer.
-            
-            const index = Math.floor((360 - degree) / (360 / totalSegments)) % totalSegments;
-            const winningNumber = segments[index];
-            const winningColor = colors[index] === '#e74c3c' ? 'Red' : (colors[index] === '#34495e' ? 'Black' : 'Green');
+    function determineWinner(rotation) {
+        const degree = rotation % 360;
+        // Pointer is at top (0 deg). 
+        // 360 - degree gives us the angle under the pointer.
+        const index = Math.floor((360 - degree) / (360 / totalSegments)) % totalSegments;
+        
+        const winNum = segments[index];
+        let winColorStr = "NEON";
+        let hex = THEME.cyan;
 
-            resultDiv.innerHTML = `Winner: <span style="color:${colors[index]}">${winningNumber} (${winningColor})</span>`;
-        }
-    </script>
+        if(colors[index] === THEME.pink) { winColorStr = "HOT PINK"; hex = THEME.pink; }
+        if(colors[index] === THEME.dark) { winColorStr = "DEEP BLUE"; hex = "#4455aa"; }
+
+        // Update Text
+        resultDiv.innerHTML = `<span style="color:${hex}">${winNum} // ${winColorStr}</span>`;
+        resultDiv.classList.add('winner-anim');
+
+        // Update History Log
+        const span = document.createElement('span');
+        span.className = 'hist-badge';
+        span.style.borderColor = hex;
+        span.style.color = hex;
+        span.innerText = winNum;
+        
+        // Keep only last 8 history items
+        if(historyDiv.children.length > 7) historyDiv.removeChild(historyDiv.firstChild);
+        historyDiv.appendChild(span);
+    }
+</script>
 </body>
 </html>
