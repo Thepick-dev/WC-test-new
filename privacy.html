@@ -1,54 +1,194 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Privacy — Retro Football</title>
-<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
-<style>
-:root{--bg:#0A0A1A;--yellow:#FFD60A;--cyan:#00FFFF;--nav-text:var(--yellow);--nav-active-bg:var(--yellow);--nav-active-text:#0A0A1A;font-family:'Press Start 2P',monospace;}
-*{box-sizing:border-box;margin:0;padding:0}
-html,body{height:100%;background:var(--bg);color:var(--yellow);font-family:'Press Start 2P',monospace;}
-header.site-header{position:sticky;top:0;z-index:50}
-nav.main-nav{display:flex;width:100%;justify-content:space-between;background:#0A0A1A;border-bottom:4px solid rgba(0,255,255,0.12)}
-.nav-link{flex:1;text-align:center;padding:14px 0;text-decoration:none;color:var(--nav-text);border-right:1px solid rgba(0,255,255,0.06);transition:all .2s;font-size:11px;}
-.nav-link:last-child{border-right:none;}
-.nav-link:hover{color:var(--cyan);text-shadow:0 0 8px var(--cyan);}
-.nav-link.active{background:var(--nav-active-bg);color:var(--nav-active-text);outline:3px solid var(--cyan);}
-.banner{width:100%;height:160px;background-image:url('assets/privacy.jpg');background-size:cover;background-position:center;margin-top:0;box-shadow:0 6px 18px rgba(0,255,255,0.1);}
-main{max-width:960px;margin:24px auto;padding:12px;text-align:left;font-size:10px;}
-footer{border-top:4px solid rgba(0,255,255,0.06);padding:18px 0;text-align:center;}
-footer a{color:var(--yellow);text-decoration:underline;font-size:11px;}
-@media(max-width:480px){.banner{height:120px}.nav-link{font-size:9px;padding:12px 0;}}
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Spinning Roulette Wheel</title>
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            background-color: #2c3e50;
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            color: white;
+        }
+
+        .roulette-container {
+            position: relative;
+            width: 400px;
+            height: 400px;
+        }
+
+        canvas {
+            border-radius: 50%;
+            box-shadow: 0 0 20px rgba(0,0,0,0.5);
+            transition: transform 4s cubic-bezier(0.25, 0.1, 0.25, 1); /* Smooth easing */
+        }
+
+        /* The Pointer (Triangle) */
+        .pointer {
+            position: absolute;
+            top: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 0;
+            height: 0;
+            border-left: 15px solid transparent;
+            border-right: 15px solid transparent;
+            border-top: 30px solid #f1c40f;
+            z-index: 10;
+            filter: drop-shadow(0 2px 2px rgba(0,0,0,0.3));
+        }
+
+        #spinBtn {
+            margin-top: 30px;
+            padding: 12px 30px;
+            font-size: 1.2rem;
+            background-color: #e74c3c;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            box-shadow: 0 4px #c0392b;
+            transition: transform 0.1s;
+        }
+
+        #spinBtn:active {
+            transform: translateY(2px);
+            box-shadow: 0 2px #c0392b;
+        }
+
+        #spinBtn:disabled {
+            background-color: #95a5a6;
+            cursor: not-allowed;
+            box-shadow: none;
+        }
+
+        #result {
+            margin-top: 20px;
+            font-size: 2rem;
+            font-weight: bold;
+            min-height: 40px;
+        }
+    </style>
 </head>
 <body>
-<header class="site-header">
-  <nav class="main-nav" aria-label="Main navigation">
-    <a class="nav-link" href="index.html">HOME</a>
-    <a class="nav-link" href="predict.html">PREDICT</a>
-    <a class="nav-link" href="standings.html">STANDINGS</a>
-    <a class="nav-link" href="rules.html">RULES</a>
-  </nav>
-  <div class="banner"></div>
-</header>
 
-<main>
-<h1>PRIVACY POLICY</h1>
-<p>We respect your privacy. Any email submitted via the register interest form is stored securely and used solely for updates regarding Retro Football.</p>
-<p>No personal information is shared with third parties. Cookies may be used for performance analytics and to enhance the user experience.</p>
-</main>
+    <div class="roulette-container">
+        <div class="pointer"></div>
+        <canvas id="wheel" width="400" height="400"></canvas>
+    </div>
 
-<footer>
-  <a href="privacy.html">Privacy Policy</a>
-</footer>
+    <button id="spinBtn">SPIN</button>
+    <div id="result"></div>
 
-<audio id="bgAudio" src="assets/go.mp3" preload="auto" playsinline autoplay loop></audio>
-<script>
-const audio=document.getElementById('bgAudio');
-function tryPlay(){audio.play().catch(()=>{});}
-window.addEventListener('load',tryPlay);
-document.addEventListener('visibilitychange',()=>{if(!document.hidden){tryPlay();}});
-</script>
+    <script>
+        const canvas = document.getElementById('wheel');
+        const ctx = canvas.getContext('2d');
+        const spinBtn = document.getElementById('spinBtn');
+        const resultDiv = document.getElementById('result');
+
+        // Standard European Roulette Numbers (0-36)
+        const segments = [
+            0, 32, 15, 19, 4, 21, 2, 25, 17, 34, 6, 27, 13, 36, 11, 30, 8, 23, 10, 
+            5, 24, 16, 33, 1, 20, 14, 31, 9, 22, 18, 29, 7, 28, 12, 35, 3, 26
+        ];
+
+        const colors = segments.map(number => {
+            if (number === 0) return '#2ecc71'; // Green for 0
+            // Red numbers in Roulette
+            const redNumbers = [1, 3, 5, 7, 9, 12, 14, 16, 18, 19, 21, 23, 25, 27, 30, 32, 34, 36];
+            return redNumbers.includes(number) ? '#e74c3c' : '#34495e'; // Red or Black
+        });
+
+        const totalSegments = segments.length;
+        const arcSize = (2 * Math.PI) / totalSegments;
+        let currentRotation = 0;
+
+        // 1. Draw the Wheel
+        function drawWheel() {
+            const radius = canvas.width / 2;
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            // Draw Outer Rim
+            ctx.beginPath();
+            ctx.arc(radius, radius, radius, 0, 2 * Math.PI);
+            ctx.fillStyle = "#ecf0f1";
+            ctx.fill();
+
+            // Draw Segments
+            for (let i = 0; i < totalSegments; i++) {
+                const angle = i * arcSize - Math.PI / 2; // Start at top (12 o'clock)
+                
+                ctx.beginPath();
+                ctx.moveTo(radius, radius);
+                ctx.arc(radius, radius, radius - 10, angle, angle + arcSize);
+                ctx.fillStyle = colors[i];
+                ctx.fill();
+                ctx.save();
+
+                // Draw Text
+                ctx.translate(radius, radius);
+                ctx.rotate(angle + arcSize / 2);
+                ctx.textAlign = "right";
+                ctx.fillStyle = "#fff";
+                ctx.font = "bold 14px Arial";
+                ctx.fillText(segments[i], radius - 25, 5);
+                ctx.restore();
+            }
+
+            // Draw Center Circle
+            ctx.beginPath();
+            ctx.arc(radius, radius, 20, 0, 2 * Math.PI);
+            ctx.fillStyle = "#fff";
+            ctx.fill();
+        }
+
+        drawWheel();
+
+        // 2. Handle Spin
+        spinBtn.addEventListener('click', () => {
+            // Disable button during spin
+            spinBtn.disabled = true;
+            resultDiv.innerText = "Spinning...";
+
+            // Calculate random rotation:
+            // At least 5 full spins (1800 degrees) + random segment
+            const randomDegree = Math.floor(Math.random() * 360);
+            const extraSpins = 5 * 360; 
+            const newRotation = currentRotation + extraSpins + randomDegree;
+            
+            // Apply CSS transform for smooth animation
+            canvas.style.transform = `rotate(${newRotation}deg)`;
+            
+            currentRotation = newRotation;
+
+            // Wait for transition to end to determine winner
+            setTimeout(() => {
+                spinBtn.disabled = false;
+                determineWinner(newRotation);
+            }, 4000); // Matches CSS transition time (4s)
+        });
+
+        // 3. Calculate Winner
+        function determineWinner(rotation) {
+            // Normalize rotation to 0-360
+            const degree = rotation % 360;
+            
+            // The pointer is at the top (0 degrees).
+            // Since the wheel rotates clockwise, the numbers pass the pointer in reverse order.
+            // We calculate how far the wheel traveled "past" the 0 mark relative to the pointer.
+            
+            const index = Math.floor((360 - degree) / (360 / totalSegments)) % totalSegments;
+            const winningNumber = segments[index];
+            const winningColor = colors[index] === '#e74c3c' ? 'Red' : (colors[index] === '#34495e' ? 'Black' : 'Green');
+
+            resultDiv.innerHTML = `Winner: <span style="color:${colors[index]}">${winningNumber} (${winningColor})</span>`;
+        }
+    </script>
 </body>
 </html>
