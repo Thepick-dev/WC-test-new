@@ -48,7 +48,8 @@ body{
 .hero-section {
     width: 100%; max-width: 960px; padding: 60px 0; margin-bottom: 20px;
     border-bottom: 4px solid var(--neon-cyan);
-    background: linear-gradient(180deg, rgba(5, 217, 232, 0) 0%, rgba(5, 217, 232, 0.1) 100%);
+    /* Changed to solid black to match sprite backgrounds */
+    background: #000; 
     position: relative; overflow: hidden;
     text-align: center;
     min-height: 220px;
@@ -68,7 +69,7 @@ body{
 
 .sprite-player {
     position: absolute; 
-    left: 5%; 
+    left: 2%; /* Moved further left to avoid crowding the text */
     bottom: 10%; 
     width: 120px; 
     height: 120px; 
@@ -81,7 +82,7 @@ body{
 
 .sprite-ball {
     position: absolute; 
-    left: 20%; 
+    left: 15%; /* Adjusted starting point relative to new player position */
     bottom: 15%; 
     width: 30px; 
     height: 30px; 
@@ -127,7 +128,7 @@ body{
 .hero-content {
     position: relative; z-index: 3;
     opacity: 0;
-    animation: fadeInText 0.3s ease-in 0.8s forwards; /* Appears as ball strikes */
+    animation: fadeInText 0.3s ease-in 0.8s forwards; 
 }
 @keyframes fadeInText { to { opacity: 1; transform: scale(1); } }
 
