@@ -48,7 +48,6 @@ body{
 .hero-section {
     width: 100%; max-width: 960px; padding: 60px 0; margin-bottom: 20px;
     border-bottom: 4px solid var(--neon-cyan);
-    /* Changed to solid black to match sprite backgrounds */
     background: #000; 
     position: relative; overflow: hidden;
     text-align: center;
@@ -69,8 +68,8 @@ body{
 
 .sprite-player {
     position: absolute; 
-    left: 2%; /* Moved further left to avoid crowding the text */
-    bottom: 10%; 
+    left: 2%; 
+    top: 45%; /* Shifted up to align bar with hero wording */
     width: 120px; 
     height: 120px; 
     background-image: var(--player-idle);
@@ -82,8 +81,8 @@ body{
 
 .sprite-ball {
     position: absolute; 
-    left: 15%; /* Adjusted starting point relative to new player position */
-    bottom: 15%; 
+    left: 15%; 
+    top: 73%; /* Adjusted to match new player verticality */
     width: 30px; 
     height: 30px; 
     background-image: var(--ball-normal);
@@ -94,9 +93,14 @@ body{
 
 .power-bar-container {
     position: absolute;
-    top: -20px; left: 0; width: 100%; height: 8px;
-    background: #222; border: 1px solid #fff;
-    opacity: 0; animation: show-bar 0.1s linear 0s forwards;
+    top: -10px; /* Aligned with top of wording */
+    left: 0; 
+    width: 100%; 
+    height: 8px;
+    background: #222; 
+    border: 1px solid #fff;
+    opacity: 0; 
+    animation: show-bar 0.1s linear 0s forwards;
 }
 .power-fill {
     height: 100%; width: 0%; background: var(--neon-yellow); 
@@ -275,22 +279,20 @@ input:focus, select:focus { border-color: var(--neon-yellow); }
 
 <div class="panel">
     <h1>3RD PLACE PLAYOFF</h1>
-    <div class="instructions">Loser SF1 vs Loser SF2</div>
     <div id="playoff-container"></div>
 </div>
 
 <div class="panel">
     <h1>WORLD CUP WINNER</h1>
-    <div class="instructions">CHOOSE STRATEGY: HEDGE (Safe Points) or RISK (Big Bonus).</div>
     <div class="strategy-toggle">
         <button class="strat-btn" id="btnHedge" onclick="setStrategy('hedge')">HEDGE IT<br>(RANK 1-4)</button>
         <button class="strat-btn" id="btnRisk" onclick="setStrategy('risk')">RISK IT<br>(PICK 1 WINNER)</button>
     </div>
     <div id="hedgeContent" class="strat-content">
-        <select id="rank1" onchange="validate()"><option value="">1ST PLACE PREDICTION...</option></select>
-        <select id="rank2" onchange="validate()"><option value="">2ND PLACE PREDICTION...</option></select>
-        <select id="rank3" onchange="validate()"><option value="">3RD PLACE PREDICTION...</option></select>
-        <select id="rank4" onchange="validate()"><option value="">4TH PLACE PREDICTION...</option></select>
+        <select id="rank1" onchange="validate()"><option value="">1ST PLACE...</option></select>
+        <select id="rank2" onchange="validate()"><option value="">2ND PLACE...</option></select>
+        <select id="rank3" onchange="validate()"><option value="">3RD PLACE...</option></select>
+        <select id="rank4" onchange="validate()"><option value="">4TH PLACE...</option></select>
     </div>
     <div id="riskContent" class="strat-content">
         <select id="riskSelect" onchange="validate()"><option value="">SELECT CHAMPION...</option></select>
