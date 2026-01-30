@@ -8,6 +8,7 @@
 <style>
 /* --- 1. SETUP & ASSETS --- */
 :root {
+    /* Ensure these match your filenames exactly */
     --player-idle:    url('p1.png');
     --player-windup:  url('p2.png');
     --player-kick:    url('p3.png');
@@ -15,12 +16,13 @@
     --ball-normal:    url('b1.png');
     --ball-super:     url('b2.png');
 
-    /* A tight 1.2 second sting */
+    /* Animation Duration */
     --total-time: 1.2s;
 }
 
 /* --- 2. GLOBAL RESET --- */
 * { box-sizing: border-box; margin: 0; padding: 0; }
+
 body { 
     background: #000; 
     font-family: 'Press Start 2P', cursive; 
@@ -31,7 +33,7 @@ body {
     justify-content: center;
 }
 
-/* --- 3. THE STING LAYER (The Animation) --- */
+/* --- 3. THE STING CONTAINER --- */
 #sting-layer {
     position: fixed; 
     inset: 0; 
@@ -40,129 +42,120 @@ body {
     display: flex; 
     align-items: center; 
     justify-content: center;
-    /* Fades out smoothly after animation */
+    /* Clean fade out */
     animation: fadeOut 0.2s ease-out 1.4s forwards;
 }
 
-/* MOBILE FIX: The Arena uses Aspect Ratio.
-   It creates a responsive "box" that is always twice as wide as it is tall.
-   Everything inside is positioned with %, so it never breaks on phones.
+/* THE STAGE: Fixed Aspect Ratio (16:9) 
+   This ensures the distance between foot and ball is IDENTICAL on all phones.
 */
 .arena {
     width: 100%;
-    max-width: 800px; /* Cap size on big screens */
-    aspect-ratio: 2 / 1; /* Keeps the stage shape perfect on mobile */
+    max-width: 800px;
+    aspect-ratio: 16 / 9; 
     position: relative;
-    overflow: hidden; /* Clips the fireball when it flies out */
+    /* Optional: visual debugger to see the floor */
+    /* border-bottom: 2px solid #333; */ 
 }
 
 /* --- THE PLAYER --- */
 .sprite-player {
     position: absolute; 
-    left: 10%; 
-    bottom: 5%; /* Relative to the arena floor */
-    width: 20%; /* Responsive Size */
-    aspect-ratio: 1/1; /* Keeps player square */
-    z-index: 2;
+    left: 15%; 
+    bottom: 0; /* Anchor feet to floor */
+    width: 30%; /* Bigger size for better visibility */
+    aspect-ratio: 1/1; 
+    z-index: 10;
     
     background-image: var(--player-idle);
     background-size: contain; 
     background-repeat: no-repeat; 
     background-position: bottom center;
 
-    /* 'step-end' gives it that chunky NES frame-swapping feel */
+    /* 'step-end' prevents ghosting between frames */
     animation: player-sequence var(--total-time) step-end forwards;
 }
 
 /* --- THE BALL --- */
 .sprite-ball {
     position: absolute; 
-    left: 26%; /* Positioned relative to player foot */
-    bottom: 8%; 
-    z-index: 1;
+    left: 38%; /* Adjusted to sit right in front of the 30% wide player */
+    bottom: 0; /* Align with floor */
+    z-index: 5;
     
-    /* Start State */
-    width: 6%; /* Responsive size for normal ball */
+    /* Normal Ball Size */
+    width: 8%; 
     aspect-ratio: 1/1; 
     
     background-image: var(--ball-normal);
     background-size: contain; 
     background-repeat: no-repeat;
-    background-position: center left; /* aligned left so it grows outward */
+    background-position: bottom left; 
+    
+    /* CRITICAL FIX: Grows from left to right */
+    transform-origin: left bottom; 
 
     animation: ball-sequence var(--total-time) linear forwards;
 }
 
-/* --- UI FX (Text & Bar) --- */
+/* --- TEXT FX --- */
 .shout-text {
     position: absolute; 
-    top: -20%; 
+    top: 10%; 
     left: 0; 
     width: 100%;
     text-align: center;
     color: #ffd60a; 
-    font-size: 3vw; /* Responsive font size */
+    font-size: 4vw; 
     opacity: 0;
-    text-shadow: 2px 2px #ff0055;
+    text-shadow: 4px 4px #ff0055;
     animation: text-pop 0.1s linear 0.6s forwards, text-hide 0.1s linear 0.9s forwards;
-}
-
-.flash-screen {
-    position: absolute; inset: 0; background: #fff; opacity: 0; pointer-events: none; z-index: 999;
-    animation: flash 0.15s linear 0.65s forwards;
 }
 
 /* =========================================
    ANIMATION KEYFRAMES
    ========================================= */
 
-/* PLAYER: 
-   0%: Idle
-   50%: Windup (Backswing)
-   55%: Kick (Impact)
-*/
+/* PLAYER MOVEMENT */
 @keyframes player-sequence {
     0%   { background-image: var(--player-idle); }
     50%  { background-image: var(--player-windup); }
-    55%  { background-image: var(--player-kick); transform: translateX(2%); } 
-    100% { background-image: var(--player-kick); transform: translateX(2%); }
+    55%  { background-image: var(--player-kick); transform: translateX(5%); } /* Slight lunge forward */
+    100% { background-image: var(--player-kick); transform: translateX(5%); }
 }
 
-/* BALL PHYSICS:
-   The width snaps instantly at 55% to match the fireball image.
-*/
+/* BALL PHYSICS */
 @keyframes ball-sequence {
-    /* --- WAITING --- */
-    0%   { background-image: var(--ball-normal); transform: translateX(0); width: 6%; aspect-ratio: 1/1; }
-    54%  { background-image: var(--ball-normal); transform: translateX(0); width: 6%; aspect-ratio: 1/1; }
+    /* 1. IDLE STATE */
+    0%   { background-image: var(--ball-normal); transform: translateX(0); width: 8%; }
+    54%  { background-image: var(--ball-normal); transform: translateX(0); width: 8%; }
     
-    /* --- IMPACT (Snap to Fireball) --- */
+    /* 2. IMPACT (Instant Swap) */
     55%  { 
         background-image: var(--ball-super);  
-        width: 25%; /* Fireball is wider */
-        aspect-ratio: auto; /* Allow rectangle shape */
-        height: 15%; /* Match relative height */
+        width: 35%; /* Fireball is much longer */
+        aspect-ratio: 3/1; /* Fireball shape */
         transform: translateX(0); 
-        animation-timing-function: cubic-bezier(0.1, 1, 0.2, 1); /* Explosive ease-out */
+        animation-timing-function: cubic-bezier(0.1, 1, 0.2, 1); /* "Explosion" curve */
     }
     
-    /* --- FLIGHT --- */
+    /* 3. FLIGHT (Exit Screen) */
     100% { 
         background-image: var(--ball-super);
-        width: 25%;
-        height: 15%;
-        aspect-ratio: auto; 
-        transform: translateX(300%); /* Fly off stage using % */
+        width: 35%;
+        aspect-ratio: 3/1;
+        transform: translateX(300%); /* Fly off to the right */
     }
 }
 
+/* UTILITIES */
 @keyframes text-pop { 0% { opacity: 0; transform: scale(0.5); } 100% { opacity: 1; transform: scale(1.2); } }
 @keyframes text-hide { to { opacity: 0; } }
-@keyframes flash { 0%, 100% { opacity: 0; } 50% { opacity: 1; } }
 @keyframes fadeOut { to { opacity: 0; visibility: hidden; } }
+@keyframes fadeInPage { to { opacity: 1; } }
 
 /* =========================================
-   HOMEPAGE (Content Layer)
+   HOMEPAGE
    ========================================= */
 #homepage {
     position: absolute;
@@ -173,23 +166,20 @@ body {
     opacity: 0; 
     animation: fadeInPage 0.5s ease-in 1.5s forwards;
 }
-@keyframes fadeInPage { to { opacity: 1; } }
 
 .nav-bar { display: flex; gap: 20px; margin-bottom: 40px; }
 .nav-bar a { color: #00f6ff; text-decoration: none; border: 1px solid #00f6ff; padding: 10px 20px; font-size: 14px; }
-.hero h1 { font-size: 40px; color: #ffd60a; text-shadow: 4px 4px #ff0055; margin-bottom: 20px;}
+.hero h1 { font-size: 40px; color: #ffd60a; text-shadow: 4px 4px #ff0055; margin-bottom: 20px; text-align: center;}
 
 </style>
 </head>
 <body>
 
     <div id="sting-layer">
-        <div class="flash-screen"></div>
         <div class="arena">
-            <div class="sprite-player">
-                <div class="shout-text">SURGE!</div>
-            </div>
+            <div class="sprite-player"></div>
             <div class="sprite-ball"></div>
+            <div class="shout-text">SURGE!</div>
         </div>
     </div>
 
@@ -206,7 +196,6 @@ body {
     </div>
 
 <script>
-    // Cleanup script
     window.addEventListener('load', () => {
         setTimeout(() => {
             const sting = document.getElementById('sting-layer');
