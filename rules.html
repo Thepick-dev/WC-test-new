@@ -6,7 +6,7 @@
 <title>GOALSTORM! — ROUND 3</title>
 <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap" rel="stylesheet">
 <style>
-/* --- 1. CORE PALETTE --- */
+/* --- 1. CORE PALETTE: HOT ARCADE --- */
 :root{
   --bg: #0f0e17;          
   --panel: #1a1a2e;       
@@ -36,88 +36,123 @@ body{
     padding-bottom: 60px;
 }
 
-/* --- BOOT SEQUENCE ANIMATION (THE STING) --- */
+/* =========================================
+   BOOT SEQUENCE: THUNDER STRIKE (V3)
+   ========================================= */
 #boot-sequence {
-    position: fixed;
-    top: 0; left: 0; width: 100%; height: 100%;
-    background-color: #000;
+    position: fixed; inset: 0;
+    background: radial-gradient(circle at center, #1a1a2e 0%, #000 100%); /* New BG */
     z-index: 9999;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    overflow: hidden;
-    /* The whole black screen fades out after 2.6s */
-    animation: fadeOutSting 0.5s ease-in-out 2.6s forwards;
+    display: flex; align-items: center; justify-content: center;
+    /* Hard cut to website after 3.5s */
+    animation: killBoot 0.1s linear 3.5s forwards;
 }
 
-.sting-stage {
+.thunder-stage {
     position: relative;
-    width: 300px;
-    height: 300px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    width: 300px; height: 300px;
+    display: flex; align-items: center; justify-content: center;
 }
 
-/* 1. The Ball: Rolls in, pauses, gets kicked */
-.sting-ball {
-    font-size: 60px;
+/* 1. THE WIREFRAME BALL */
+.electric-ball {
     position: absolute;
-    left: -150px; /* Start off screen */
-    bottom: 40%;
-    animation: ballRollAndKick 2s cubic-bezier(0.25, 1, 0.5, 1) forwards;
-    z-index: 2;
-}
-
-/* 2. The Flash: Explodes on impact */
-.sting-flash {
-    position: absolute;
-    width: 10px; height: 10px;
-    background: #fff;
+    width: 60px; height: 60px;
     border-radius: 50%;
-    opacity: 0;
-    z-index: 1;
-    box-shadow: 0 0 100px var(--neon-pink), 0 0 50px var(--neon-cyan);
-    animation: impactFlash 0.5s ease-out 1.2s forwards;
+    border: 4px solid var(--neon-cyan);
+    background: rgba(0,0,0,0.5);
+    box-shadow: 0 0 20px var(--neon-cyan);
+    z-index: 2;
+    /* Animations: Float -> Get Struck -> Explode */
+    animation: 
+        ballFloat 0.8s infinite alternate ease-in-out,
+        ballHit 0.2s cubic-bezier(0.1, 0.9, 0.2, 1) 1.6s forwards;
 }
+/* Internal wireframe lines */
+.electric-ball::before, .electric-ball::after {
+    content: ''; position: absolute; inset: 0; border-radius: 50%;
+    border: 2px solid rgba(5, 217, 232, 0.5);
+}
+.electric-ball::before { transform: rotateX(60deg); }
+.electric-ball::after { transform: rotateY(60deg); }
 
-/* 3. The Logo: Thuds in */
-.sting-logo {
-    font-family: "Press Start 2P"; 
-    font-size: 40px;
-    color: var(--neon-yellow);
-    text-shadow: 4px 4px 0 var(--neon-pink);
-    opacity: 0;
-    transform: scale(3); /* Starts huge */
+/* 2. THE LIGHTNING BOLT */
+.lightning-container {
+    position: absolute;
+    top: -200px; left: 50%; transform: translateX(-50%);
+    width: 100px; height: 240px;
     z-index: 3;
-    animation: logoSlam 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) 1.2s forwards;
+    overflow: visible;
+}
+.lightning-path {
+    stroke: #fff;
+    stroke-width: 8px;
+    fill: none;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    filter: drop-shadow(0 0 15px var(--neon-yellow));
+    stroke-dasharray: 600;
+    stroke-dashoffset: 600; /* Hidden */
+    animation: boltStrike 0.4s ease-out 1.3s forwards;
+    opacity: 0;
 }
 
-/* KEYFRAMES */
-@keyframes ballRollAndKick {
-    0% { left: -150px; transform: rotate(0deg); }
-    40% { left: 42%; transform: rotate(360deg); } /* Rolls to center */
-    55% { left: 42%; transform: rotate(360deg) scale(0.9); } /* Winds up */
-    60% { left: 42%; opacity: 1; }
-    100% { left: 150%; top: -100px; transform: rotate(720deg) scale(1.5); opacity: 0;} /* KICKED AWAY */
+/* 3. SCREEN FLASH (The Impact) */
+.white-flash {
+    position: absolute; inset: 0;
+    background: #fff;
+    opacity: 0;
+    pointer-events: none;
+    z-index: 10;
+    animation: flashBang 0.2s linear 1.6s forwards; /* Fires exactly when bolt hits ball */
 }
 
-@keyframes impactFlash {
-    0% { transform: scale(0); opacity: 1; }
-    100% { transform: scale(50); opacity: 0; } /* Explodes to fill screen */
+/* 4. THE LOGO REVEAL */
+.boot-logo {
+    font-family: "Press Start 2P"; font-size: 48px;
+    color: var(--neon-yellow);
+    text-shadow: 4px 4px 0 var(--neon-pink), -4px -4px 0 var(--neon-cyan);
+    opacity: 0;
+    transform: scale(0.5);
+    z-index: 5;
+    animation: logoPop 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) 1.7s forwards;
 }
 
-@keyframes logoSlam {
-    0% { opacity: 0; transform: scale(2); filter: blur(10px); }
+/* --- ANIMATION TIMING --- */
+@keyframes ballFloat { 
+    from { transform: translateY(0); } 
+    to { transform: translateY(-10px); } 
+}
+
+@keyframes boltStrike {
+    0% { stroke-dashoffset: 600; opacity: 1; }
+    40% { stroke-dashoffset: 0; opacity: 1; } /* Connected */
+    80% { stroke-width: 12px; stroke: #fff; opacity: 1; } /* Glow brighter */
+    100% { stroke-dashoffset: 0; opacity: 0; } /* Gone */
+}
+
+@keyframes flashBang {
+    0% { opacity: 0; }
+    50% { opacity: 1; } /* BLINDING WHITE */
+    100% { opacity: 0; }
+}
+
+@keyframes ballHit {
+    0% { transform: scale(1); opacity: 1; }
+    100% { transform: scale(3); opacity: 0; border-width: 0; } /* Explodes outward */
+}
+
+@keyframes logoPop {
+    0% { opacity: 0; transform: scale(0.5); filter: blur(10px); }
     100% { opacity: 1; transform: scale(1); filter: blur(0); }
 }
 
-@keyframes fadeOutSting {
-    to { opacity: 0; visibility: hidden; }
-}
+@keyframes killBoot { to { visibility: hidden; opacity: 0; pointer-events: none; } }
 
 
-/* --- SITE STYLES (FROM V2) --- */
+/* =========================================
+   MAIN SITE STYLES
+   ========================================= */
 .hero-section {
     width: 100%; max-width: 960px; padding: 30px 0; margin-bottom: 20px;
     border-bottom: 4px solid var(--neon-cyan);
@@ -141,6 +176,8 @@ body{
     margin-top: 15px; letter-spacing: 3px; background: var(--neon-pink);
     padding: 6px 12px; display: inline-block; box-shadow: 4px 4px 0 #000;
 }
+
+/* NAV */
 .nav { width: 100%; max-width: 960px; display: flex; gap: 10px; padding: 10px; margin-top: 10px; }
 .nav a {
   flex: 1; font-family: "Press Start 2P", cursive; font-size: 10px; padding: 12px 5px;
@@ -150,6 +187,7 @@ body{
 }
 .nav a.active { background: var(--neon-pink); border-color: var(--neon-pink); color: #fff; }
 
+/* PANELS */
 .panel {
     width: 95%; max-width: 960px; background: var(--panel);
     border: 3px solid var(--neon-cyan); padding: 20px; margin-bottom: 25px;
@@ -160,19 +198,87 @@ h1 {
     color: var(--neon-cyan); border-bottom: 4px solid #000; padding-bottom: 10px; text-align: left;
 }
 input, select {
-    width: 100%; padding: 15px; margin: 10px 0; background: #000; color: var(--neon-yellow);
-    border: 2px solid #888; font-family: "VT323", monospace; font-size: 24px; outline: none; text-transform: uppercase;
+    width: 100%; padding: 15px; margin: 10px 0; 
+    background: #000; color: var(--neon-yellow);
+    border: 2px solid #888;
+    font-family: "VT323", monospace; font-size: 24px; outline: none; text-transform: uppercase;
+    transition: all 0.3s;
 }
+::placeholder { color: var(--neon-yellow); opacity: 1; }
+input:focus::placeholder { color: transparent; }
+input:focus, select:focus { border-color: var(--neon-yellow); }
+
+/* MATCH BOXES */
+.instructions { font-family: "VT323", monospace; font-size: 18px; color: #aaa; margin-bottom: 15px; text-align: left; text-transform: uppercase; }
 .match-box { border: 2px solid #333; background: #12121c; padding: 15px; margin-bottom: 25px; }
 .match-title { font-family: "Press Start 2P"; font-size: 12px; color: var(--neon-pink); margin-bottom: 15px; border-bottom: 1px solid #333; padding-bottom: 10px; }
 .section-label { font-family: "Press Start 2P"; font-size: 10px; color: var(--neon-cyan); margin: 15px 0 10px; text-align:left; }
+
+/* GRIDS & BUTTONS */
 .method-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px; }
+.team-col { display: flex; flex-direction: column; gap: 5px; }
+.team-header { font-family: "Press Start 2P"; font-size: 10px; color: #fff; margin-bottom: 5px; }
+
 .arcade-btn {
-    font-family: "VT323"; font-size: 18px; padding: 10px; background: #000; border: 1px solid #444; color: #666; cursor: pointer; text-transform: uppercase; width: 100%; margin-bottom: 5px;
+    font-family: "VT323"; font-size: 18px; padding: 10px; 
+    background: #000; border: 1px solid #444; color: #666; 
+    cursor: pointer; text-transform: uppercase; transition: all 0.2s;
 }
+.arcade-btn:hover { border-color: var(--neon-cyan); color: #fff; }
 .arcade-btn.selected { background: var(--neon-cyan); color: #000; border-color: #fff; box-shadow: 0 0 10px var(--neon-cyan); font-weight: bold; }
-.sys { margin: 15px 0; font-size: 18px; color: #555; text-transform: uppercase; }
+
+.time-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 5px; }
+.time-btn {
+    font-family: "VT323"; font-size: 16px; padding: 8px 2px;
+    background: #000; border: 1px solid #444; color: #666; cursor: pointer;
+}
+.time-btn:hover { border-color: var(--neon-pink); color: #fff; }
+.time-btn.selected { background: var(--neon-pink); color: #fff; border-color: #fff; box-shadow: 0 0 10px var(--neon-pink); }
+
+/* STRATEGY */
+.strategy-toggle { display: flex; gap: 15px; margin: 20px 0; }
+.strat-btn {
+    flex: 1; padding: 20px 10px; background: #000; border: 2px solid #444; color: #666;
+    font-family: "Press Start 2P"; font-size: 12px; cursor: pointer; box-shadow: inset 0 0 0 transparent; transition: all 0.3s;
+}
+.strat-btn.active-hedge { border-color: var(--neon-cyan); color: var(--neon-cyan); box-shadow: inset 0 0 15px rgba(5, 217, 232, 0.3); }
+.strat-btn.active-risk { border-color: var(--neon-pink); color: var(--neon-pink); box-shadow: inset 0 0 15px rgba(255, 42, 109, 0.3); }
+.strat-content { display: none; padding: 15px; border: 1px dashed #333; margin-top: 15px; }
+.strat-content.visible { display: block; animation: flicker 0.5s; }
+@keyframes flicker { 0%{opacity:0;} 100%{opacity:1;} }
+
+/* OPTIONS & SYSTEM */
+.option-row {
+    display: flex; align-items: center; gap: 15px; padding: 15px;
+    border: 1px solid #333; background: #000; margin-bottom: 8px; cursor: pointer;
+    font-family: "VT323"; font-size: 20px; color: #888; text-align: left;
+}
+.option-row:hover { border-color: var(--neon-yellow); color: #fff; }
+.option-row.selected {
+    border-color: var(--neon-pink); color: #fff; background: rgba(255, 42, 109, 0.1);
+    box-shadow: 0 0 10px rgba(255, 42, 109, 0.2);
+}
+.opt-id { font-family: "Press Start 2P"; font-size: 12px; color: var(--neon-yellow); min-width: 30px; }
+
+.sys { margin: 15px 0; font-size: 18px; color: #555; text-transform: uppercase; min-height: 24px; transition: color 0.3s; }
+.sys.active { color: var(--neon-pink); }
 .sys.complete { color: var(--neon-cyan); text-shadow: 0 0 5px var(--neon-cyan); }
+
+/* SUMMARY OVERLAY */
+.submit-overlay {
+    position: fixed; inset: 0; background: rgba(10, 10, 15, 0.98);
+    display: none; align-items: center; justify-content: center; z-index: 20;
+}
+.submit-box {
+    width: 96%; max-width: 500px; max-height: 95vh; overflow-y: auto;
+    background: #000; border: 4px solid var(--neon-yellow); padding: 0;
+    box-shadow: 0 0 50px rgba(255, 200, 0, 0.1);
+}
+.submit-header { background: var(--neon-yellow); color: #000; padding: 15px; font-family: "Press Start 2P"; font-size: 14px; text-align: center; }
+.submit-body { padding: 20px; text-align: left; font-family: "VT323"; font-size: 22px; color: #fff;}
+.summary-list li { margin-bottom: 10px; border-bottom: 1px solid #333; padding-bottom: 5px; list-style: none; }
+.summary-list strong { color: var(--neon-cyan); font-family: "Press Start 2P"; font-size: 10px; margin-right: 10px;}
+
 @media (min-width: 768px) {
     .nav a { font-size: 18px; padding: 20px 10px; }
     .glitch { font-size: 64px; }
@@ -185,10 +291,18 @@ input, select {
 <body>
 
 <div id="boot-sequence">
-    <div class="sting-stage">
-        <div class="sting-ball">⚽</div>
-        <div class="sting-flash"></div>
-        <div class="sting-logo">GOALSURGE!</div>
+    <div class="white-flash"></div>
+    
+    <div class="thunder-stage">
+        <div class="lightning-container">
+            <svg viewBox="0 0 100 240" preserveAspectRatio="none" width="100%" height="100%">
+                <path class="lightning-path" d="M50,0 L20,100 L70,100 L40,240" vector-effect="non-scaling-stroke" />
+            </svg>
+        </div>
+        
+        <div class="electric-ball"></div>
+
+        <div class="boot-logo glitch" data-text="GOALSURGE!">GOALSURGE!</div>
     </div>
 </div>
 
@@ -217,34 +331,115 @@ input, select {
 
 <div class="panel">
     <h1>ROUND 3: SEMI FINALS</h1>
+    <div class="instructions">POINTS: Correct Winner (5pts), Correct Method (3pts), Time Block (5pts).</div>
     <div id="sf1-container"></div>
     <div id="sf2-container"></div>
 </div>
 
 <div class="panel">
+    <h1>3RD PLACE PLAYOFF</h1>
+    <div class="instructions">Loser SF1 vs Loser SF2</div>
+    <div id="playoff-container"></div>
+</div>
+
+<div class="panel">
+    <h1>WORLD CUP WINNER</h1>
+    <div class="instructions">CHOOSE STRATEGY: HEDGE (Safe Points) or RISK (Big Bonus).</div>
+    <div class="strategy-toggle">
+        <button class="strat-btn" id="btnHedge" onclick="setStrategy('hedge')">HEDGE IT<br>(RANK 1-4)</button>
+        <button class="strat-btn" id="btnRisk" onclick="setStrategy('risk')">RISK IT<br>(PICK 1 WINNER)</button>
+    </div>
+    <div id="hedgeContent" class="strat-content">
+        <div class="instructions" style="color:var(--neon-cyan)">RANK THE TEAMS: 1st(10pts), 2nd(7pts), 3rd(5pts), 4th(2pts)</div>
+        <select id="rank1" onchange="validate()"><option value="">1ST PLACE PREDICTION...</option></select>
+        <select id="rank2" onchange="validate()"><option value="">2ND PLACE PREDICTION...</option></select>
+        <select id="rank3" onchange="validate()"><option value="">3RD PLACE PREDICTION...</option></select>
+        <select id="rank4" onchange="validate()"><option value="">4TH PLACE PREDICTION...</option></select>
+    </div>
+    <div id="riskContent" class="strat-content">
+        <div class="instructions" style="color:var(--neon-pink)">ALL OR NOTHING: 25 Points if correct. 0 if wrong.</div>
+        <select id="riskSelect" onchange="validate()"><option value="">SELECT CHAMPION...</option></select>
+    </div>
+</div>
+
+<div class="panel">
     <h1>THE FINAL</h1>
+    <div class="instructions">Winner SF1 vs Winner SF2</div>
     <div id="final-container"></div>
 </div>
 
-<button id="submitBtn" style="width:100%; max-width:600px; padding:20px; font-family:'Press Start 2P'; background:#333; color:#555; border:2px solid #555; margin-bottom:40px;" disabled>SUBMIT PICKS</button>
+<div class="panel">
+    <h1>RED CARD CHAOS [10pts]</h1>
+    <div class="instructions">Pick ONE scenario. Cards to players on pitch only.</div>
+    <div id="redCardOptions"></div>
+</div>
+
+<div class="panel">
+    <h1>PLAYER COMBO [15pts]</h1>
+    <div class="instructions">Pick the duo with most Goals + Assists combined in final 4 games.</div>
+    <select id="playerCombo" onchange="validate()">
+        <option value="">SELECT DUO...</option>
+        <option>Mbappe & Kane</option>
+        <option>Messi & Alvarez</option>
+        <option>Yamal & Williams</option>
+        <option>Bellingham & Saka</option>
+        <option>Griezmann & Giroud</option>
+        <option>Vinicius & Rodrygo</option>
+        <option>Lautaro & Di Maria</option>
+        <option>Foden & Palmer</option>
+    </select>
+</div>
+
+<div class="panel">
+    <h1>TOTAL GOALS [10pts]</h1>
+    <div class="instructions">Total goals scored in the final 4 matches combined.</div>
+    <div class="time-grid" id="totalGoalsGrid">
+        <button class="time-btn" onclick="selectTotalGoals(this, '0-5')">0-5</button>
+        <button class="time-btn" onclick="selectTotalGoals(this, '6-8')">6-8</button>
+        <button class="time-btn" onclick="selectTotalGoals(this, '9-11')">9-11</button>
+        <button class="time-btn" onclick="selectTotalGoals(this, '12-14')">12-14</button>
+        <button class="time-btn" onclick="selectTotalGoals(this, '15-17')">15-17</button>
+        <button class="time-btn" onclick="selectTotalGoals(this, '18-20')">18-20</button>
+        <button class="time-btn" onclick="selectTotalGoals(this, '21+')">21+</button>
+    </div>
+</div>
+
+<button id="submitBtn" style="width:100%; max-width:600px; padding:20px; font-family:'Press Start 2P'; background:#333; color:#555; border:2px solid #555; margin-bottom:40px; cursor:not-allowed;" disabled onclick="showSummary()">SUBMIT PICKS</button>
+
+<div class="submit-overlay" id="submitOverlay">
+  <div class="submit-box">
+    <div class="submit-header">CONFIRM PICKS</div>
+    <div class="submit-body">
+        <ul id="summaryList" class="summary-list"></ul>
+        <div style="text-align:center; margin-top:20px; border-top: 2px dashed #333; padding-top:15px; display:flex; gap:10px;">
+            <button onclick="document.getElementById('submitOverlay').style.display='none'" style="flex:1; background:#333; font-size:12px; font-family:'Press Start 2P'; color:#fff; border:1px solid #555; padding:15px;">EDIT</button>
+            <button onclick="alert('SUBMITTED! GOOD LUCK!')" style="flex:1; font-size:12px; font-family:'Press Start 2P'; background:var(--neon-pink); color:#fff; border:1px solid #fff; padding:15px;">CONFIRM</button>
+        </div>
+    </div>
+  </div>
+</div>
 
 <script>
 // --- BOOT SEQUENCE CLEANUP ---
 window.addEventListener('load', () => {
-    // Remove the boot element from DOM after animation is done to prevent clicking issues
     setTimeout(() => {
         const boot = document.getElementById('boot-sequence');
         if(boot) boot.remove();
-    }, 3200);
+    }, 3800);
 });
 
-// --- GAME LOGIC (Simplified for Demo) ---
+// --- GAME LOGIC ---
 const CONFIG = { sf1_home: "ENGLAND", sf1_away: "FRANCE", sf2_home: "SPAIN", sf2_away: "ARGENTINA" };
+const TEAMS = [CONFIG.sf1_home, CONFIG.sf1_away, CONFIG.sf2_home, CONFIG.sf2_away];
+const picks = { user: '', email: '', tiebreaker: '', sf1: { winner: null, method: null, time: null }, sf2: { winner: null, method: null, time: null }, p3: { winner: null, method: null, time: null }, fin: { winner: null, method: null, time: null }, strategy: null, hedge: [null, null, null, null], risk: null, redCard: null, combo: null, totalGoals: null };
 
 window.onload = function() {
     renderMatch('sf1-container', 'sf1', CONFIG.sf1_home, CONFIG.sf1_away, 'SEMI FINAL 1');
     renderMatch('sf2-container', 'sf2', CONFIG.sf2_home, CONFIG.sf2_away, 'SEMI FINAL 2');
+    renderMatch('playoff-container', 'p3', 'SF1 LOSER', 'SF2 LOSER', '3RD PLACE PLAYOFF');
     renderMatch('final-container', 'fin', 'SF1 WINNER', 'SF2 WINNER', 'THE FINAL');
+    renderRedCardOptions();
+    populateTeamDropdowns();
 };
 
 function renderMatch(containerId, matchKey, home, away, title) {
@@ -255,48 +450,76 @@ function renderMatch(containerId, matchKey, home, away, title) {
         <div class="section-label">WINNER & METHOD</div>
         <div class="method-grid" id="grid-${matchKey}">
             <div class="team-col">
-                <div class="team-header" style="color:#fff; font-family:'Press Start 2P'; font-size:10px; margin-bottom:5px;">${home}</div>
-                <button class="arcade-btn" onclick="selectBtn(this)">Normal</button>
-                <button class="arcade-btn" onclick="selectBtn(this)">Ex.Time</button>
-                <button class="arcade-btn" onclick="selectBtn(this)">Pens</button>
+                <div class="team-header">${home}</div>
+                <button class="arcade-btn" onclick="selectMatchResult('${matchKey}', '${home}', 'Normal Time', this)">Normal</button>
+                <button class="arcade-btn" onclick="selectMatchResult('${matchKey}', '${home}', 'Extra Time', this)">Ex.Time</button>
+                <button class="arcade-btn" onclick="selectMatchResult('${matchKey}', '${home}', 'Penalties', this)">Pens</button>
             </div>
             <div class="team-col">
-                <div class="team-header" style="color:#fff; font-family:'Press Start 2P'; font-size:10px; margin-bottom:5px;">${away}</div>
-                <button class="arcade-btn" onclick="selectBtn(this)">Normal</button>
-                <button class="arcade-btn" onclick="selectBtn(this)">Ex.Time</button>
-                <button class="arcade-btn" onclick="selectBtn(this)">Pens</button>
+                <div class="team-header">${away}</div>
+                <button class="arcade-btn" onclick="selectMatchResult('${matchKey}', '${away}', 'Normal Time', this)">Normal</button>
+                <button class="arcade-btn" onclick="selectMatchResult('${matchKey}', '${away}', 'Extra Time', this)">Ex.Time</button>
+                <button class="arcade-btn" onclick="selectMatchResult('${matchKey}', '${away}', 'Penalties', this)">Pens</button>
             </div>
+        </div>
+        <div class="section-label">TIME OF 1ST GOAL</div>
+        <div class="time-grid" id="time-${matchKey}">
+            ${['0-10','11-20','21-30','31-40','41-50','51-60','61-70','71-80','81-90', '90+', 'ET 1', 'ET 2'].map(t => `<button class="time-btn" onclick="selectMatchTime('${matchKey}', '${t}', this)">${t}</button>`).join('')}
         </div>
     </div>`;
 }
 
-function selectBtn(btn) {
-    // Visual toggle only for demo
-    btn.parentNode.parentNode.querySelectorAll('.arcade-btn').forEach(b => b.classList.remove('selected'));
-    btn.classList.add('selected');
-    validate();
+function renderRedCardOptions() {
+    const opts = [{id:'A', text: "No red cards."}, {id:'B', text: "Exactly 1 red card."}, {id:'C', text: "More than 1 red card."}, {id:'D', text: "Red card in a Semi Final."}, {id:'E', text: "Red card in Final or 3rd/4th."}, {id:'F', text: "Red card in the Final."}];
+    const container = document.getElementById('redCardOptions');
+    opts.forEach(opt => {
+        const div = document.createElement('div');
+        div.className = 'option-row';
+        div.innerHTML = `<div class="opt-id">${opt.id}</div> <div>${opt.text}</div>`;
+        div.onclick = () => selectRedCard(opt.id, div);
+        container.appendChild(div);
+    });
 }
 
+function populateTeamDropdowns() {
+    ['rank1', 'rank2', 'rank3', 'rank4', 'riskSelect'].forEach(sId => {
+        const sel = document.getElementById(sId);
+        TEAMS.forEach(team => { const opt = document.createElement('option'); opt.value = team; opt.text = team; sel.add(opt); });
+    });
+}
+
+function selectMatchResult(mk, w, m, btn) { document.getElementById(`grid-${mk}`).querySelectorAll('.arcade-btn').forEach(b => b.classList.remove('selected')); btn.classList.add('selected'); picks[mk].winner = w; picks[mk].method = m; validate(); }
+function selectMatchTime(mk, t, btn) { document.getElementById(`time-${mk}`).querySelectorAll('.time-btn').forEach(b => b.classList.remove('selected')); btn.classList.add('selected'); picks[mk].time = t; validate(); }
+function setStrategy(s) { picks.strategy = s; document.getElementById('btnHedge').className = s === 'hedge' ? 'strat-btn active-hedge' : 'strat-btn'; document.getElementById('btnRisk').className = s === 'risk' ? 'strat-btn active-risk' : 'strat-btn'; document.getElementById('hedgeContent').className = s === 'hedge' ? 'strat-content visible' : 'strat-content'; document.getElementById('riskContent').className = s === 'risk' ? 'strat-content visible' : 'strat-content'; if(s === 'risk') ['rank1','rank2','rank3','rank4'].forEach(id => document.getElementById(id).value = ""); else document.getElementById('riskSelect').value = ""; validate(); }
+function selectRedCard(id, el) { document.querySelectorAll('.option-row').forEach(row => row.classList.remove('selected')); el.classList.add('selected'); picks.redCard = id; validate(); }
+function selectTotalGoals(btn, val) { document.getElementById('totalGoalsGrid').querySelectorAll('.time-btn').forEach(b => b.classList.remove('selected')); btn.classList.add('selected'); picks.totalGoals = val; validate(); }
+
 function validate() {
-    // Simple visual validation for demo
-    const user = document.getElementById('username').value;
-    const sys = document.getElementById('sysMsg');
-    const btn = document.getElementById('submitBtn');
-    if(user.length > 2) {
-        sys.textContent = "SYSTEM READY.";
-        sys.className = "sys complete";
-        btn.disabled = false;
-        btn.style.background = "var(--neon-pink)";
-        btn.style.color = "#fff";
-        btn.style.borderColor = "#fff";
-        btn.style.cursor = "pointer";
-    } else {
-        sys.textContent = "AWAITING INPUT...";
-        sys.className = "sys";
-    }
+    picks.user = document.getElementById('username').value; picks.email = document.getElementById('email').value; picks.tiebreaker = document.getElementById('tiebreaker').value;
+    let valid = true; if(!picks.user || !picks.email || !picks.tiebreaker) valid = false;
+    ['sf1','sf2','p3','fin'].forEach(m => { if(!picks[m].winner || !picks[m].time) valid = false; });
+    if(!picks.strategy) valid = false;
+    if(picks.strategy === 'risk' && !document.getElementById('riskSelect').value) valid = false;
+    if(picks.strategy === 'hedge' && [1,2,3,4].some(i => !document.getElementById('rank'+i).value)) valid = false;
+    if(!picks.redCard || !picks.combo || !picks.totalGoals) valid = false;
+    
+    const sys = document.getElementById('sysMsg'); const btn = document.getElementById('submitBtn');
+    if(valid) { sys.textContent = "SYSTEM READY."; sys.className = "sys complete"; btn.disabled = false; btn.style.cursor = "pointer"; btn.style.borderColor = "var(--neon-pink)"; btn.style.background = "var(--neon-pink)"; btn.style.color = "#fff"; }
+    else { sys.textContent = "AWAITING DATA..."; sys.className = "sys"; btn.disabled = true; btn.style.cursor = "not-allowed"; btn.style.background = "#333"; btn.style.borderColor = "#555"; btn.style.color = "#555"; }
+}
+
+function showSummary() {
+    const list = document.getElementById('summaryList');
+    let html = `<li><strong>PLAYER:</strong> ${picks.user.toUpperCase()}</li><li><strong>EMAIL:</strong> ${picks.email.toUpperCase()}</li><li><strong>TB:</strong> ${picks.tiebreaker}</li><br>`;
+    ['sf1','sf2','p3','fin'].forEach(k => html += `<li><strong>${k.toUpperCase()}:</strong> ${picks[k].winner} (${picks[k].method}) @ ${picks[k].time}</li>`);
+    html += `<br><li><strong>STRATEGY:</strong> ${picks.strategy.toUpperCase()}</li>`;
+    if(picks.strategy==='risk') picks.risk = document.getElementById('riskSelect').value; else picks.hedge = [1,2,3,4].map(i=>document.getElementById('rank'+i).value);
+    if(picks.strategy === 'risk') html += `<li><strong>CHAMPION:</strong> ${picks.risk}</li>`;
+    else html += `<li><strong>1ST-4TH:</strong> ${picks.hedge.join(', ')}</li>`;
+    html += `<br><li><strong>RED CARD:</strong> ${picks.redCard}</li><li><strong>COMBO:</strong> ${picks.combo}</li><li><strong>GOALS:</strong> ${picks.totalGoals}</li>`;
+    list.innerHTML = html;
+    document.getElementById('submitOverlay').style.display = 'flex';
 }
 </script>
 </body>
 </html>
-
-```
