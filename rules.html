@@ -153,10 +153,10 @@ body {
     }
     
     /* 2. ANTICIPATION (The Subtle Shrink) */
-    /* At 54% (right before kick), scale to 0.9 (90%) instead of shrinking width */
+    /* Changed from 0.9 to 0.95 for a gentler effect */
     54%  { 
         background-image: var(--ball-normal); 
-        transform: translateX(0) scale(0.9); 
+        transform: translateX(0) scale(0.95); 
         width: 8%; 
     }
     
@@ -244,3 +244,5 @@ body {
 
 </body>
 </html>
+
+```
