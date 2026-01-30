@@ -1,3 +1,10 @@
+Here is the updated code.
+
+I have **removed the background colors and dashed borders** from the player and ball containers. Now, only your cropped images will be visible.
+
+### `index.html`
+
+```html
 <!doctype html>
 <html lang="en">
 <head>
@@ -9,7 +16,7 @@
 /* --- CONFIGURATION: SLOT YOUR IMAGES HERE --- */
 :root {
     /* 1. Drop your PNGs into the project folder.
-       2. Ensure they are named exactly as below, or change the filenames here.
+       2. Ensure they are named exactly as below.
     */
     --player-idle:    url('p1.png'); /* Charging/Idle */
     --player-windup:  url('p2.png'); /* Leg back/Ready */
@@ -46,24 +53,21 @@ body {
 
 .arena {
     position: relative; width: 100%; max-width: 800px; height: 400px;
-    border-bottom: 4px solid #333;
+    /* Removed the border-bottom line so it looks cleaner, 
+       add it back (border-bottom: 4px solid #333;) if you want a floor line */
     display: flex; align-items: flex-end;
 }
 
 /* --- THE PLAYER --- */
 .sprite-player {
     position: absolute; left: 10%; bottom: 0;
-    width: 150px; height: 150px; /* Adjust based on your PNG size */
+    width: 150px; height: 150px; 
     
     /* Image Handling */
     background-image: var(--player-idle);
     background-size: contain; 
     background-repeat: no-repeat; 
     background-position: bottom center;
-    
-    /* Fallback color if image missing */
-    background-color: rgba(0, 255, 255, 0.1); 
-    border: 1px dashed #444; 
 
     /* The Animation Sequence */
     animation: 
@@ -74,17 +78,13 @@ body {
 /* --- THE BALL --- */
 .sprite-ball {
     position: absolute; left: 30%; bottom: 10px;
-    width: 50px; height: 50px; /* Adjust based on your PNG size */
+    width: 50px; height: 50px; 
     
     /* Image Handling */
     background-image: var(--ball-normal);
     background-size: contain; 
     background-repeat: no-repeat;
     background-position: center;
-
-    /* Fallback color */
-    background-color: rgba(255, 255, 255, 0.1);
-    border-radius: 50%;
 
     /* The Animation Sequence */
     animation: ball-sequence var(--total-time) cubic-bezier(0.1, 0.9, 0.2, 1) forwards;
@@ -127,8 +127,8 @@ body {
 /* 1. PLAYER: Swaps p1 -> p2 -> p3 */
 @keyframes player-sequence {
     0%   { background-image: var(--player-idle);   transform: translateX(0); }
-    57%  { background-image: var(--player-windup); transform: translateX(-10px); animation-timing-function: ease-out; } /* 2.0s approx */
-    63%  { background-image: var(--player-kick);   transform: translateX(40px); }  /* 2.2s approx (The Kick) */
+    57%  { background-image: var(--player-windup); transform: translateX(-10px); animation-timing-function: ease-out; } 
+    63%  { background-image: var(--player-kick);   transform: translateX(40px); } 
     100% { background-image: var(--player-kick);   transform: translateX(40px); }
 }
 
@@ -136,7 +136,7 @@ body {
 @keyframes ball-sequence {
     0%   { background-image: var(--ball-normal); transform: translateX(0) scale(1); }
     62%  { background-image: var(--ball-normal); transform: translateX(0) scale(1); }
-    63%  { background-image: var(--ball-super);  transform: translateX(0) scale(1); width: 150px; } /* Switch to fireball */
+    63%  { background-image: var(--ball-super);  transform: translateX(0) scale(1); width: 150px; } 
     100% { background-image: var(--ball-super);  transform: translateX(1200px) scale(1); width: 150px; opacity: 1; }
 }
 
@@ -164,7 +164,7 @@ body {
     height: 100vh;
     display: flex; flex-direction: column; align-items: center; justify-content: center;
     background: #0f0e17; color: #fff;
-    opacity: 0; /* Hidden initially, JS creates fade in effect implicitly via sting fade out */
+    opacity: 0; 
     animation: fadeInPage 1s ease-in 3.5s forwards;
 }
 
@@ -204,15 +204,15 @@ body {
     </div>
 
 <script>
-    // Simple clean up: remove the sting animation from DOM after it finishes
-    // so it doesn't block clicks on the homepage
     window.addEventListener('load', () => {
         setTimeout(() => {
             const sting = document.getElementById('sting-layer');
             if(sting) sting.remove();
-        }, 4000); // 4 seconds (animation is 3.5s + fade)
+        }, 4000); 
     });
 </script>
 
 </body>
 </html>
+
+```
