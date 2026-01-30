@@ -3,22 +3,23 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>GOALSTORM! - ROULETTE</title>
+<title>GOALSTORM! - PRO ROULETTE</title>
 <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
 <style>
-/* --- CORE --- */
+/* --- CORE STYLES --- */
 :root {
     --neon-cyan: #00f6ff;
+    --neon-blue: #0055ff;
     --neon-pink: #ff0055;
+    --neon-red: #ff0000;
     --neon-yellow: #ffd60a;
     --bg-dark: #0f0e17;
-    --wheel-bg: #111;
 }
 
 * { box-sizing: border-box; margin: 0; padding: 0; }
 
 body { 
-    background: #000; 
+    background: #050505; 
     font-family: 'Press Start 2P', cursive; 
     color: #fff;
     min-height: 100vh;
@@ -31,117 +32,126 @@ body {
 /* --- HUD --- */
 .hud {
     width: 100%;
-    padding: 15px 20px;
+    padding: 15px 30px;
     display: flex;
     justify-content: space-between;
     background: #111;
-    border-bottom: 2px solid #333;
+    border-bottom: 3px solid #333;
     z-index: 20;
+    position: sticky; top: 0;
 }
 .balance-box { color: var(--neon-yellow); text-shadow: 2px 2px var(--neon-pink); font-size: 14px; }
 .spins-box { color: var(--neon-cyan); font-size: 14px; }
 
-/* --- GAME STAGE --- */
+/* --- THE STAGE --- */
 .stage {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
-    align-items: center;
-    gap: 30px;
-    margin-top: 20px;
+    align-items: flex-start;
+    gap: 40px;
+    padding: 40px 20px;
     width: 100%;
-    max-width: 900px;
+    max-width: 1200px;
 }
 
-/* --- THE WHEEL --- */
-.wheel-container {
+/* --- THE WHEEL (BIGGER) --- */
+.wheel-wrapper {
     position: relative;
-    width: 340px;
-    height: 340px;
-    filter: drop-shadow(0 0 15px rgba(0,246,255,0.2));
+    /* Responsive sizing: massive on desktop, fits mobile */
+    width: min(600px, 90vw); 
+    height: min(600px, 90vw);
+    filter: drop-shadow(0 0 20px rgba(0,246,255,0.1));
 }
 
 .pointer {
     position: absolute;
-    top: -15px;
+    top: -25px;
     left: 50%;
     transform: translateX(-50%);
     width: 0; 
     height: 0; 
-    border-left: 15px solid transparent;
-    border-right: 15px solid transparent;
-    border-top: 30px solid #fff;
+    border-left: 20px solid transparent;
+    border-right: 20px solid transparent;
+    border-top: 40px solid #fff;
     z-index: 10;
-    filter: drop-shadow(0 0 2px #000);
+    filter: drop-shadow(0 4px 4px #000);
 }
 
 .wheel {
     width: 100%;
     height: 100%;
     border-radius: 50%;
-    border: 8px solid #222;
+    border: 10px solid #222;
     position: relative;
     overflow: hidden;
-    transition: transform 5s cubic-bezier(0.1, 0.9, 0.2, 1);
+    transition: transform 6s cubic-bezier(0.1, 1, 0.1, 1);
 }
 
-/* Numbers on the wheel */
+/* Wheel Numbers */
 .number {
     position: absolute;
     top: 50%; left: 50%;
     transform-origin: 0 0;
-    width: 50%; /* Radiate from center to edge */
-    height: 2px; /* Thin visual guide */
+    width: 50%; 
+    height: 2px;
     display: flex;
-    justify-content: flex-end; /* Push text to edge */
+    justify-content: flex-end;
 }
 
 .num-text {
-    transform: rotate(90deg); /* Make text upright-ish relative to rim */
-    font-size: 10px;
-    margin-right: 12px; /* Padding from rim */
+    transform: rotate(90deg);
+    font-size: 12px; /* Bigger text */
+    margin-right: 15px; 
     color: #fff;
     text-shadow: 1px 1px 0 #000;
 }
 
-/* --- THE KEY (Legend) --- */
-.key-panel {
-    width: 280px;
+/* --- THE RULES BOARD (Variables) --- */
+.rules-panel {
+    width: 300px;
     background: #111;
-    border: 2px solid #444;
+    border: 2px solid #333;
     padding: 20px;
 }
 
-.key-title { text-align: center; color: #888; margin-bottom: 15px; font-size: 12px; }
+.rules-header { text-align: center; color: #888; font-size: 12px; margin-bottom: 20px; }
 
-.key-item {
+.rule-row {
     display: flex;
     align-items: center;
     margin-bottom: 15px;
     font-size: 10px;
-    line-height: 1.6;
+    line-height: 1.4;
 }
 
-.dot { width: 20px; height: 20px; margin-right: 15px; border: 2px solid #fff; }
-.dot-green { background: var(--neon-yellow); box-shadow: 0 0 5px var(--neon-yellow); }
-.dot-black { background: var(--neon-cyan); box-shadow: 0 0 5px var(--neon-cyan); }
-.dot-red   { background: var(--neon-pink); box-shadow: 0 0 5px var(--neon-pink); }
+.color-block { width: 20px; height: 20px; margin-right: 15px; border: 2px solid #fff; }
+
+/* Colors for Legend */
+.c-yellow { background: var(--neon-yellow); box-shadow: 0 0 8px var(--neon-yellow); }
+.c-cyan   { background: var(--neon-cyan);   box-shadow: 0 0 8px var(--neon-cyan); }
+.c-blue   { background: var(--neon-blue);   opacity: 0.8; }
+.c-pink   { background: var(--neon-pink);   opacity: 0.8; }
+.c-red    { background: var(--neon-red);    box-shadow: 0 0 8px var(--neon-red); }
 
 /* --- CONTROLS --- */
-.control-area {
+.controls-area {
     width: 100%;
     max-width: 600px;
-    margin: 20px auto;
+    margin: 0 auto 40px auto;
     text-align: center;
+    z-index: 10;
 }
 
-.msg-box {
-    height: 40px;
+.message-display {
+    height: 50px;
     display: flex; align-items: center; justify-content: center;
     color: #fff;
-    font-size: 14px;
-    margin-bottom: 15px;
+    font-size: 16px;
+    margin-bottom: 20px;
     text-shadow: 2px 2px #000;
+    border: 1px dashed #333;
+    background: #0a0a0a;
 }
 
 .btn-group { display: flex; gap: 10px; justify-content: center; margin-bottom: 15px; }
@@ -151,11 +161,10 @@ button {
     border: 2px solid #fff;
     color: #fff;
     font-family: 'Press Start 2P', cursive;
-    padding: 12px;
+    padding: 15px 20px;
     cursor: pointer;
     font-size: 10px;
     transition: 0.1s;
-    text-transform: uppercase;
 }
 button:hover:not(:disabled) { transform: translateY(-2px); background: #222; }
 button:active { transform: translateY(0); }
@@ -166,47 +175,44 @@ button:disabled { opacity: 0.3; cursor: not-allowed; }
     border-color: var(--neon-yellow); 
     color: var(--neon-yellow); 
     background: #111; 
-    padding: 15px 30px; 
-    font-size: 12px;
+    font-size: 14px;
+    width: 100%;
 }
 
 /* --- SHOP --- */
-.shop-container {
+.shop-section {
     width: 100%;
     flex-grow: 1;
     background: #111;
     border-top: 4px solid #333;
-    padding: 15px;
-    overflow-y: auto;
+    padding: 20px;
 }
-.shop-header { text-align: center; font-size: 10px; color: #666; margin-bottom: 10px; }
 .player-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
-    gap: 10px;
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 15px;
 }
 .player-card {
     background: #1a1a1a;
     border: 1px solid #333;
-    padding: 10px;
+    padding: 15px;
     text-align: center;
     opacity: 0.3;
-    font-size: 9px;
+    font-size: 10px;
 }
 .player-card.affordable {
     opacity: 1;
     border-color: var(--neon-cyan);
     background: #0f0e17;
-    box-shadow: 0 0 5px var(--neon-cyan);
+    box-shadow: 0 0 8px rgba(0,246,255,0.3);
     cursor: pointer;
 }
-.player-card.affordable:hover { background: #1a1a2e; }
 
 /* Flash FX */
-@keyframes flashWin { 0% { background: var(--neon-cyan); } 100% { background: #000; } }
-@keyframes flashLoss { 0% { background: var(--neon-pink); } 100% { background: #000; } }
-.flash-win { animation: flashWin 0.3s ease-out; }
-.flash-loss { animation: flashLoss 0.3s ease-out; }
+@keyframes flashWin { 0% { background: var(--neon-cyan); } 100% { background: #050505; } }
+@keyframes flashLoss { 0% { background: var(--neon-red); } 100% { background: #050505; } }
+.win-anim { animation: flashWin 0.5s; }
+.lose-anim { animation: flashLoss 0.5s; }
 
 </style>
 </head>
@@ -214,126 +220,151 @@ button:disabled { opacity: 0.3; cursor: not-allowed; }
 
 <div class="hud">
     <div class="balance-box">BANK: £<span id="bal">1,000,000</span></div>
-    <div class="spins-box">SPINS: <span id="spins">3</span></div>
+    <div class="spins-box">SPINS LEFT: <span id="spins">3</span></div>
 </div>
 
 <div class="stage">
-    <div class="wheel-container">
+    <div class="wheel-wrapper">
         <div class="pointer"></div>
         <div class="wheel" id="wheel"></div>
     </div>
 
-    <div class="key-panel">
-        <div class="key-title">RULES OF THE WHEEL</div>
+    <div class="rules-panel">
+        <div class="rules-header">ODDS & VARIABLES</div>
         
-        <div class="key-item">
-            <div class="dot dot-green"></div>
+        <div class="rule-row">
+            <div class="color-block c-yellow"></div>
             <div>
-                <span style="color:var(--neon-yellow)">NUMBER 0 (JACKPOT)</span><br>
-                WORLDIE! x10 MULTIPLIER
+                <span style="color:var(--neon-yellow)">0: WORLDIE</span><br>
+                JACKPOT (x10)
             </div>
         </div>
 
-        <div class="key-item">
-            <div class="dot dot-black"></div>
+        <div class="rule-row">
+            <div class="color-block c-cyan"></div>
             <div>
-                <span style="color:var(--neon-cyan)">CYAN (BLACK)</span><br>
-                GOAL! x2 MULTIPLIER
+                <span style="color:var(--neon-cyan)">EVEN BLACKS</span><br>
+                HAT-TRICK (x4)
             </div>
         </div>
 
-        <div class="key-item">
-            <div class="dot dot-red"></div>
+        <div class="rule-row">
+            <div class="color-block c-blue"></div>
             <div>
-                <span style="color:var(--neon-pink)">PINK (RED)</span><br>
-                MISS! LOSE BET
+                <span style="color:var(--neon-blue)">ODD BLACKS</span><br>
+                GOAL (x2)
+            </div>
+        </div>
+
+        <div class="rule-row">
+            <div class="color-block c-pink"></div>
+            <div>
+                <span style="color:var(--neon-pink)">EVEN REDS</span><br>
+                VAR CHECK (SAVE 50%)
+            </div>
+        </div>
+
+        <div class="rule-row">
+            <div class="color-block c-red"></div>
+            <div>
+                <span style="color:var(--neon-red)">ODD REDS</span><br>
+                RED CARD (LOSE BET)
             </div>
         </div>
     </div>
 </div>
 
-<div class="control-area">
-    <div class="msg-box" id="msg">PLACE YOUR BET</div>
+<div class="controls-area">
+    <div class="message-display" id="msg">SELECT BET AMOUNT</div>
     <div class="btn-group">
         <button class="btn-bet" onclick="setBet(100000)">£100K</button>
         <button class="btn-bet" onclick="setBet(500000)">£500K</button>
         <button class="btn-bet" onclick="setBet('all')">ALL IN</button>
     </div>
-    <button class="btn-spin" id="spinBtn" onclick="spin()" disabled>SPIN THE WHEEL</button>
+    <button class="btn-spin" id="spinBtn" onclick="spin()" disabled>SPIN ROULETTE</button>
 </div>
 
-<div class="shop-container">
-    <div class="shop-header">TRANSFER TARGETS</div>
+<div class="shop-section">
+    <div class="rules-header">TRANSFER MARKET SCOUTING</div>
     <div class="player-grid" id="grid"></div>
 </div>
 
 <script>
-    // --- CONFIGURATION ---
-    // Standard European Roulette Sequence
-    const rouletteOrder = [
+    // --- 1. SETUP DATA ---
+    // Standard European Wheel Order (0 to 36)
+    const wheelOrder = [
         0, 32, 15, 19, 4, 21, 2, 25, 17, 34, 6, 27, 13, 36, 11, 30, 8, 23, 
         10, 5, 24, 16, 33, 1, 20, 14, 31, 9, 22, 18, 29, 7, 28, 12, 35, 3, 26
     ];
-    
-    // In Roulette, Red/Black is specific. 
-    // We will map them to Pink/Cyan styles.
-    const redNumbers = [1,3,5,7,9,12,14,16,18,19,21,23,25,27,30,32,34,36];
-    
-    // Game State
-    let balance = 1000000;
-    let spinsLeft = 3;
-    let currentBet = 0;
-    let wheelRotation = 0;
 
-    // Elements
+    // Standard Red Numbers in Roulette
+    const redNumbers = [1,3,5,7,9,12,14,16,18,19,21,23,25,27,30,32,34,36];
+
+    // Helper: Determine Outcome Type based on Number
+    function getNumberType(num) {
+        if (num === 0) return 'jackpot'; // Yellow
+        
+        const isRed = redNumbers.includes(num);
+        const isEven = (num % 2 === 0);
+
+        if (isRed) {
+            // REDS (Losses)
+            if (isEven) return 'var'; // Pink (Even Reds) - Save 50%
+            return 'redcard'; // Red (Odd Reds) - Lose All
+        } else {
+            // BLACKS (Wins)
+            if (isEven) return 'hattrick'; // Cyan (Even Blacks) - x4
+            return 'goal'; // Blue (Odd Blacks) - x2
+        }
+    }
+
+    // Color Map for CSS
+    const colorMap = {
+        'jackpot': 'var(--neon-yellow)',
+        'hattrick': 'var(--neon-cyan)', // Bright Cyan
+        'goal': '#0055ff',              // Darker Neon Blue
+        'var': 'var(--neon-pink)',      // Pink
+        'redcard': 'var(--neon-red)'    // Pure Red
+    };
+
+    // --- 2. INIT DOM ---
     const wheel = document.getElementById('wheel');
     const balEl = document.getElementById('bal');
     const spinEl = document.getElementById('spins');
     const msgEl = document.getElementById('msg');
     const spinBtn = document.getElementById('spinBtn');
+    
+    let balance = 1000000;
+    let spinsLeft = 3;
+    let currentBet = 0;
+    let rotation = 0;
 
-    // --- BUILD THE WHEEL ---
-    function initWheel() {
-        const sliceDeg = 360 / 37; // ~9.72 degrees per slice
-        
-        // 1. Generate Gradient String for Background
-        // We need to construct a conic-gradient based on the sequence
-        let gradientStr = 'conic-gradient(';
-        
-        rouletteOrder.forEach((num, i) => {
-            let color;
-            if (num === 0) color = 'var(--neon-yellow)'; // Green/Jackpot
-            else if (redNumbers.includes(num)) color = 'var(--neon-pink)'; // Red/Loss
-            else color = 'var(--neon-cyan)'; // Black/Win
+    // Build Wheel Graphic
+    function buildWheel() {
+        const sliceDeg = 360 / 37;
+        let gradient = 'conic-gradient(';
 
-            const startDeg = i * sliceDeg;
-            const endDeg = (i + 1) * sliceDeg;
-            gradientStr += `${color} ${startDeg}deg ${endDeg}deg, `;
-        });
-        
-        // Remove trailing comma and close
-        gradientStr = gradientStr.slice(0, -2) + ')';
-        wheel.style.background = gradientStr;
-
-        // 2. Place Numbers
-        rouletteOrder.forEach((num, i) => {
-            const el = document.createElement('div');
-            el.className = 'number';
-            // Rotation is: Index * sliceDeg + half a slice (to center number in color)
+        wheelOrder.forEach((num, i) => {
+            const type = getNumberType(num);
+            const color = colorMap[type];
+            const start = i * sliceDeg;
+            const end = (i + 1) * sliceDeg;
+            gradient += `${color} ${start}deg ${end}deg, `;
+            
+            // Create Number Element
+            const numDiv = document.createElement('div');
+            numDiv.className = 'number';
             const rot = (i * sliceDeg) + (sliceDeg / 2);
-            // We need to offset by -90deg because CSS 0 is Top, but Transform Origin calculations 
-            // usually start from Right in standard circle math, or Top.
-            // Actually, we rotate the container div from center. 0deg = 3 o'clock? 
-            // Let's rely on visual alignment. transform: rotate(X) rotates clockwise.
-            // We want index 0 at the top.
-            // With this CSS, 0 deg starts at 12 o'clock. 
-            el.style.transform = `rotate(${rot}deg)`;
-            el.innerHTML = `<div class="num-text">${num}</div>`;
-            wheel.appendChild(el);
+            numDiv.style.transform = `rotate(${rot}deg)`;
+            numDiv.innerHTML = `<div class="num-text">${num}</div>`;
+            wheel.appendChild(numDiv);
         });
+
+        gradient = gradient.slice(0, -2) + ')';
+        wheel.style.background = gradient;
     }
 
-    // --- PLAYERS DATA ---
+    // Players Data
     const players = [
         {n:"R.BIT", v:12000000}, {n:"M.PIXEL", v:8000000}, {n:"L.NEON", v:6000000},
         {n:"Z.CYAN", v:5500000}, {n:"K.PINK", v:5000000}, {n:"J.ARCADE", v:4500000},
@@ -351,34 +382,33 @@ button:disabled { opacity: 0.3; cursor: not-allowed; }
         const grid = document.getElementById('grid');
         grid.innerHTML = '';
         players.forEach(p => {
-            const el = document.createElement('div');
-            el.className = `player-card ${balance >= p.v ? 'affordable' : ''}`;
-            el.innerHTML = `<div>${p.n}</div><div style="color:#ffd60a; margin-top:5px">£${(p.v/1000000).toFixed(2)}M</div>`;
-            grid.appendChild(el);
+            const card = document.createElement('div');
+            card.className = `player-card ${balance >= p.v ? 'affordable' : ''}`;
+            card.innerHTML = `<div>${p.n}</div><div style="color:var(--neon-yellow); margin-top:5px">£${(p.v/1000000).toFixed(2)}M</div>`;
+            grid.appendChild(card);
         });
     }
 
-    // --- GAME LOGIC ---
-    window.setBet = function(amount) {
-        if(spinsLeft <= 0) return;
-        
-        if (amount === 'all') currentBet = balance;
-        else currentBet = amount;
+    // --- 3. GAMEPLAY ---
+    window.setBet = function(amt) {
+        if(spinsLeft < 1) return;
+        if(amt === 'all') currentBet = balance;
+        else currentBet = amt;
 
-        if (currentBet > balance) {
-            msgEl.innerText = "INSUFFICIENT FUNDS";
-            msgEl.style.color = "var(--neon-pink)";
+        if(currentBet > balance) {
+            msgEl.innerText = "NO FUNDS!";
+            msgEl.style.color = "var(--neon-red)";
             spinBtn.disabled = true;
             return;
         }
 
-        msgEl.innerText = `BET: £${currentBet.toLocaleString()}`;
+        msgEl.innerText = `LOCKED: £${currentBet.toLocaleString()}`;
         msgEl.style.color = "#fff";
         spinBtn.disabled = false;
     }
 
     window.spin = function() {
-        if(spinsLeft <= 0 || currentBet === 0) return;
+        if(spinsLeft < 1 || currentBet === 0) return;
 
         // Deduct
         balance -= currentBet;
@@ -388,88 +418,83 @@ button:disabled { opacity: 0.3; cursor: not-allowed; }
 
         // UI Lock
         spinBtn.disabled = true;
-        const bets = document.querySelectorAll('.btn-bet');
-        bets.forEach(b => b.disabled = true);
-        msgEl.innerText = "SPINNING...";
+        document.querySelectorAll('.btn-bet').forEach(b => b.disabled = true);
+        msgEl.innerText = "BALL ROLLING...";
 
-        // Physics
-        // Add huge rotation (at least 5 spins = 1800deg) + random
-        const spinForce = 1800 + Math.floor(Math.random() * 2000); 
-        wheelRotation += spinForce;
-        wheel.style.transform = `rotate(${wheelRotation}deg)`;
+        // Spin Physics (Forceful spin)
+        const spinForce = 2500 + Math.floor(Math.random() * 2000);
+        rotation += spinForce;
+        wheel.style.transform = `rotate(${rotation}deg)`;
 
-        // Result Calculation
+        // Wait for spin to end (6s)
         setTimeout(() => {
-            calculateResult(wheelRotation);
-        }, 5000); // 5s spin match CSS
+            resolveSpin(rotation);
+        }, 6000);
     }
 
-    function calculateResult(rotation) {
-        const sliceDeg = 360 / 37;
-        
-        // Get actual degree within 0-360
-        const actualDeg = rotation % 360;
-        
-        // Pointer is at Top (0). Wheel rotates Clockwise.
-        // The slice under the pointer is: (360 - actualDeg)
-        const pointerDeg = (360 - actualDeg) % 360;
-        
-        // Calculate Index
-        const index = Math.floor(pointerDeg / sliceDeg);
-        
-        // Get the Number
-        const winningNum = rouletteOrder[index];
-        
-        // Check Win/Loss
-        if (winningNum === 0) {
-            // JACKPOT
-            const win = currentBet * 10;
-            balance += win;
-            msgEl.innerText = `0! WORLDIE! JACKPOT (+£${win.toLocaleString()})`;
-            msgEl.style.color = "var(--neon-yellow)";
-            document.body.classList.add('flash-win');
-        } else if (redNumbers.includes(winningNum)) {
-            // RED = LOSS
-            // Special Rule: Is it unlucky 13?
-            // Let's keep it simple: ALL REDS LOSE
-            msgEl.innerText = `${winningNum} RED! MISS! LOST BET`;
-            msgEl.style.color = "var(--neon-pink)";
-            document.body.classList.add('flash-loss');
-        } else {
-            // BLACK = WIN (x2)
-            const win = currentBet * 2;
-            balance += win;
-            msgEl.innerText = `${winningNum} BLACK! GOAL! (+£${win.toLocaleString()})`;
-            msgEl.style.color = "var(--neon-cyan)";
-            document.body.classList.add('flash-win');
-        }
-        
-        // Cleanup
-        setTimeout(() => {
-            document.body.classList.remove('flash-win');
-            document.body.classList.remove('flash-loss');
-        }, 300);
+    function resolveSpin(deg) {
+        // Calculate Landing
+        const actual = deg % 360;
+        const pointerLoc = (360 - actual) % 360;
+        const sliceSize = 360 / 37;
+        const index = Math.floor(pointerLoc / sliceSize);
+        const winningNum = wheelOrder[index];
+        const type = getNumberType(winningNum);
 
+        // Outcomes
+        let winAmount = 0;
+        
+        if (type === 'jackpot') {
+            winAmount = currentBet * 10;
+            balance += winAmount;
+            msgEl.innerText = `0! WORLDIE! JACKPOT (+£${winAmount.toLocaleString()})`;
+            msgEl.style.color = "var(--neon-yellow)";
+            document.body.className = "win-anim";
+        } 
+        else if (type === 'hattrick') {
+            winAmount = currentBet * 4;
+            balance += winAmount;
+            msgEl.innerText = `${winningNum} EVEN BLACK! HAT-TRICK (+£${winAmount.toLocaleString()})`;
+            msgEl.style.color = "var(--neon-cyan)";
+            document.body.className = "win-anim";
+        }
+        else if (type === 'goal') {
+            winAmount = currentBet * 2;
+            balance += winAmount;
+            msgEl.innerText = `${winningNum} ODD BLACK! GOAL (+£${winAmount.toLocaleString()})`;
+            msgEl.style.color = "var(--neon-blue)";
+            document.body.className = "win-anim";
+        }
+        else if (type === 'var') {
+            winAmount = Math.floor(currentBet * 0.5);
+            balance += winAmount;
+            msgEl.innerText = `${winningNum} EVEN RED! VAR SAVES HALF (+£${winAmount.toLocaleString()})`;
+            msgEl.style.color = "var(--neon-pink)";
+        }
+        else {
+            msgEl.innerText = `${winningNum} RED CARD! LOST BET`;
+            msgEl.style.color = "var(--neon-red)";
+            document.body.className = "lose-anim";
+        }
+
+        // Cleanup
+        setTimeout(() => document.body.className = '', 500);
+        
         balEl.innerText = balance.toLocaleString();
         updateShop();
 
+        // Next Steps
         if (spinsLeft > 0 && balance > 0) {
-            bets.forEach(b => b.disabled = false);
+            document.querySelectorAll('.btn-bet').forEach(b => b.disabled = false);
         } else {
-            if(balance > 0) {
-                msgEl.innerText = "MARKET OPEN";
-                msgEl.style.color = "var(--neon-yellow)";
-            } else {
-                msgEl.innerText = "GAME OVER";
-                msgEl.style.color = "#fff";
-            }
+            msgEl.innerText = balance > 0 ? "MARKET OPEN" : "GAME OVER";
+            msgEl.style.color = "#fff";
         }
     }
-    
-    // Init
-    initWheel();
+
+    // Start
+    buildWheel();
     updateShop();
-    const bets = document.querySelectorAll('.btn-bet');
 
 </script>
 </body>
