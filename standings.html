@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>GOALSTORM! - TRANSFER WHEEL</title>
+<title>GOALSTORM! - ROULETTE</title>
 <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
 <style>
 /* --- CORE --- */
@@ -12,6 +12,7 @@
     --neon-pink: #ff0055;
     --neon-yellow: #ffd60a;
     --bg-dark: #0f0e17;
+    --wheel-bg: #111;
 }
 
 * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -30,110 +31,144 @@ body {
 /* --- HUD --- */
 .hud {
     width: 100%;
-    padding: 15px;
+    padding: 15px 20px;
     display: flex;
     justify-content: space-between;
     background: #111;
     border-bottom: 2px solid #333;
     z-index: 20;
 }
-.balance-box { color: var(--neon-yellow); text-shadow: 2px 2px var(--neon-pink); font-size: 12px; }
-.spins-box { color: var(--neon-cyan); font-size: 12px; }
+.balance-box { color: var(--neon-yellow); text-shadow: 2px 2px var(--neon-pink); font-size: 14px; }
+.spins-box { color: var(--neon-cyan); font-size: 14px; }
 
-/* --- THE WHEEL CONTAINER --- */
-.wheel-stage {
-    position: relative;
-    width: 320px;
-    height: 320px;
-    margin: 20px auto;
+/* --- GAME STAGE --- */
+.stage {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    gap: 30px;
+    margin-top: 20px;
+    width: 100%;
+    max-width: 900px;
 }
 
-/* The Triangle Pointer */
+/* --- THE WHEEL --- */
+.wheel-container {
+    position: relative;
+    width: 340px;
+    height: 340px;
+    filter: drop-shadow(0 0 15px rgba(0,246,255,0.2));
+}
+
 .pointer {
     position: absolute;
-    top: -10px;
+    top: -15px;
     left: 50%;
     transform: translateX(-50%);
     width: 0; 
     height: 0; 
     border-left: 15px solid transparent;
     border-right: 15px solid transparent;
-    border-top: 25px solid var(--neon-yellow);
+    border-top: 30px solid #fff;
     z-index: 10;
-    filter: drop-shadow(0 0 5px var(--neon-yellow));
+    filter: drop-shadow(0 0 2px #000);
 }
 
-/* The Spinning Disc */
 .wheel {
     width: 100%;
     height: 100%;
     border-radius: 50%;
-    border: 4px solid #fff;
+    border: 8px solid #222;
     position: relative;
     overflow: hidden;
-    transition: transform 4s cubic-bezier(0.1, 0.9, 0.2, 1); /* Realistic deceleration */
-    box-shadow: 0 0 20px rgba(0, 246, 255, 0.2);
-    
-    /* The Background Colors using Conic Gradient */
-    background: conic-gradient(
-        var(--neon-cyan) 0deg 45deg,
-        var(--neon-pink) 45deg 90deg,
-        var(--neon-cyan) 90deg 135deg,
-        #ff0000 135deg 180deg, /* Red Card Zone */
-        var(--neon-cyan) 180deg 225deg,
-        var(--neon-pink) 225deg 270deg,
-        var(--neon-yellow) 270deg 315deg, /* Jackpot Zone */
-        var(--neon-pink) 315deg 360deg
-    );
+    transition: transform 5s cubic-bezier(0.1, 0.9, 0.2, 1);
 }
 
-/* Text Labels inside the wheel */
-.wheel-label {
+/* Numbers on the wheel */
+.number {
     position: absolute;
-    top: 50%;
-    left: 50%;
-    width: 100px; /* Width of text area */
-    height: 20px;
-    text-align: right;
-    transform-origin: 0 0; /* Rotate from center */
-    font-size: 10px;
-    color: #000;
-    line-height: 1.2;
-    padding-right: 10px;
+    top: 50%; left: 50%;
+    transform-origin: 0 0;
+    width: 50%; /* Radiate from center to edge */
+    height: 2px; /* Thin visual guide */
+    display: flex;
+    justify-content: flex-end; /* Push text to edge */
 }
+
+.num-text {
+    transform: rotate(90deg); /* Make text upright-ish relative to rim */
+    font-size: 10px;
+    margin-right: 12px; /* Padding from rim */
+    color: #fff;
+    text-shadow: 1px 1px 0 #000;
+}
+
+/* --- THE KEY (Legend) --- */
+.key-panel {
+    width: 280px;
+    background: #111;
+    border: 2px solid #444;
+    padding: 20px;
+}
+
+.key-title { text-align: center; color: #888; margin-bottom: 15px; font-size: 12px; }
+
+.key-item {
+    display: flex;
+    align-items: center;
+    margin-bottom: 15px;
+    font-size: 10px;
+    line-height: 1.6;
+}
+
+.dot { width: 20px; height: 20px; margin-right: 15px; border: 2px solid #fff; }
+.dot-green { background: var(--neon-yellow); box-shadow: 0 0 5px var(--neon-yellow); }
+.dot-black { background: var(--neon-cyan); box-shadow: 0 0 5px var(--neon-cyan); }
+.dot-red   { background: var(--neon-pink); box-shadow: 0 0 5px var(--neon-pink); }
 
 /* --- CONTROLS --- */
-.control-panel {
+.control-area {
+    width: 100%;
+    max-width: 600px;
+    margin: 20px auto;
     text-align: center;
-    margin-bottom: 20px;
-    z-index: 10;
 }
 
 .msg-box {
     height: 40px;
     display: flex; align-items: center; justify-content: center;
     color: #fff;
-    font-size: 12px;
-    margin-bottom: 10px;
-    text-shadow: 1px 1px #000;
+    font-size: 14px;
+    margin-bottom: 15px;
+    text-shadow: 2px 2px #000;
 }
 
-.btn-group { display: flex; gap: 10px; justify-content: center; }
+.btn-group { display: flex; gap: 10px; justify-content: center; margin-bottom: 15px; }
 
 button {
     background: #000;
     border: 2px solid #fff;
     color: #fff;
     font-family: 'Press Start 2P', cursive;
-    padding: 10px;
+    padding: 12px;
     cursor: pointer;
     font-size: 10px;
     transition: 0.1s;
+    text-transform: uppercase;
 }
-button:hover:not(:disabled) { transform: scale(1.05); background: #222; }
+button:hover:not(:disabled) { transform: translateY(-2px); background: #222; }
+button:active { transform: translateY(0); }
 button:disabled { opacity: 0.3; cursor: not-allowed; }
+
 .btn-bet { border-color: var(--neon-cyan); color: var(--neon-cyan); }
-.btn-spin { border-color: var(--neon-yellow); color: var(--neon-yellow); background: #111; padding: 10px 20px; }
+.btn-spin { 
+    border-color: var(--neon-yellow); 
+    color: var(--neon-yellow); 
+    background: #111; 
+    padding: 15px 30px; 
+    font-size: 12px;
+}
 
 /* --- SHOP --- */
 .shop-container {
@@ -144,24 +179,20 @@ button:disabled { opacity: 0.3; cursor: not-allowed; }
     padding: 15px;
     overflow-y: auto;
 }
-
-.shop-header { text-align: center; font-size: 12px; color: #888; margin-bottom: 15px; }
-
+.shop-header { text-align: center; font-size: 10px; color: #666; margin-bottom: 10px; }
 .player-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
     gap: 10px;
 }
-
 .player-card {
-    background: #222;
-    border: 1px solid #444;
-    padding: 8px;
+    background: #1a1a1a;
+    border: 1px solid #333;
+    padding: 10px;
     text-align: center;
-    opacity: 0.4;
+    opacity: 0.3;
     font-size: 9px;
 }
-
 .player-card.affordable {
     opacity: 1;
     border-color: var(--neon-cyan);
@@ -171,90 +202,136 @@ button:disabled { opacity: 0.3; cursor: not-allowed; }
 }
 .player-card.affordable:hover { background: #1a1a2e; }
 
-.p-val { color: var(--neon-yellow); margin-top: 5px; }
-
-/* Flash Animation for Wins */
-@keyframes flash { 0% { background: #fff; } 100% { background: #000; } }
-.flash { animation: flash 0.3s linear; }
+/* Flash FX */
+@keyframes flashWin { 0% { background: var(--neon-cyan); } 100% { background: #000; } }
+@keyframes flashLoss { 0% { background: var(--neon-pink); } 100% { background: #000; } }
+.flash-win { animation: flashWin 0.3s ease-out; }
+.flash-loss { animation: flashLoss 0.3s ease-out; }
 
 </style>
 </head>
 <body>
 
 <div class="hud">
-    <div class="balance-box">CASH: £<span id="bal">1000000</span></div>
+    <div class="balance-box">BANK: £<span id="bal">1,000,000</span></div>
     <div class="spins-box">SPINS: <span id="spins">3</span></div>
 </div>
 
-<div class="wheel-stage">
-    <div class="pointer"></div>
-    <div class="wheel" id="wheel">
+<div class="stage">
+    <div class="wheel-container">
+        <div class="pointer"></div>
+        <div class="wheel" id="wheel"></div>
+    </div>
+
+    <div class="key-panel">
+        <div class="key-title">RULES OF THE WHEEL</div>
+        
+        <div class="key-item">
+            <div class="dot dot-green"></div>
+            <div>
+                <span style="color:var(--neon-yellow)">NUMBER 0 (JACKPOT)</span><br>
+                WORLDIE! x10 MULTIPLIER
+            </div>
         </div>
+
+        <div class="key-item">
+            <div class="dot dot-black"></div>
+            <div>
+                <span style="color:var(--neon-cyan)">CYAN (BLACK)</span><br>
+                GOAL! x2 MULTIPLIER
+            </div>
+        </div>
+
+        <div class="key-item">
+            <div class="dot dot-red"></div>
+            <div>
+                <span style="color:var(--neon-pink)">PINK (RED)</span><br>
+                MISS! LOSE BET
+            </div>
+        </div>
+    </div>
 </div>
 
-<div class="control-panel">
+<div class="control-area">
     <div class="msg-box" id="msg">PLACE YOUR BET</div>
     <div class="btn-group">
         <button class="btn-bet" onclick="setBet(100000)">£100K</button>
         <button class="btn-bet" onclick="setBet(500000)">£500K</button>
         <button class="btn-bet" onclick="setBet('all')">ALL IN</button>
     </div>
-    <div style="margin-top: 10px;">
-        <button class="btn-spin" id="spinBtn" onclick="spin()" disabled>SPIN!</button>
-    </div>
+    <button class="btn-spin" id="spinBtn" onclick="spin()" disabled>SPIN THE WHEEL</button>
 </div>
 
 <div class="shop-container">
-    <div class="shop-header">TRANSFER MARKET</div>
+    <div class="shop-header">TRANSFER TARGETS</div>
     <div class="player-grid" id="grid"></div>
 </div>
 
 <script>
-    // --- SETUP ---
-    const segments = [
-        { label: "GOAL\nx2",   type: "win", val: 2,   deg: 22.5 },
-        { label: "OWN GOAL\nLOSE", type: "loss", val: 0, deg: 67.5 },
-        { label: "HAT-TRICK\nx5", type: "win", val: 5,   deg: 112.5 },
-        { label: "RED CARD\nZERO", type: "loss", val: -1, deg: 157.5 },
-        { label: "STRIKE\nx1.5", type: "win", val: 1.5, deg: 202.5 },
-        { label: "VAR\nHALF", type: "loss", val: 0.5, deg: 247.5 },
-        { label: "WORLDIE\nx10", type: "win", val: 10,  deg: 292.5 },
-        { label: "OFFSIDE\nLOSE", type: "loss", val: 0,   deg: 337.5 }
+    // --- CONFIGURATION ---
+    // Standard European Roulette Sequence
+    const rouletteOrder = [
+        0, 32, 15, 19, 4, 21, 2, 25, 17, 34, 6, 27, 13, 36, 11, 30, 8, 23, 
+        10, 5, 24, 16, 33, 1, 20, 14, 31, 9, 22, 18, 29, 7, 28, 12, 35, 3, 26
     ];
-
-    const wheel = document.getElementById('wheel');
-    const balEl = document.getElementById('bal');
-    const spinEl = document.getElementById('spins');
-    const msgEl = document.getElementById('msg');
-    const spinBtn = document.getElementById('spinBtn');
     
+    // In Roulette, Red/Black is specific. 
+    // We will map them to Pink/Cyan styles.
+    const redNumbers = [1,3,5,7,9,12,14,16,18,19,21,23,25,27,30,32,34,36];
+    
+    // Game State
     let balance = 1000000;
     let spinsLeft = 3;
     let currentBet = 0;
     let wheelRotation = 0;
 
-    // --- DRAW WHEEL LABELS ---
-    // We position text based on rotation
-    segments.forEach((seg, i) => {
-        const el = document.createElement('div');
-        el.className = 'wheel-label';
-        el.innerText = seg.label;
-        // Logic: Rotate to angle, then translate OUT to edge, then rotate text upright slightly
-        // The wheel segments are 45deg each. Center of first is 22.5deg.
-        const rotation = (i * 45) + 22.5; 
+    // Elements
+    const wheel = document.getElementById('wheel');
+    const balEl = document.getElementById('bal');
+    const spinEl = document.getElementById('spins');
+    const msgEl = document.getElementById('msg');
+    const spinBtn = document.getElementById('spinBtn');
+
+    // --- BUILD THE WHEEL ---
+    function initWheel() {
+        const sliceDeg = 360 / 37; // ~9.72 degrees per slice
         
-        // Complex transform to put text in the middle of the slice
-        // We subtract 90deg because CSS 0deg is top, but transform origin math can be weird.
-        // Actually, easiest way: Rotate container, push out.
-        // Using `transform-origin: 0 0` (center of wheel)
-        // Move to center, rotate, move right (radius)
+        // 1. Generate Gradient String for Background
+        // We need to construct a conic-gradient based on the sequence
+        let gradientStr = 'conic-gradient(';
         
-        // Simplified CSS approach applied in class, just need to set the specific rotation var
-        el.style.transform = `rotate(${rotation - 90}deg) translateX(110px) rotate(90deg)`;
-        el.style.textAlign = "center";
+        rouletteOrder.forEach((num, i) => {
+            let color;
+            if (num === 0) color = 'var(--neon-yellow)'; // Green/Jackpot
+            else if (redNumbers.includes(num)) color = 'var(--neon-pink)'; // Red/Loss
+            else color = 'var(--neon-cyan)'; // Black/Win
+
+            const startDeg = i * sliceDeg;
+            const endDeg = (i + 1) * sliceDeg;
+            gradientStr += `${color} ${startDeg}deg ${endDeg}deg, `;
+        });
         
-        wheel.appendChild(el);
-    });
+        // Remove trailing comma and close
+        gradientStr = gradientStr.slice(0, -2) + ')';
+        wheel.style.background = gradientStr;
+
+        // 2. Place Numbers
+        rouletteOrder.forEach((num, i) => {
+            const el = document.createElement('div');
+            el.className = 'number';
+            // Rotation is: Index * sliceDeg + half a slice (to center number in color)
+            const rot = (i * sliceDeg) + (sliceDeg / 2);
+            // We need to offset by -90deg because CSS 0 is Top, but Transform Origin calculations 
+            // usually start from Right in standard circle math, or Top.
+            // Actually, we rotate the container div from center. 0deg = 3 o'clock? 
+            // Let's rely on visual alignment. transform: rotate(X) rotates clockwise.
+            // We want index 0 at the top.
+            // With this CSS, 0 deg starts at 12 o'clock. 
+            el.style.transform = `rotate(${rot}deg)`;
+            el.innerHTML = `<div class="num-text">${num}</div>`;
+            wheel.appendChild(el);
+        });
+    }
 
     // --- PLAYERS DATA ---
     const players = [
@@ -276,20 +353,20 @@ button:disabled { opacity: 0.3; cursor: not-allowed; }
         players.forEach(p => {
             const el = document.createElement('div');
             el.className = `player-card ${balance >= p.v ? 'affordable' : ''}`;
-            el.innerHTML = `<div>${p.n}</div><div class="p-val">£${(p.v/1000000).toFixed(2)}M</div>`;
+            el.innerHTML = `<div>${p.n}</div><div style="color:#ffd60a; margin-top:5px">£${(p.v/1000000).toFixed(2)}M</div>`;
             grid.appendChild(el);
         });
     }
 
-    // --- LOGIC ---
+    // --- GAME LOGIC ---
     window.setBet = function(amount) {
-        if (spinsLeft < 1) return;
+        if(spinsLeft <= 0) return;
         
-        if(amount === 'all') currentBet = balance;
+        if (amount === 'all') currentBet = balance;
         else currentBet = amount;
 
-        if(currentBet > balance) {
-            msgEl.innerText = "NO FUNDS!";
+        if (currentBet > balance) {
+            msgEl.innerText = "INSUFFICIENT FUNDS";
             msgEl.style.color = "var(--neon-pink)";
             spinBtn.disabled = true;
             return;
@@ -301,88 +378,98 @@ button:disabled { opacity: 0.3; cursor: not-allowed; }
     }
 
     window.spin = function() {
-        if(spinsLeft < 1 || currentBet === 0) return;
+        if(spinsLeft <= 0 || currentBet === 0) return;
 
-        // Take money
+        // Deduct
         balance -= currentBet;
         spinsLeft--;
         balEl.innerText = balance.toLocaleString();
         spinEl.innerText = spinsLeft;
-        
-        // Disable UI
+
+        // UI Lock
         spinBtn.disabled = true;
-        document.querySelectorAll('.btn-bet').forEach(b => b.disabled = true);
+        const bets = document.querySelectorAll('.btn-bet');
+        bets.forEach(b => b.disabled = true);
         msgEl.innerText = "SPINNING...";
 
-        // SPIN MATH
-        // 1. Random degrees between 2000 and 5000
-        const spinAmount = Math.floor(2000 + Math.random() * 3000); 
-        wheelRotation += spinAmount;
-        
-        // 2. Apply CSS
+        // Physics
+        // Add huge rotation (at least 5 spins = 1800deg) + random
+        const spinForce = 1800 + Math.floor(Math.random() * 2000); 
+        wheelRotation += spinForce;
         wheel.style.transform = `rotate(${wheelRotation}deg)`;
 
-        // 3. Calculate Result (after 4s)
+        // Result Calculation
         setTimeout(() => {
-            calculateWin(wheelRotation);
-        }, 4000);
+            calculateResult(wheelRotation);
+        }, 5000); // 5s spin match CSS
     }
 
-    function calculateWin(actualRotation) {
-        // Normalize rotation to 0-360
-        // We must account that CSS rotates Clockwise, so pointer "moves" Counter-Clockwise relative to wheel
-        const degrees = actualRotation % 360;
+    function calculateResult(rotation) {
+        const sliceDeg = 360 / 37;
         
-        // The Pointer is at the TOP (0 degrees). 
-        // If wheel rotates 22.5 deg, the slice at 337.5 is at the top.
-        // Formula: (360 - degrees) % 360 gives us the angle "under" the pointer
-        const pointerAngle = (360 - degrees) % 360;
-
-        // Find which segment range this angle falls into
-        // Each segment is 45deg. 
-        // Index 0: 0-45, Index 1: 45-90...
-        const index = Math.floor(pointerAngle / 45);
-        const result = segments[index];
-
-        // Process Win
-        if (result.val === -1) {
-            // RED CARD (Bankrupt)
-            balance = 0;
-            msgEl.innerText = "RED CARD! BANKRUPT!";
-            msgEl.style.color = "var(--neon-pink)";
-        } else if (result.val === 0) {
-            // LOSE
-            msgEl.innerText = "LOST BET!";
-            msgEl.style.color = "var(--neon-pink)";
-        } else if (result.val < 1) {
-            // VAR (Partial)
-            const ret = Math.floor(currentBet * result.val);
-            balance += ret;
-            msgEl.innerText = `VAR CHECK: £${ret.toLocaleString()} BACK`;
-            msgEl.style.color = "var(--neon-pink)";
-        } else {
-            // WIN
-            const win = Math.floor(currentBet * result.val);
+        // Get actual degree within 0-360
+        const actualDeg = rotation % 360;
+        
+        // Pointer is at Top (0). Wheel rotates Clockwise.
+        // The slice under the pointer is: (360 - actualDeg)
+        const pointerDeg = (360 - actualDeg) % 360;
+        
+        // Calculate Index
+        const index = Math.floor(pointerDeg / sliceDeg);
+        
+        // Get the Number
+        const winningNum = rouletteOrder[index];
+        
+        // Check Win/Loss
+        if (winningNum === 0) {
+            // JACKPOT
+            const win = currentBet * 10;
             balance += win;
-            msgEl.innerText = `${result.label.split('\n')[0]}! +£${win.toLocaleString()}`;
+            msgEl.innerText = `0! WORLDIE! JACKPOT (+£${win.toLocaleString()})`;
+            msgEl.style.color = "var(--neon-yellow)";
+            document.body.classList.add('flash-win');
+        } else if (redNumbers.includes(winningNum)) {
+            // RED = LOSS
+            // Special Rule: Is it unlucky 13?
+            // Let's keep it simple: ALL REDS LOSE
+            msgEl.innerText = `${winningNum} RED! MISS! LOST BET`;
+            msgEl.style.color = "var(--neon-pink)";
+            document.body.classList.add('flash-loss');
+        } else {
+            // BLACK = WIN (x2)
+            const win = currentBet * 2;
+            balance += win;
+            msgEl.innerText = `${winningNum} BLACK! GOAL! (+£${win.toLocaleString()})`;
             msgEl.style.color = "var(--neon-cyan)";
-            document.body.classList.add('flash');
-            setTimeout(() => document.body.classList.remove('flash'), 300);
+            document.body.classList.add('flash-win');
         }
+        
+        // Cleanup
+        setTimeout(() => {
+            document.body.classList.remove('flash-win');
+            document.body.classList.remove('flash-loss');
+        }, 300);
 
         balEl.innerText = balance.toLocaleString();
         updateShop();
-        
-        // Re-enable or Game Over
+
         if (spinsLeft > 0 && balance > 0) {
-            document.querySelectorAll('.btn-bet').forEach(b => b.disabled = false);
+            bets.forEach(b => b.disabled = false);
         } else {
-            msgEl.innerText = "MARKET OPEN - GOOD LUCK";
-            msgEl.style.color = "var(--neon-yellow)";
+            if(balance > 0) {
+                msgEl.innerText = "MARKET OPEN";
+                msgEl.style.color = "var(--neon-yellow)";
+            } else {
+                msgEl.innerText = "GAME OVER";
+                msgEl.style.color = "#fff";
+            }
         }
     }
-
+    
+    // Init
+    initWheel();
     updateShop();
+    const bets = document.querySelectorAll('.btn-bet');
 
 </script>
 </body>
