@@ -34,124 +34,145 @@ body{
     align-items:center;
     min-height: 100vh;
     padding-bottom: 60px;
+    overflow-x: hidden; /* Prevent scroll during shake */
 }
 
 /* =========================================
-   BOOT SEQUENCE: THUNDER STRIKE (V3)
+   BOOT SEQUENCE: THE SUPER-CHARGE (STREET FIGHTER STYLE)
    ========================================= */
 #boot-sequence {
     position: fixed; inset: 0;
-    background: radial-gradient(circle at center, #1a1a2e 0%, #000 100%); /* New BG */
+    background-color: #000;
     z-index: 9999;
     display: flex; align-items: center; justify-content: center;
-    /* Hard cut to website after 3.5s */
-    animation: killBoot 0.1s linear 3.5s forwards;
+    /* Kill screen after 4.5s */
+    animation: killBoot 0.1s linear 4.5s forwards;
 }
 
-.thunder-stage {
-    position: relative;
-    width: 300px; height: 300px;
-    display: flex; align-items: center; justify-content: center;
+.arena {
+    position: relative; width: 100%; max-width: 600px; height: 300px;
+    border-bottom: 4px solid #333; /* The floor */
+    display: flex; align-items: flex-end;
+    overflow: hidden;
 }
 
-/* 1. THE WIREFRAME BALL */
-.electric-ball {
-    position: absolute;
-    width: 60px; height: 60px;
-    border-radius: 50%;
-    border: 4px solid var(--neon-cyan);
-    background: rgba(0,0,0,0.5);
-    box-shadow: 0 0 20px var(--neon-cyan);
-    z-index: 2;
-    /* Animations: Float -> Get Struck -> Explode */
+/* --- THE PLAYER SPRITE (CSS BLOCKS) --- */
+.player-container {
+    position: absolute; left: 50px; bottom: 0;
+    width: 60px; height: 100px;
+    display: flex; flex-direction: column; align-items: center;
+}
+
+/* The Body */
+.p-head { width: 20px; height: 20px; background: var(--neon-cyan); margin-bottom: 2px; }
+.p-body { width: 30px; height: 40px; background: #fff; margin-bottom: 2px; }
+.p-legs { width: 30px; height: 30px; display: flex; justify-content: space-between; }
+.p-leg { width: 10px; height: 100%; background: var(--neon-cyan); }
+
+/* Animations applied to container */
+.player-container {
     animation: 
-        ballFloat 0.8s infinite alternate ease-in-out,
-        ballHit 0.2s cubic-bezier(0.1, 0.9, 0.2, 1) 1.6s forwards;
-}
-/* Internal wireframe lines */
-.electric-ball::before, .electric-ball::after {
-    content: ''; position: absolute; inset: 0; border-radius: 50%;
-    border: 2px solid rgba(5, 217, 232, 0.5);
-}
-.electric-ball::before { transform: rotateX(60deg); }
-.electric-ball::after { transform: rotateY(60deg); }
-
-/* 2. THE LIGHTNING BOLT */
-.lightning-container {
-    position: absolute;
-    top: -200px; left: 50%; transform: translateX(-50%);
-    width: 100px; height: 240px;
-    z-index: 3;
-    overflow: visible;
-}
-.lightning-path {
-    stroke: #fff;
-    stroke-width: 8px;
-    fill: none;
-    stroke-linecap: round;
-    stroke-linejoin: round;
-    filter: drop-shadow(0 0 15px var(--neon-yellow));
-    stroke-dasharray: 600;
-    stroke-dashoffset: 600; /* Hidden */
-    animation: boltStrike 0.4s ease-out 1.3s forwards;
-    opacity: 0;
+        p-idle 0.1s infinite, /* Shaking */
+        p-kick 0.2s cubic-bezier(0.1, 0.9, 0.2, 1) 2.5s forwards; /* The Lunge */
 }
 
-/* 3. SCREEN FLASH (The Impact) */
-.white-flash {
-    position: absolute; inset: 0;
-    background: #fff;
-    opacity: 0;
-    pointer-events: none;
-    z-index: 10;
-    animation: flashBang 0.2s linear 1.6s forwards; /* Fires exactly when bolt hits ball */
+/* --- THE POWER BAR --- */
+.power-wrapper {
+    position: absolute; top: -40px; left: -20px;
+    width: 100px; height: 10px; border: 2px solid #fff;
+    background: #222;
+}
+.power-fill {
+    height: 100%; width: 0%; background: var(--neon-yellow);
+    animation: chargeUp 2.5s linear forwards;
 }
 
-/* 4. THE LOGO REVEAL */
-.boot-logo {
-    font-family: "Press Start 2P"; font-size: 48px;
-    color: var(--neon-yellow);
-    text-shadow: 4px 4px 0 var(--neon-pink), -4px -4px 0 var(--neon-cyan);
-    opacity: 0;
-    transform: scale(0.5);
+/* --- THE SPEECH BUBBLE --- */
+.shout {
+    position: absolute; top: -80px; left: -30px;
+    font-family: "Press Start 2P"; font-size: 20px; color: var(--neon-pink);
+    opacity: 0; text-shadow: 2px 2px #fff;
+    animation: shoutAppear 0.2s linear 2.2s forwards, shoutHide 0.1s linear 2.6s forwards;
+}
+
+/* --- THE BALL / FIREBALL --- */
+.ball-obj {
+    position: absolute; left: 100px; bottom: 10px;
+    width: 30px; height: 30px; border-radius: 50%;
+    background: #fff; border: 2px solid #000;
     z-index: 5;
-    animation: logoPop 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) 1.7s forwards;
+    /* Kick Animation */
+    animation: fireShot 0.4s ease-in 2.6s forwards;
 }
 
-/* --- ANIMATION TIMING --- */
-@keyframes ballFloat { 
-    from { transform: translateY(0); } 
-    to { transform: translateY(-10px); } 
+/* Energy Aura during charge */
+.aura {
+    position: absolute; bottom: 0; left: 30px;
+    width: 100px; height: 100px;
+    background: radial-gradient(circle, rgba(5, 217, 232, 0.5) 0%, transparent 70%);
+    opacity: 0; transform: translate(-50%, 0);
+    animation: auraGrow 2.5s ease-in forwards;
 }
 
-@keyframes boltStrike {
-    0% { stroke-dashoffset: 600; opacity: 1; }
-    40% { stroke-dashoffset: 0; opacity: 1; } /* Connected */
-    80% { stroke-width: 12px; stroke: #fff; opacity: 1; } /* Glow brighter */
-    100% { stroke-dashoffset: 0; opacity: 0; } /* Gone */
+/* --- IMPACT EFFECT --- */
+.impact-flash {
+    position: absolute; inset: 0; background: #fff; opacity: 0; pointer-events: none; z-index: 100;
+    animation: flashBang 0.2s linear 2.9s forwards;
 }
 
-@keyframes flashBang {
-    0% { opacity: 0; }
-    50% { opacity: 1; } /* BLINDING WHITE */
-    100% { opacity: 0; }
+.cracked-overlay {
+    position: absolute; inset: 0; 
+    background: 
+        linear-gradient(45deg, transparent 48%, #fff 48%, #fff 52%, transparent 52%),
+        linear-gradient(-45deg, transparent 48%, #fff 48%, #fff 52%, transparent 52%);
+    opacity: 0; z-index: 90;
+    mix-blend-mode: overlay;
+    animation: crackShow 0.1s linear 2.9s forwards;
 }
 
-@keyframes ballHit {
-    0% { transform: scale(1); opacity: 1; }
-    100% { transform: scale(3); opacity: 0; border-width: 0; } /* Explodes outward */
+.boot-logo {
+    position: absolute; top: 40%; left: 50%; transform: translate(-50%, -50%) scale(0);
+    font-family: "Press Start 2P"; font-size: 60px; color: var(--neon-yellow);
+    text-shadow: 5px 5px 0 var(--neon-pink);
+    z-index: 101;
+    animation: logoSlam 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) 3.0s forwards;
 }
 
-@keyframes logoPop {
-    0% { opacity: 0; transform: scale(0.5); filter: blur(10px); }
-    100% { opacity: 1; transform: scale(1); filter: blur(0); }
+/* --- KEYFRAMES --- */
+@keyframes p-idle { 
+    0% { transform: translateX(0); } 
+    50% { transform: translateX(1px); } 
+    100% { transform: translateX(-1px); } 
+}
+@keyframes chargeUp {
+    0% { width: 0%; background: lime; }
+    50% { width: 50%; background: yellow; }
+    100% { width: 100%; background: var(--neon-pink); box-shadow: 0 0 10px var(--neon-pink); }
+}
+@keyframes auraGrow {
+    0% { opacity: 0; transform: translate(-50%, 10px) scale(0.5); }
+    80% { opacity: 0.8; transform: translate(-50%, 0) scale(1.5); }
+    100% { opacity: 1; transform: translate(-50%, 0) scale(1.8); }
+}
+@keyframes shoutAppear { from { opacity: 0; transform: scale(0); } to { opacity: 1; transform: scale(1); } }
+@keyframes shoutHide { to { opacity: 0; } }
+@keyframes p-kick { to { transform: translateX(40px) skewX(-10deg); } } /* Move to ball */
+
+@keyframes fireShot {
+    0% { transform: translateX(0) scale(1); background: #fff; box-shadow: none;}
+    10% { transform: translateX(0) scale(1.2, 0.8); } /* Squish */
+    20% { width: 60px; background: var(--neon-cyan); box-shadow: 0 0 20px var(--neon-cyan); border:none; border-radius: 10px;}
+    100% { transform: translateX(800px) scale(3, 0.5); width: 200px; opacity: 1; } /* Laser beam right */
 }
 
-@keyframes killBoot { to { visibility: hidden; opacity: 0; pointer-events: none; } }
+@keyframes flashBang { 0%, 100% { opacity: 0; } 50% { opacity: 1; } }
+@keyframes crackShow { to { opacity: 0.3; } }
+@keyframes logoSlam { to { transform: translate(-50%, -50%) scale(1); } }
+@keyframes killBoot { to { opacity: 0; visibility: hidden; pointer-events: none; } }
 
 
 /* =========================================
-   MAIN SITE STYLES
+   MAIN SITE STYLES (V2)
    ========================================= */
 .hero-section {
     width: 100%; max-width: 960px; padding: 30px 0; margin-bottom: 20px;
@@ -208,13 +229,12 @@ input, select {
 input:focus::placeholder { color: transparent; }
 input:focus, select:focus { border-color: var(--neon-yellow); }
 
-/* MATCH BOXES */
+/* GAME UI */
 .instructions { font-family: "VT323", monospace; font-size: 18px; color: #aaa; margin-bottom: 15px; text-align: left; text-transform: uppercase; }
 .match-box { border: 2px solid #333; background: #12121c; padding: 15px; margin-bottom: 25px; }
 .match-title { font-family: "Press Start 2P"; font-size: 12px; color: var(--neon-pink); margin-bottom: 15px; border-bottom: 1px solid #333; padding-bottom: 10px; }
 .section-label { font-family: "Press Start 2P"; font-size: 10px; color: var(--neon-cyan); margin: 15px 0 10px; text-align:left; }
 
-/* GRIDS & BUTTONS */
 .method-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px; }
 .team-col { display: flex; flex-direction: column; gap: 5px; }
 .team-header { font-family: "Press Start 2P"; font-size: 10px; color: #fff; margin-bottom: 5px; }
@@ -235,7 +255,6 @@ input:focus, select:focus { border-color: var(--neon-yellow); }
 .time-btn:hover { border-color: var(--neon-pink); color: #fff; }
 .time-btn.selected { background: var(--neon-pink); color: #fff; border-color: #fff; box-shadow: 0 0 10px var(--neon-pink); }
 
-/* STRATEGY */
 .strategy-toggle { display: flex; gap: 15px; margin: 20px 0; }
 .strat-btn {
     flex: 1; padding: 20px 10px; background: #000; border: 2px solid #444; color: #666;
@@ -247,7 +266,6 @@ input:focus, select:focus { border-color: var(--neon-yellow); }
 .strat-content.visible { display: block; animation: flicker 0.5s; }
 @keyframes flicker { 0%{opacity:0;} 100%{opacity:1;} }
 
-/* OPTIONS & SYSTEM */
 .option-row {
     display: flex; align-items: center; gap: 15px; padding: 15px;
     border: 1px solid #333; background: #000; margin-bottom: 8px; cursor: pointer;
@@ -291,18 +309,26 @@ input:focus, select:focus { border-color: var(--neon-yellow); }
 <body>
 
 <div id="boot-sequence">
-    <div class="white-flash"></div>
+    <div class="impact-flash"></div>
+    <div class="cracked-overlay"></div>
+    <div class="boot-logo glitch" data-text="GOALSURGE!">GOALSURGE!</div>
     
-    <div class="thunder-stage">
-        <div class="lightning-container">
-            <svg viewBox="0 0 100 240" preserveAspectRatio="none" width="100%" height="100%">
-                <path class="lightning-path" d="M50,0 L20,100 L70,100 L40,240" vector-effect="non-scaling-stroke" />
-            </svg>
+    <div class="arena">
+        <div class="aura"></div>
+        
+        <div class="player-container">
+            <div class="power-wrapper"><div class="power-fill"></div></div>
+            <div class="shout">SURGE!</div>
+            
+            <div class="p-head"></div>
+            <div class="p-body"></div>
+            <div class="p-legs">
+                <div class="p-leg"></div>
+                <div class="p-leg"></div>
+            </div>
         </div>
         
-        <div class="electric-ball"></div>
-
-        <div class="boot-logo glitch" data-text="GOALSURGE!">GOALSURGE!</div>
+        <div class="ball-obj"></div>
     </div>
 </div>
 
@@ -420,15 +446,15 @@ input:focus, select:focus { border-color: var(--neon-yellow); }
 </div>
 
 <script>
-// --- BOOT SEQUENCE CLEANUP ---
+// --- BOOT CLEANUP ---
 window.addEventListener('load', () => {
     setTimeout(() => {
         const boot = document.getElementById('boot-sequence');
         if(boot) boot.remove();
-    }, 3800);
+    }, 4600);
 });
 
-// --- GAME LOGIC ---
+// --- GAME CONFIG & STATE ---
 const CONFIG = { sf1_home: "ENGLAND", sf1_away: "FRANCE", sf2_home: "SPAIN", sf2_away: "ARGENTINA" };
 const TEAMS = [CONFIG.sf1_home, CONFIG.sf1_away, CONFIG.sf2_home, CONFIG.sf2_away];
 const picks = { user: '', email: '', tiebreaker: '', sf1: { winner: null, method: null, time: null }, sf2: { winner: null, method: null, time: null }, p3: { winner: null, method: null, time: null }, fin: { winner: null, method: null, time: null }, strategy: null, hedge: [null, null, null, null], risk: null, redCard: null, combo: null, totalGoals: null };
