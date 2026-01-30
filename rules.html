@@ -2,276 +2,467 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>GOALSURGE BANNER</title>
-<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<title>GOALSTORM! — ROUND 3</title>
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap" rel="stylesheet">
 <style>
-/* =========================================
-   1. CONFIGURATION
-   ========================================= */
-:root {
-    /* --- IMAGE SOURCES --- */
-    /* Ensure these files exist in your folder */
-    --p-idle:   url('p1.png');
-    --p-windup: url('p2.png');
-    --p-kick:   url('p3.png');
-    
-    --b-normal: url('b1.png');
-    --b-super:  url('b2.png');
+/* --- 1. CORE PALETTE: HOT ARCADE (VERSION 2 STYLE) --- */
+:root{
+  --bg: #0f0e17;          
+  --panel: #1a1a2e;       
+  --neon-pink: #ff2a6d;   /* ACTION */
+  --neon-cyan: #05d9e8;   /* STRUCTURE */
+  --neon-yellow: #ffc800; /* DATA */
+  --text-main: #d1d1d1;
 
-    /* --- COLORS --- */
-    --neon-cyan: #00f6ff;
-    --neon-pink: #ff0055;
-    --neon-yellow: #ffd60a;
-    --bg-dark: #0f0e17;
-
-    /* --- TIMING --- */
-    --kick-delay: 1.0s; /* Time spent winding up */
-    --fly-speed: 1.2s;  /* Time taken to cross screen */
+  /* STING ASSETS */
+  --player-idle:    url('p1.png');
+  --player-windup:  url('p2.png');
+  --player-kick:    url('p3.png');
+  --ball-normal:    url('b1.png');
+  --ball-super:     url('b2.png');
+  --total-time: 1.2s;
 }
 
-* { box-sizing: border-box; margin: 0; padding: 0; }
+*{box-sizing:border-box;margin:0;padding:0;}
 
-body { 
-    background: var(--bg-dark); 
-    font-family: 'Press Start 2P', cursive;
-    color: #fff;
-    overflow-x: hidden;
+body{
+    margin:0;
+    background-color: var(--bg);
+    background-image: 
+        linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+    background-size: 20px 20px;
+    color: var(--text-main);
+    font-family:"VT323", monospace;
+    font-size: 20px; 
+    text-align:center;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    min-height: 100vh;
+    padding-bottom: 60px;
 }
 
-/* =========================================
-   2. THE BANNER CONTAINER
-   ========================================= */
-.banner-stage {
-    position: relative;
-    width: 100%;
-    height: 300px; /* Adjust height as needed */
-    background: #000;
+/* --- 2. HEADER & INTEGRATED STING --- */
+.hero-section {
+    width: 100%; max-width: 960px; padding: 60px 0; margin-bottom: 20px;
     border-bottom: 4px solid var(--neon-cyan);
+    background: linear-gradient(180deg, rgba(5, 217, 232, 0) 0%, rgba(5, 217, 232, 0.1) 100%);
+    position: relative; overflow: hidden;
+    text-align: center;
+    min-height: 220px;
     display: flex;
-    align-items: center;
+    flex-direction: column;
     justify-content: center;
-    overflow: hidden;
+    align-items: center;
 }
 
-/* =========================================
-   3. THE TEXT REVEAL MECHANIC
-   ========================================= */
-
-/* Shared Text Styles */
-.banner-text {
-    font-size: 8vw; /* Responsive Size */
+/* STING COMPONENTS IN BANNER */
+.arena-banner {
     position: absolute;
-    left: 50%; top: 50%;
-    transform: translate(-50%, -50%);
-    white-space: nowrap;
-    padding-left: 50px; /* Make room for player on left */
-}
-
-/* Layer 1: The "Empty" Background Text */
-.text-base {
-    color: #222;
-    text-shadow: 2px 2px #000;
+    inset: 0;
+    pointer-events: none;
     z-index: 1;
 }
 
-/* Layer 2: The "Mask" that expands */
-.reveal-mask {
-    position: absolute;
-    left: 50%; top: 50%;
-    transform: translate(-50%, -50%);
-    height: 100%;
-    
-    /* Start at 0 width (hidden), animate to full width */
-    width: 0%;
-    overflow: hidden; /* This cuts off the text */
-    z-index: 5;
-    
-    /* This makes the layer expansion visible (for debugging) */
-    /* border: 1px solid red; */
-    
-    animation: wipe-mask var(--fly-speed) linear forwards;
-    animation-delay: var(--kick-delay);
-}
-
-/* The Bright Text INSIDE the mask */
-.text-lit {
-    color: var(--neon-yellow);
-    text-shadow: 4px 4px var(--neon-pink);
-    
-    /* We must counteract the mask's transform to keep text centered */
-    /* This is a CSS trick: The container shrinks, but text stays center */
-    position: relative;
-    left: 0; top: 0;
-    transform: none;
-    display: block;
-    width: 100vw; /* Force width to match screen */
-    text-align: center;
-}
-
-/* =========================================
-   4. THE BALL (Pinned to the Mask Edge)
-   ========================================= */
-/* Since this is INSIDE .reveal-mask, and .reveal-mask 
-   grows from Left to Right, putting this on the RIGHT edge
-   means it will ride the wave perfectly.
-*/
-.ball-anchor {
-    position: absolute;
-    right: 0; 
-    top: 50%;
-    transform: translate(50%, -50%); /* Center on the edge line */
-    z-index: 10;
-    
-    /* Hide initially, appear on kick */
-    opacity: 0;
-    animation: ball-appear 0s linear forwards;
-    animation-delay: var(--kick-delay);
-}
-
-.ball-sprite {
-    width: 60px; height: 60px;
-    
-    /* Image Handling */
-    background-image: var(--b-super);
-    background-size: contain;
-    background-repeat: no-repeat;
-    
-    /* Fallback if image missing: White Circle */
-    background-color: #fff; 
-    border-radius: 50%;
-    border: 2px solid var(--neon-cyan);
-
-    /* Spin Animation */
-    animation: spin 0.5s linear infinite;
-}
-
-/* Fire Trail effect following the ball */
-.fire-trail {
-    position: absolute;
-    right: 30px; top: 10px;
-    width: 200px; height: 40px;
-    background: linear-gradient(90deg, transparent, var(--neon-pink), var(--neon-yellow));
-    z-index: -1;
-    filter: blur(8px);
-    opacity: 0.8;
-}
-
-/* =========================================
-   5. THE PLAYER (Stationary on Left)
-   ========================================= */
-.player-container {
-    position: absolute;
-    left: 5%; bottom: 20px;
-    width: 150px; height: 150px;
-    z-index: 20;
-}
-
-.player-sprite {
-    width: 100%; height: 100%;
-    
-    /* Image Handling */
-    background-image: var(--p-idle);
-    background-size: contain;
-    background-repeat: no-repeat;
+.sprite-player {
+    position: absolute; 
+    left: 5%; 
+    bottom: 10%; 
+    width: 120px; 
+    height: 120px; 
+    background-image: var(--player-idle);
+    background-size: contain; 
+    background-repeat: no-repeat; 
     background-position: bottom center;
-    
-    /* Fallback if image missing: Grey Box */
-    background-color: #333;
-    border: 2px dashed #666;
-
-    /* The Animation Sequence */
-    animation: player-action var(--kick-delay) step-end forwards;
+    animation: player-sequence var(--total-time) step-end forwards;
 }
 
-/* Power Bar above player head */
-.power-bar {
-    position: absolute; top: 0; left: 20px; right: 20px; height: 10px;
-    border: 2px solid #fff;
-    opacity: 1;
-    animation: fade-out 0.2s linear forwards;
-    animation-delay: var(--kick-delay);
+.sprite-ball {
+    position: absolute; 
+    left: 20%; 
+    bottom: 15%; 
+    width: 30px; 
+    height: 30px; 
+    background-image: var(--ball-normal);
+    background-size: contain; 
+    background-repeat: no-repeat;
+    animation: ball-sequence var(--total-time) linear forwards;
+}
+
+.power-bar-container {
+    position: absolute;
+    top: -20px; left: 0; width: 100%; height: 8px;
+    background: #222; border: 1px solid #fff;
+    opacity: 0; animation: show-bar 0.1s linear 0s forwards;
 }
 .power-fill {
-    height: 100%; width: 0%; background: var(--neon-yellow);
-    animation: fill-up var(--kick-delay) linear forwards;
+    height: 100%; width: 0%; background: var(--neon-yellow); 
+    animation: fill-bar 0.6s linear forwards; 
 }
 
-/* =========================================
-   6. KEYFRAMES
-   ========================================= */
-
-/* The Text Wipe */
-@keyframes wipe-mask {
-    0%   { width: 0%; overflow: visible; } /* Overflow visible lets ball poke out */
-    99%  { overflow: visible; }
-    100% { width: 100%; overflow: visible; }
+@keyframes player-sequence {
+    0%   { background-image: var(--player-idle); }
+    50%  { background-image: var(--player-windup); }
+    55%  { background-image: var(--player-kick); transform: translateX(10px); } 
+    100% { background-image: var(--player-kick); transform: translateX(10px); }
 }
 
-/* The Player Logic */
-@keyframes player-action {
-    0%   { background-image: var(--p-idle); transform: translateX(0); }
-    20%  { background-image: var(--p-windup); }
-    50%  { background-image: var(--p-windup); } /* Hold Windup */
-    
-    /* KICK FRAME */
-    90%  { 
-        background-image: var(--p-kick); 
-        transform: translateX(10px); 
-        background-color: transparent; /* Remove fallback color on kick */
-        border: none;
-    }
-    100% { 
-        background-image: var(--p-kick); 
-        transform: translateX(10px);
-        opacity: 0; /* Fade out player after kick */
-        background-color: transparent;
-        border: none;
-    }
+@keyframes ball-sequence {
+    0%, 54.9% { background-image: var(--ball-normal); transform: translateX(0); width: 30px; height: 30px; }
+    55%  { background-image: var(--ball-super); width: 120px; height: 40px; transform: translateX(0); animation-timing-function: cubic-bezier(0.1, 1, 0.2, 1); }
+    100% { background-image: var(--ball-super); width: 120px; height: 40px; transform: translateX(1200px); }
 }
 
-/* Utilities */
-@keyframes ball-appear { to { opacity: 1; } }
-@keyframes spin { to { transform: rotate(360deg); } }
-@keyframes fill-up { to { width: 100%; } }
-@keyframes fade-out { to { opacity: 0; } }
+@keyframes fill-bar { 0% { width: 0%; } 100% { width: 100%; background: var(--neon-pink); } }
+@keyframes show-bar { to { opacity: 1; } }
 
-/* =========================================
-   7. PAGE CONTENT
-   ========================================= */
-.content {
-    padding: 50px; text-align: center;
+/* HEADER TEXT LOGIC */
+.scanlines {
+    position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+    background: linear-gradient(to bottom, rgba(255,255,255,0), rgba(255,255,255,0) 50%, rgba(0,0,0,0.1) 50%, rgba(0,0,0,0.1));
+    background-size: 100% 4px; pointer-events: none; z-index: 2;
+}
+.hero-content {
+    position: relative; z-index: 3;
+    opacity: 0;
+    animation: fadeInText 0.3s ease-in 0.8s forwards; /* Appears as ball strikes */
+}
+@keyframes fadeInText { to { opacity: 1; transform: scale(1); } }
+
+.glitch {
+    font-family: "Press Start 2P", cursive; font-size: 40px; 
+    color: var(--neon-yellow);
+    text-shadow: 4px 4px 0px var(--neon-pink), -3px -3px 0px var(--neon-cyan);
+    text-transform: uppercase; margin: 0; line-height: 1; letter-spacing: -2px;
+}
+.hero-sub {
+    font-family: "Press Start 2P", cursive; font-size: 10px; color: #fff;
+    margin-top: 15px; letter-spacing: 3px; background: var(--neon-pink);
+    padding: 6px 12px; display: inline-block; box-shadow: 4px 4px 0 #000;
+}
+
+/* --- 3. NAV & BUTTONS --- */
+.nav { width: 100%; max-width: 960px; display: flex; gap: 10px; padding: 10px; margin-top: 10px; }
+.nav a {
+  flex: 1; font-family: "Press Start 2P", cursive; font-size: 10px; padding: 12px 5px;
+  color: var(--neon-cyan); text-decoration: none; background: #111;
+  border: 2px solid var(--neon-cyan); box-shadow: 4px 4px 0px 0px rgba(5, 217, 232, 0.4);
+  text-transform: uppercase; transition: all 0.1s; display: flex; align-items: center; justify-content: center;
+}
+.nav a.active { background: var(--neon-pink); border-color: var(--neon-pink); color: #fff; }
+
+button {
+    font-family: "Press Start 2P", cursive; font-size: 14px; padding: 15px 20px; margin: 10px 0;
+    color: #fff; background: var(--neon-pink); border: 2px solid #fff;
+    box-shadow: 4px 4px 0px #000; cursor: pointer; transition: all 0.05s; text-transform: uppercase;
+}
+button:hover { background: #ff5c8d; transform: translate(-2px, -2px); box-shadow: 6px 6px 0px #000; }
+button:active { transform: translate(2px, 2px); box-shadow: 2px 2px 0px #000; }
+button:disabled { opacity: 0.5; cursor: not-allowed; background: #333; border-color: #555; box-shadow: none; transform: none; }
+
+/* --- 4. PANELS --- */
+.panel {
+    width: 95%; max-width: 960px; background: var(--panel);
+    border: 3px solid var(--neon-cyan); padding: 20px; margin-bottom: 25px;
+    box-shadow: 0 0 20px rgba(5, 217, 232, 0.1);
+}
+h1 {
+    font-family: "Press Start 2P", cursive; font-size: 16px; margin-bottom: 20px;
+    color: var(--neon-cyan); border-bottom: 4px solid #000; padding-bottom: 10px; text-align: left;
+}
+
+input, select {
+    width: 100%; padding: 15px; margin: 10px 0; 
+    background: #000; color: var(--neon-yellow);
+    border: 2px solid #888;
+    font-family: "VT323", monospace; font-size: 24px; outline: none; text-transform: uppercase;
+    transition: all 0.3s;
+}
+::placeholder { color: var(--neon-yellow); opacity: 1; }
+input:focus, select:focus { border-color: var(--neon-yellow); }
+
+.instructions { font-family: "VT323", monospace; font-size: 18px; color: #aaa; margin-bottom: 15px; text-align: left; text-transform: uppercase; }
+.match-box { border: 2px solid #333; background: #12121c; padding: 15px; margin-bottom: 25px; }
+.match-title { font-family: "Press Start 2P"; font-size: 12px; color: var(--neon-pink); margin-bottom: 15px; border-bottom: 1px solid #333; padding-bottom: 10px; }
+.section-label { font-family: "Press Start 2P"; font-size: 10px; color: var(--neon-cyan); margin: 15px 0 10px; text-align:left; }
+
+.method-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px; }
+.team-col { display: flex; flex-direction: column; gap: 5px; }
+.team-header { font-family: "Press Start 2P"; font-size: 10px; color: #fff; margin-bottom: 5px; }
+
+.arcade-btn {
+    font-family: "VT323"; font-size: 18px; padding: 10px; 
+    background: #000; border: 1px solid #444; color: #666; 
+    cursor: pointer; text-transform: uppercase; transition: all 0.2s;
+}
+.arcade-btn.selected { background: var(--neon-cyan); color: #000; border-color: #fff; box-shadow: 0 0 10px var(--neon-cyan); }
+
+.time-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 5px; }
+.time-btn { font-family: "VT323"; font-size: 16px; padding: 8px 2px; background: #000; border: 1px solid #444; color: #666; cursor: pointer; }
+.time-btn.selected { background: var(--neon-pink); color: #fff; border-color: #fff; box-shadow: 0 0 10px var(--neon-pink); }
+
+.strategy-toggle { display: flex; gap: 15px; margin: 20px 0; }
+.strat-btn { flex: 1; padding: 20px 10px; background: #000; border: 2px solid #444; color: #666; font-family: "Press Start 2P"; font-size: 12px; cursor: pointer; transition: all 0.3s; }
+.strat-btn.active-hedge { border-color: var(--neon-cyan); color: var(--neon-cyan); box-shadow: inset 0 0 15px rgba(5, 217, 232, 0.3); }
+.strat-btn.active-risk { border-color: var(--neon-pink); color: var(--neon-pink); box-shadow: inset 0 0 15px rgba(255, 42, 109, 0.3); }
+.strat-content { display: none; padding: 15px; border: 1px dashed #333; margin-top: 15px; }
+.strat-content.visible { display: block; animation: flicker 0.5s; }
+
+.option-row { display: flex; align-items: center; gap: 15px; padding: 15px; border: 1px solid #333; background: #000; margin-bottom: 8px; cursor: pointer; font-family: "VT323"; font-size: 20px; color: #888; text-align: left; }
+.option-row.selected { border-color: var(--neon-pink); color: #fff; background: rgba(255, 42, 109, 0.1); }
+.opt-id { font-family: "Press Start 2P"; font-size: 12px; color: var(--neon-yellow); min-width: 30px; }
+
+.submit-overlay { position: fixed; inset: 0; background: rgba(10, 10, 15, 0.98); display: none; align-items: center; justify-content: center; z-index: 20; }
+.submit-box { width: 96%; max-width: 500px; max-height: 95vh; overflow-y: auto; background: #000; border: 4px solid var(--neon-yellow); }
+.submit-header { background: var(--neon-yellow); color: #000; padding: 15px; font-family: "Press Start 2P"; font-size: 14px; text-align: center; }
+.submit-body { padding: 20px; text-align: left; font-family: "VT323"; font-size: 22px; color: #fff;}
+.summary-list li { margin-bottom: 10px; border-bottom: 1px solid #333; padding-bottom: 5px; list-style: none; }
+.summary-list strong { color: var(--neon-cyan); font-family: "Press Start 2P"; font-size: 10px; margin-right: 10px;}
+
+.sys { margin: 15px 0; font-size: 18px; color: #555; text-transform: uppercase; min-height: 24px; }
+.sys.complete { color: var(--neon-cyan); text-shadow: 0 0 5px var(--neon-cyan); }
+
+@media (min-width: 768px) {
+    .nav a { font-size: 18px; padding: 20px 10px; }
+    .glitch { font-size: 64px; }
+    .hero-sub { font-size: 14px; letter-spacing: 5px; }
+    h1 { font-size: 24px; }
 }
 </style>
 </head>
 <body>
 
-    <header class="banner-stage">
-        
-        <div class="banner-text text-base">GOALSURGE</div>
+<div class="nav">
+  <a href="index.html">HOME</a>
+  <a href="predict.html" class="active">PLAY</a>
+  <a href="scores.html">SCORES</a>
+  <a href="rules.html">RULES</a>
+</div>  
 
-        <div class="reveal-mask">
-            
-            <div class="ball-anchor">
-                <div class="fire-trail"></div>
-                <div class="ball-sprite"></div>
-            </div>
-
-            <div class="text-lit">
-                <span class="banner-text" style="position:relative; left:0; top:0; transform:none; padding-left:50px;">GOALSURGE</span>
-            </div>
+<div class="hero-section">
+    <div class="scanlines"></div>
+    
+    <div class="arena-banner">
+        <div class="sprite-player">
+            <div class="power-bar-container"><div class="power-fill"></div></div>
         </div>
-
-        <div class="player-container">
-            <div class="power-bar"><div class="power-fill"></div></div>
-            <div class="player-sprite"></div>
-        </div>
-
-    </header>
-
-    <div class="content">
-        <p style="color:#666">ROUND 3: SEMI FINALS</p>
+        <div class="sprite-ball"></div>
     </div>
 
+    <div class="hero-content">
+        <h1 class="glitch" data-text="GOALSTORM!">GOALSTORM!</h1>
+        <div class="hero-sub">ROUND 3: SEMI FINALS</div>
+    </div>
+</div>
+
+<div class="panel">
+    <h1>PLAYER TERMINAL</h1>
+    <input id="username" placeholder="USERNAME (REQUIRED)" oninput="validate()">
+    <input id="email" placeholder="EMAIL ADDRESS" oninput="validate()">
+    <input id="tiebreaker" placeholder="TIEBREAKER: TOTAL YEL CARDS?" type="number" oninput="validate()">
+    <div class="sys" id="sysMsg">AWAITING INPUT...</div>
+</div>
+
+<div class="panel">
+    <h1>ROUND 3: SEMI FINALS</h1>
+    <div class="instructions">POINTS: Correct Winner (5pts), Correct Method (3pts), Time Block (5pts).</div>
+    <div id="sf1-container"></div>
+    <div id="sf2-container"></div>
+</div>
+
+<div class="panel">
+    <h1>3RD PLACE PLAYOFF</h1>
+    <div class="instructions">Loser SF1 vs Loser SF2</div>
+    <div id="playoff-container"></div>
+</div>
+
+<div class="panel">
+    <h1>WORLD CUP WINNER</h1>
+    <div class="instructions">CHOOSE STRATEGY: HEDGE (Safe Points) or RISK (Big Bonus).</div>
+    <div class="strategy-toggle">
+        <button class="strat-btn" id="btnHedge" onclick="setStrategy('hedge')">HEDGE IT<br>(RANK 1-4)</button>
+        <button class="strat-btn" id="btnRisk" onclick="setStrategy('risk')">RISK IT<br>(PICK 1 WINNER)</button>
+    </div>
+    <div id="hedgeContent" class="strat-content">
+        <select id="rank1" onchange="validate()"><option value="">1ST PLACE PREDICTION...</option></select>
+        <select id="rank2" onchange="validate()"><option value="">2ND PLACE PREDICTION...</option></select>
+        <select id="rank3" onchange="validate()"><option value="">3RD PLACE PREDICTION...</option></select>
+        <select id="rank4" onchange="validate()"><option value="">4TH PLACE PREDICTION...</option></select>
+    </div>
+    <div id="riskContent" class="strat-content">
+        <select id="riskSelect" onchange="validate()"><option value="">SELECT CHAMPION...</option></select>
+    </div>
+</div>
+
+<div class="panel">
+    <h1>THE FINAL</h1>
+    <div id="final-container"></div>
+</div>
+
+<div class="panel">
+    <h1>RED CARD CHAOS [10pts]</h1>
+    <div id="redCardOptions"></div>
+</div>
+
+<div class="panel">
+    <h1>PLAYER COMBO [15pts]</h1>
+    <select id="playerCombo" onchange="validate()">
+        <option value="">SELECT DUO...</option>
+        <option>Mbappe & Kane</option>
+        <option>Messi & Alvarez</option>
+        <option>Yamal & Williams</option>
+        <option>Bellingham & Saka</option>
+    </select>
+</div>
+
+<div class="panel">
+    <h1>TOTAL GOALS [10pts]</h1>
+    <div class="time-grid" id="totalGoalsGrid">
+        <button class="time-btn" onclick="selectTotalGoals(this, '0-5')">0-5</button>
+        <button class="time-btn" onclick="selectTotalGoals(this, '6-8')">6-8</button>
+        <button class="time-btn" onclick="selectTotalGoals(this, '9-11')">9-11</button>
+        <button class="time-btn" onclick="selectTotalGoals(this, '12-14')">12-14</button>
+        <button class="time-btn" onclick="selectTotalGoals(this, '15-17')">15-17</button>
+        <button class="time-btn" onclick="selectTotalGoals(this, '18-20')">18-20</button>
+        <button class="time-btn" onclick="selectTotalGoals(this, '21+')">21+</button>
+    </div>
+</div>
+
+<button id="submitBtn" style="width:100%; max-width:600px;" disabled onclick="showSummary()">SUBMIT PICKS</button>
+
+<div class="submit-overlay" id="submitOverlay">
+  <div class="submit-box">
+    <div class="submit-header">CONFIRM PICKS</div>
+    <div class="submit-body">
+        <ul id="summaryList" class="summary-list"></ul>
+        <div style="text-align:center; margin-top:20px; display:flex; gap:10px;">
+            <button onclick="document.getElementById('submitOverlay').style.display='none'" style="flex:1; background:#333; font-size:12px;">EDIT</button>
+            <button onclick="alert('SUBMITTED!')" style="flex:1; font-size:12px;">CONFIRM</button>
+        </div>
+    </div>
+  </div>
+</div>
+
+<script>
+const CONFIG = { sf1_home: "ENGLAND", sf1_away: "FRANCE", sf2_home: "SPAIN", sf2_away: "ARGENTINA" };
+const TEAMS = [CONFIG.sf1_home, CONFIG.sf1_away, CONFIG.sf2_home, CONFIG.sf2_away];
+const picks = { user: '', email: '', tiebreaker: '', sf1: { winner: null, method: null, time: null }, sf2: { winner: null, method: null, time: null }, p3:  { winner: null, method: null, time: null }, fin: { winner: null, method: null, time: null }, strategy: null, hedge: [null, null, null, null], risk: null, redCard: null, combo: null, totalGoals: null };
+
+window.onload = function() {
+    renderMatch('sf1-container', 'sf1', CONFIG.sf1_home, CONFIG.sf1_away, 'SEMI FINAL 1');
+    renderMatch('sf2-container', 'sf2', CONFIG.sf2_home, CONFIG.sf2_away, 'SEMI FINAL 2');
+    renderMatch('playoff-container', 'p3', 'SF1 LOSER', 'SF2 LOSER', '3RD PLACE PLAYOFF');
+    renderMatch('final-container', 'fin', 'SF1 WINNER', 'SF2 WINNER', 'THE FINAL');
+    renderRedCardOptions();
+    populateTeamDropdowns();
+};
+
+function renderMatch(containerId, matchKey, home, away, title) {
+    const c = document.getElementById(containerId);
+    let html = `
+    <div class="match-box">
+        <div class="match-title">${title}</div>
+        <div class="method-grid" id="grid-${matchKey}">
+            <div class="team-col">
+                <div class="team-header">${home}</div>
+                <button class="arcade-btn" onclick="selectMatchResult('${matchKey}', '${home}', 'Normal Time', this)">Normal</button>
+                <button class="arcade-btn" onclick="selectMatchResult('${matchKey}', '${home}', 'Extra Time', this)">Ex.Time</button>
+                <button class="arcade-btn" onclick="selectMatchResult('${matchKey}', '${home}', 'Penalties', this)">Pens</button>
+            </div>
+            <div class="team-col">
+                <div class="team-header">${away}</div>
+                <button class="arcade-btn" onclick="selectMatchResult('${matchKey}', '${away}', 'Normal Time', this)">Normal</button>
+                <button class="arcade-btn" onclick="selectMatchResult('${matchKey}', '${away}', 'Extra Time', this)">Ex.Time</button>
+                <button class="arcade-btn" onclick="selectMatchResult('${matchKey}', '${away}', 'Penalties', this)">Pens</button>
+            </div>
+        </div>
+        <div class="section-label">TIME OF 1ST GOAL</div>
+        <div class="time-grid" id="time-${matchKey}">
+            ${['0-10','11-20','21-30','31-40','41-50','51-60','61-70','71-80','81-90', '90+', 'ET 1', 'ET 2'].map(t => `<button class="time-btn" onclick="selectMatchTime('${matchKey}', '${t}', this)">${t}</button>`).join('')}
+        </div>
+    </div>`;
+    c.innerHTML = html;
+}
+
+function renderRedCardOptions() {
+    const opts = [{id:'A', text: "No red cards."}, {id:'B', text: "Exactly 1 red card."}, {id:'C', text: "More than 1 red card."}, {id:'D', text: "SF Red Card."}, {id:'E', text: "Final/3rd Red Card."}, {id:'F', text: "Final Red Card."}];
+    const container = document.getElementById('redCardOptions');
+    opts.forEach(opt => {
+        const div = document.createElement('div');
+        div.className = 'option-row';
+        div.innerHTML = `<div class="opt-id">${opt.id}</div> <div>${opt.text}</div>`;
+        div.onclick = () => selectRedCard(opt.id, div);
+        container.appendChild(div);
+    });
+}
+
+function populateTeamDropdowns() {
+    const selects = ['rank1', 'rank2', 'rank3', 'rank4', 'riskSelect'];
+    selects.forEach(sId => {
+        const sel = document.getElementById(sId);
+        TEAMS.forEach(team => {
+            const opt = document.createElement('option');
+            opt.value = team; opt.text = team; sel.add(opt);
+        });
+    });
+}
+
+function selectMatchResult(matchKey, winner, method, btn) {
+    document.getElementById(`grid-${matchKey}`).querySelectorAll('.arcade-btn').forEach(b => b.classList.remove('selected'));
+    btn.classList.add('selected');
+    picks[matchKey].winner = winner; picks[matchKey].method = method;
+    validate();
+}
+
+function selectMatchTime(matchKey, time, btn) {
+    document.getElementById(`time-${matchKey}`).querySelectorAll('.time-btn').forEach(b => b.classList.remove('selected'));
+    btn.classList.add('selected');
+    picks[matchKey].time = time;
+    validate();
+}
+
+function setStrategy(strat) {
+    picks.strategy = strat;
+    document.getElementById('btnHedge').className = strat === 'hedge' ? 'strat-btn active-hedge' : 'strat-btn';
+    document.getElementById('btnRisk').className = strat === 'risk' ? 'strat-btn active-risk' : 'strat-btn';
+    document.getElementById('hedgeContent').className = strat === 'hedge' ? 'strat-content visible' : 'strat-content';
+    document.getElementById('riskContent').className = strat === 'risk' ? 'strat-content visible' : 'strat-content';
+    validate();
+}
+
+function selectRedCard(optId, el) {
+    document.querySelectorAll('.option-row').forEach(row => row.classList.remove('selected'));
+    el.classList.add('selected');
+    picks.redCard = optId;
+    validate();
+}
+
+function selectTotalGoals(btn, val) {
+    document.getElementById('totalGoalsGrid').querySelectorAll('.time-btn').forEach(b => b.classList.remove('selected'));
+    btn.classList.add('selected');
+    picks.totalGoals = val;
+    validate();
+}
+
+function validate() {
+    picks.user = document.getElementById('username').value;
+    picks.email = document.getElementById('email').value;
+    picks.tiebreaker = document.getElementById('tiebreaker').value;
+    picks.combo = document.getElementById('playerCombo').value;
+    let valid = !!(picks.user && picks.email && picks.tiebreaker && picks.sf1.winner && picks.sf2.winner && picks.p3.winner && picks.fin.winner && picks.strategy && picks.redCard && picks.combo && picks.totalGoals);
+    const sys = document.getElementById('sysMsg');
+    const btn = document.getElementById('submitBtn');
+    if(valid) { sys.textContent = "SYSTEM READY. SUBMIT TO PROCEED."; sys.className = "sys complete"; btn.disabled = false; }
+    else { sys.textContent = "AWAITING COMPLETE DATA..."; sys.className = "sys"; btn.disabled = true; }
+}
+
+function showSummary() {
+    const list = document.getElementById('summaryList');
+    list.innerHTML = `<li><strong>PLAYER:</strong> ${picks.user}</li><li><strong>SF1:</strong> ${picks.sf1.winner}</li><li><strong>SF2:</strong> ${picks.sf2.winner}</li><li><strong>STRATEGY:</strong> ${picks.strategy}</li><li><strong>GOALS:</strong> ${picks.totalGoals}</li>`;
+    document.getElementById('submitOverlay').style.display = 'flex';
+}
+</script>
 </body>
 </html>
