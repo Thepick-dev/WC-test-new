@@ -46,44 +46,59 @@ body {
     animation: fadeOut 0.2s ease-out 1.4s forwards;
 }
 
-/* THE STAGE: Fixed Aspect Ratio (16:9) 
-   This ensures the distance between foot and ball is IDENTICAL on all phones.
-*/
+/* THE STAGE: Fixed Aspect Ratio (16:9) */
 .arena {
     width: 100%;
     max-width: 800px;
     aspect-ratio: 16 / 9; 
     position: relative;
-    /* Optional: visual debugger to see the floor */
-    /* border-bottom: 2px solid #333; */ 
 }
 
 /* --- THE PLAYER --- */
 .sprite-player {
     position: absolute; 
-    left: 15%; 
-    bottom: 0; /* Anchor feet to floor */
-    width: 30%; /* Bigger size for better visibility */
+    left: 12%; 
+    bottom: 0; 
+    width: 30%; /* Responsive Size */
     aspect-ratio: 1/1; 
-    z-index: 10;
+    z-index: 10; /* Player is IN FRONT of the ball */
     
     background-image: var(--player-idle);
     background-size: contain; 
     background-repeat: no-repeat; 
     background-position: bottom center;
 
-    /* 'step-end' prevents ghosting between frames */
     animation: player-sequence var(--total-time) step-end forwards;
+}
+
+/* --- THE SURGE BAR (Restored) --- */
+.power-bar-container {
+    position: absolute;
+    top: 10%; /* Above player head */
+    left: 10%;
+    width: 80%; /* Width relative to player sprite */
+    height: 10%;
+    background: #222;
+    border: 2px solid #fff;
+    opacity: 0; /* Hidden until windup starts */
+    animation: show-bar 0.1s linear 0s forwards;
+}
+
+.power-fill {
+    height: 100%;
+    width: 0%;
+    background: #ffd60a; /* Yellow start */
+    box-shadow: 0 0 5px #ff0055;
+    animation: fill-bar 0.6s linear forwards; /* Fills during windup */
 }
 
 /* --- THE BALL --- */
 .sprite-ball {
     position: absolute; 
-    left: 38%; /* Adjusted to sit right in front of the 30% wide player */
-    bottom: 0; /* Align with floor */
-    z-index: 5;
+    left: 42%; /* Moved RIGHT to clear player overlap */
+    bottom: 2%; /* Slightly off floor */
+    z-index: 5; /* Behind player */
     
-    /* Normal Ball Size */
     width: 8%; 
     aspect-ratio: 1/1; 
     
@@ -92,7 +107,6 @@ body {
     background-repeat: no-repeat;
     background-position: bottom left; 
     
-    /* CRITICAL FIX: Grows from left to right */
     transform-origin: left bottom; 
 
     animation: ball-sequence var(--total-time) linear forwards;
@@ -101,15 +115,15 @@ body {
 /* --- TEXT FX --- */
 .shout-text {
     position: absolute; 
-    top: 10%; 
+    top: 15%; 
     left: 0; 
     width: 100%;
     text-align: center;
-    color: #ffd60a; 
+    color: #00f6ff; 
     font-size: 4vw; 
     opacity: 0;
     text-shadow: 4px 4px #ff0055;
-    animation: text-pop 0.1s linear 0.6s forwards, text-hide 0.1s linear 0.9s forwards;
+    animation: text-pop 0.1s linear 0.6s forwards, text-hide 0.1s linear 1.0s forwards;
 }
 
 /* =========================================
@@ -120,7 +134,7 @@ body {
 @keyframes player-sequence {
     0%   { background-image: var(--player-idle); }
     50%  { background-image: var(--player-windup); }
-    55%  { background-image: var(--player-kick); transform: translateX(5%); } /* Slight lunge forward */
+    55%  { background-image: var(--player-kick); transform: translateX(5%); } 
     100% { background-image: var(--player-kick); transform: translateX(5%); }
 }
 
@@ -133,22 +147,28 @@ body {
     /* 2. IMPACT (Instant Swap) */
     55%  { 
         background-image: var(--ball-super);  
-        width: 35%; /* Fireball is much longer */
-        aspect-ratio: 3/1; /* Fireball shape */
+        width: 40%; /* Fireball width */
+        aspect-ratio: 3/1; 
         transform: translateX(0); 
-        animation-timing-function: cubic-bezier(0.1, 1, 0.2, 1); /* "Explosion" curve */
+        animation-timing-function: cubic-bezier(0.1, 1, 0.2, 1); 
     }
     
-    /* 3. FLIGHT (Exit Screen) */
+    /* 3. FLIGHT */
     100% { 
         background-image: var(--ball-super);
-        width: 35%;
+        width: 40%;
         aspect-ratio: 3/1;
-        transform: translateX(300%); /* Fly off to the right */
+        transform: translateX(300%); 
     }
 }
 
 /* UTILITIES */
+@keyframes fill-bar { 
+    0% { width: 0%; background: #ffd60a; } 
+    100% { width: 100%; background: #ff0055; } /* Yellow -> Pink */
+}
+@keyframes show-bar { to { opacity: 1; } }
+
 @keyframes text-pop { 0% { opacity: 0; transform: scale(0.5); } 100% { opacity: 1; transform: scale(1.2); } }
 @keyframes text-hide { to { opacity: 0; } }
 @keyframes fadeOut { to { opacity: 0; visibility: hidden; } }
@@ -177,7 +197,9 @@ body {
 
     <div id="sting-layer">
         <div class="arena">
-            <div class="sprite-player"></div>
+            <div class="sprite-player">
+                <div class="power-bar-container"><div class="power-fill"></div></div>
+            </div>
             <div class="sprite-ball"></div>
             <div class="shout-text">SURGE!</div>
         </div>
