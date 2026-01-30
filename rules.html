@@ -8,6 +8,7 @@
 <style>
 /* --- 1. SETUP & ASSETS --- */
 :root {
+    /* Ensure these match your filenames exactly */
     --player-idle:    url('p1.png');
     --player-windup:  url('p2.png');
     --player-kick:    url('p3.png');
@@ -15,6 +16,7 @@
     --ball-normal:    url('b1.png');
     --ball-super:     url('b2.png');
 
+    /* Animation Duration */
     --total-time: 1.2s;
 }
 
@@ -112,6 +114,7 @@ body {
     bottom: 2%; 
     z-index: 5; 
     
+    /* DEFAULT STATE */
     width: 8%; 
     aspect-ratio: 1/1; 
     
@@ -119,8 +122,6 @@ body {
     background-size: contain; 
     background-repeat: no-repeat;
     background-position: bottom left; 
-    
-    /* Removed transform-origin since we aren't scaling */
     
     animation: ball-sequence var(--total-time) linear forwards;
 }
@@ -138,19 +139,22 @@ body {
 
 @keyframes ball-sequence {
     /* 1. STATIC PHASE */
-    /* Absolute lock on size/position until the kick moment */
+    /* 0% to 54.9% - LOCKED. No changes allowed. */
     0%   { 
         background-image: var(--ball-normal); 
         transform: translateX(0); 
         width: 8%; 
+        aspect-ratio: 1/1;
     }
-    54%  { 
+    54.9% { 
         background-image: var(--ball-normal); 
         transform: translateX(0); 
         width: 8%; 
+        aspect-ratio: 1/1;
     }
     
     /* 2. IMPACT PHASE (Swap to Fireball) */
+    /* The change happens instantly at 55% */
     55%  { 
         background-image: var(--ball-super);  
         width: 40%; 
