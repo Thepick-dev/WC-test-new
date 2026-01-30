@@ -1,1 +1,257 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>GOALSURGE - OFFICIAL</title>
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+<style>
+/* =========================================
+   1. CONFIGURATION & ASSETS
+   ========================================= */
+:root {
+    /* --- COLORS --- */
+    --bg-color: #0f0e17;
+    --neon-cyan: #00f6ff;
+    --neon-pink: #ff0055;
+    --neon-yellow: #ffd60a;
 
+    /* --- ANIMATION SPEED --- */
+    /* Adjust this to make the kick faster/slower */
+    --total-time: 2.5s; 
+    
+    /* --- IMAGES (UNCOMMENT THESE LINES TO USE YOUR FILES) --- */
+    
+    /* --player-idle:   url('p1.png'); */
+    /* --player-kick:   url('p3.png'); */
+    /* --ball-img:      url('b2.png'); */
+
+    /* (Default placeholders so you can see it working now) */
+    --player-idle:   linear-gradient(to bottom, #444, #222);
+    --player-kick:   linear-gradient(to bottom, #666, #444);
+    --ball-img:      radial-gradient(circle at 30% 30%, #fff, #ccc);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+    background: var(--bg-color);
+    font-family: 'Press Start 2P', cursive;
+    color: #fff;
+    overflow-x: hidden;
+}
+
+/* =========================================
+   2. THE BANNER STAGE
+   ========================================= */
+.banner-container {
+    position: relative;
+    width: 100%;
+    height: 300px; /* Height of the banner */
+    background: #000;
+    border-bottom: 4px solid var(--neon-cyan);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden; /* Hides ball when it flies off screen */
+    
+    /* Optional: Grid Background Effect */
+    background-image: 
+        linear-gradient(rgba(0, 246, 255, 0.05) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0, 246, 255, 0.05) 1px, transparent 1px);
+    background-size: 40px 40px;
+}
+
+/* =========================================
+   3. TEXT LAYERS (The Reveal Trick)
+   ========================================= */
+
+/* The Font Style shared by both layers */
+.banner-text {
+    font-size: 8vw; /* Responsive huge text */
+    white-space: nowrap; /* Keep on one line */
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    padding-left: 20px; /* Offset for player space */
+}
+
+/* LAYER A: The "Off" Text (Dark Background) */
+.text-dark {
+    color: #222;
+    text-shadow: 2px 2px #000;
+    z-index: 1;
+}
+
+/* LAYER B: The "Revealed" Container */
+.reveal-mask {
+    position: absolute;
+    top: 0; left: 0; bottom: 0;
+    
+    /* Start width 0, animate to 150% to wipe across screen */
+    width: 0%; 
+    overflow: visible; /* CRITICAL: Allows ball to stick out of the edge */
+    z-index: 5;
+    
+    /* Animation: Wait 1s for player windup, then wipe */
+    animation: wipe-animation var(--total-time) cubic-bezier(0.6, 0, 0, 1) forwards;
+    animation-delay: 0.8s;
+}
+
+/* The Bright Text inside the mask */
+.text-lit {
+    /* Must be positioned identically to .text-dark to overlap perfectly */
+    width: 100vw; /* Force it to be full screen width */
+    text-align: center; 
+    left: 0;
+    
+    color: var(--neon-yellow);
+    text-shadow: 
+        0 0 10px var(--neon-pink),
+        4px 4px var(--neon-pink);
+}
+
+/* =========================================
+   4. THE BALL (Pinned to the Reveal Mask)
+   ========================================= */
+.ball-anchor {
+    position: absolute;
+    right: 0; /* Pinned to the leading edge of the wipe */
+    top: 50%;
+    transform: translate(50%, -50%); /* Center ball on the edge line */
+    z-index: 10;
+    
+    /* Hide initially */
+    opacity: 0;
+    animation: ball-appear 0.1s linear forwards;
+    animation-delay: 0.8s; /* Sync with wipe start */
+}
+
+.ball-sprite {
+    width: 60px; height: 60px;
+    border-radius: 50%;
+    background: var(--ball-img);
+    background-size: contain;
+    background-repeat: no-repeat;
+    box-shadow: 0 0 20px var(--neon-cyan);
+    
+    /* Spin effect */
+    animation: ball-spin 0.5s linear infinite;
+}
+
+.fire-trail {
+    position: absolute;
+    right: 30px; top: 10px;
+    width: 150px; height: 40px;
+    background: linear-gradient(90deg, transparent, var(--neon-pink), var(--neon-yellow));
+    filter: blur(8px);
+    z-index: -1;
+    opacity: 0.8;
+}
+
+/* =========================================
+   5. THE PLAYER
+   ========================================= */
+.player-sprite {
+    position: absolute;
+    left: 5%; bottom: 10px;
+    width: 120px; height: 140px;
+    z-index: 20;
+    
+    background: var(--player-idle);
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: bottom center;
+    
+    /* Visual placeholder border (Remove if using real image) */
+    border: 2px dashed #444; 
+
+    /* Animation: Windup -> Kick */
+    animation: player-action var(--total-time) step-end forwards;
+}
+
+/* =========================================
+   6. KEYFRAME ANIMATIONS
+   ========================================= */
+
+@keyframes wipe-animation {
+    0%   { width: 0%; }
+    100% { width: 150%; } /* Go past 100% to ensure ball leaves screen */
+}
+
+@keyframes ball-appear {
+    to { opacity: 1; }
+}
+
+@keyframes ball-spin {
+    to { transform: rotate(360deg); }
+}
+
+@keyframes player-action {
+    0%   { transform: translateX(0); background: var(--player-idle); }
+    10%  { transform: translateX(-10px) rotate(-5deg); } /* Windup */
+    
+    /* KICK FRAME - Syncs with animation-delay (0.8s) approx 30% of 2.5s */
+    30%  { 
+        transform: translateX(20px) rotate(10deg); 
+        background: var(--player-kick);
+        border-color: var(--neon-yellow); /* Flash border */
+    }
+    
+    100% { 
+        transform: translateX(20px) rotate(10deg); 
+        background: var(--player-kick);
+        opacity: 0; /* Optional: Fade player out */
+    }
+}
+
+/* =========================================
+   7. PAGE CONTENT STYLES
+   ========================================= */
+.main-content {
+    max-width: 800px; margin: 40px auto; text-align: center;
+}
+.btn {
+    background: var(--neon-pink); color: #fff; border:none;
+    padding: 15px 30px; font-family: inherit; font-size: 18px;
+    cursor: pointer; margin-top: 20px;
+    box-shadow: 4px 4px 0 #fff;
+}
+.btn:hover { transform: translate(-2px, -2px); box-shadow: 6px 6px 0 #fff; }
+
+</style>
+</head>
+<body>
+
+    <header class="banner-container">
+        
+        <div class="banner-text text-dark">GOALSURGE</div>
+
+        <div class="reveal-mask">
+            
+            <div class="ball-anchor">
+                <div class="fire-trail"></div>
+                <div class="ball-sprite"></div>
+            </div>
+
+            <div class="banner-container" style="background:transparent; border:none; height:100%; width:100vw; position:absolute; top:0; left:0;">
+                <div class="banner-text text-lit">GOALSURGE</div>
+            </div>
+            
+        </div>
+
+        <div class="player-sprite"></div>
+
+    </header>
+    <div class="main-content">
+        <p style="color:var(--neon-cyan)">WELCOME TO THE ARENA</p>
+        <br>
+        <p style="color:#888; line-height:1.6;">
+            THE PREDICTION ENGINE IS ONLINE.<br>
+            MAKE YOUR PICKS.
+        </p>
+        <button class="btn">START ROUND</button>
+    </div>
+
+</body>
+</html>
