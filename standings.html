@@ -2,232 +2,384 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-<title>GOALSTORM! — FREE KICK</title>
-<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap" rel="stylesheet">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>GOALSTORM! - TRANSFER ROULETTE</title>
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
 <style>
-:root{ --bg:#0f0e17; --neon-pink:#ff2a6d; --neon-cyan:#05d9e8; --neon-yellow:#ffc800; }
-body{ background:var(--bg); color:#fff; font-family:"VT323"; display:flex; flex-direction:column; align-items:center; min-height:100vh; margin:0; }
-
-.panel {
-    width: 95%; max-width: 600px; background: #1a1a2e;
-    border: 3px solid var(--neon-cyan); padding: 15px; margin-top: 20px;
-    box-shadow: 0 0 20px rgba(5, 217, 232, 0.2);
+/* --- CORE STYLES --- */
+:root {
+    --neon-cyan: #00f6ff;
+    --neon-pink: #ff0055;
+    --neon-yellow: #ffd60a;
+    --bg-dark: #0f0e17;
+    --panel-bg: #1a1a2e;
 }
 
-h1 { font-family:"Press Start 2P"; font-size:20px; color:var(--neon-yellow); text-align:center; margin-bottom:15px; }
+* { box-sizing: border-box; margin: 0; padding: 0; }
 
-/* GAME CANVAS */
-.game-container { position:relative; width:100%; height:300px; background:#1e5631; border:2px solid #fff; overflow:hidden; }
-
-/* HUD OVERLAYS */
-.hud { position:absolute; top:10px; left:10px; font-size:18px; z-index:10; text-shadow:1px 1px #000; pointer-events:none;}
-
-/* POWER BAR */
-.power-wrapper {
-    position:absolute; bottom:10px; left:10px; right:10px; height:20px;
-    background:#000; border:2px solid #555; display:none;
+body { 
+    background: #000; 
+    font-family: 'Press Start 2P', cursive; 
+    color: #fff;
+    height: 100vh;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
-.power-fill { height:100%; width:0%; background:linear-gradient(90deg, var(--neon-cyan), var(--neon-pink)); }
 
-/* CONTROLS */
+/* --- TOP HUD --- */
+.hud {
+    width: 100%;
+    padding: 20px;
+    display: flex;
+    justify-content: space-between;
+    border-bottom: 4px solid var(--neon-pink);
+    background: var(--bg-dark);
+    z-index: 10;
+}
+.balance-box { color: var(--neon-yellow); text-shadow: 2px 2px var(--neon-pink); }
+.spins-box { color: var(--neon-cyan); }
+
+/* --- THE ROULETTE REEL --- */
+.game-area {
+    flex-grow: 1;
+    width: 100%;
+    max-width: 800px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+}
+
+.roulette-window {
+    width: 100%;
+    height: 120px;
+    background: #222;
+    border-top: 4px solid #fff;
+    border-bottom: 4px solid #fff;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+/* The arrow pointing to the winner */
+.marker {
+    position: absolute;
+    top: 0; left: 50%;
+    transform: translateX(-50%);
+    width: 4px;
+    height: 100%;
+    background: var(--neon-yellow);
+    z-index: 5;
+    box-shadow: 0 0 10px var(--neon-yellow);
+}
+
+.reel-strip {
+    display: flex;
+    position: absolute;
+    left: 50%; /* Start centered */
+    transition: transform 3s cubic-bezier(0.1, 1, 0.1, 1); /* Deceleration effect */
+}
+
+.reel-item {
+    width: 200px;
+    height: 100px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    border-right: 2px dashed #444;
+    font-size: 14px;
+    text-align: center;
+    line-height: 1.5;
+}
+
+.item-win { color: var(--neon-cyan); background: rgba(0, 246, 255, 0.1); }
+.item-loss { color: var(--neon-pink); background: rgba(255, 0, 85, 0.1); }
+.item-val { font-size: 20px; margin-top: 10px; }
+
+/* --- CONTROLS --- */
+.controls {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
 button {
-    width:100%; padding:20px; font-family:"Press Start 2P"; font-size:16px;
-    background:var(--neon-pink); color:#fff; border:none; border-bottom:5px solid #900;
-    cursor:pointer; margin-top:10px;
+    background: #000;
+    border: 2px solid #fff;
+    color: #fff;
+    font-family: 'Press Start 2P', cursive;
+    padding: 15px;
+    cursor: pointer;
+    font-size: 12px;
+    transition: 0.1s;
 }
-button:active { transform:translateY(4px); border-bottom:1px solid #900; }
+button:hover:not(:disabled) { transform: scale(1.05); background: #222; }
+button:active:not(:disabled) { transform: scale(0.95); }
+button:disabled { opacity: 0.5; cursor: not-allowed; border-color: #555; }
+
+.btn-bet { border-color: var(--neon-cyan); color: var(--neon-cyan); }
+.btn-spin { border-color: var(--neon-yellow); color: var(--neon-yellow); background: #222; }
+
+/* --- THE SHOP (Bottom Grid) --- */
+.shop-container {
+    width: 100%;
+    height: 35vh;
+    background: #111;
+    border-top: 4px solid #333;
+    overflow-y: auto;
+    padding: 20px;
+}
+
+.shop-title { text-align: center; margin-bottom: 15px; color: #888; font-size: 12px; }
+
+.player-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    gap: 10px;
+}
+
+.player-card {
+    background: #222;
+    border: 1px solid #444;
+    padding: 10px;
+    text-align: center;
+    opacity: 0.3; /* Default Locked */
+    transition: 0.3s;
+}
+
+.player-card.unlocked {
+    opacity: 1;
+    border-color: var(--neon-cyan);
+    box-shadow: 0 0 5px var(--neon-cyan);
+    background: #0f0e17;
+}
+
+.p-name { font-size: 10px; margin-bottom: 5px; color: #fff; }
+.p-cost { font-size: 10px; color: var(--neon-yellow); }
+
+/* --- ANIMATIONS --- */
+@keyframes flash { 0% { background: #fff; } 100% { background: #000; } }
+.flash-effect { animation: flash 0.2s linear; }
+
 </style>
 </head>
 <body>
 
-<div class="panel">
-    <h1>TRAJECTORY TITAN</h1>
-    <div style="text-align:center; margin-bottom:10px; color:#aaa;">TAP TO LOCK ANGLE &rarr; TAP TO LOCK POWER</div>
-    
-    <div class="game-container" id="gameBox">
-        <canvas id="canvas" width="600" height="300"></canvas>
-        <div class="hud" id="hud">WIND: <span id="windVal">0</span></div>
-        <div class="power-wrapper" id="pwrBar"><div class="power-fill" id="pwrFill"></div></div>
+    <div class="hud">
+        <div class="balance-box">BANK: £<span id="balance">1000000</span></div>
+        <div class="spins-box">SPINS: <span id="spins">3</span></div>
     </div>
 
-    <button id="actionBtn" onclick="handleInput()">START TARGETING</button>
-</div>
+    <div class="game-area">
+        <div class="roulette-window">
+            <div class="marker"></div>
+            <div class="reel-strip" id="reel">
+                </div>
+        </div>
+
+        <div id="message-area" style="height: 30px; margin-bottom: 10px; color: #fff; text-align: center;">PLACE YOUR BET</div>
+
+        <div class="controls">
+            <button class="btn-bet" onclick="setBet(100000)">BET £100K</button>
+            <button class="btn-bet" onclick="setBet(500000)">BET £500K</button>
+            <button class="btn-bet" onclick="setBet('all')">ALL IN!</button>
+        </div>
+        <button class="btn-spin" id="spinBtn" onclick="spinWheel()" disabled>SPIN ROULETTE</button>
+    </div>
+
+    <div class="shop-container">
+        <div class="shop-title">SCOUTING REPORT - PLAYERS AVAILABLE</div>
+        <div class="player-grid" id="shopGrid"></div>
+    </div>
 
 <script>
-const cvs = document.getElementById('canvas');
-const ctx = cvs.getContext('2d');
-const btn = document.getElementById('actionBtn');
-const pwrBar = document.getElementById('pwrBar');
-const pwrFill = document.getElementById('pwrFill');
-const windDisplay = document.getElementById('windVal');
-
-// GAME STATE
-let state = 'IDLE'; // IDLE, ANGLE, POWER, SHOOTING, END
-let ball = { x: 50, y: 270, r: 6, vx: 0, vy: 0 };
-let arrow = { angle: 0, dir: 1 }; // For angle selection
-let power = 0;
-let powerDir = 1;
-let wind = (Math.random() * 2 - 1).toFixed(1); // Random wind -1 to 1
-
-// CONFIG
-const WALL_X = 300;
-const WALL_H = 100; // Height of defenders
-const GOAL_X = 500;
-const GOAL_W = 15; // Width of goal line (top down view logic applied to side view)
-const GRAVITY = 0.25;
-
-// RESIZE CANVAS
-function resize() {
-    // Keep internal resolution but scale visuals
-    const rect = document.getElementById('gameBox').getBoundingClientRect();
-    cvs.width = rect.width;
-    cvs.height = rect.height;
-    resetBall();
-}
-window.onload = resize;
-
-function resetBall() {
-    ball.x = 40; 
-    ball.y = cvs.height - 20;
-    wind = (Math.random() * 1.5 - 0.75).toFixed(2); // New wind
-    windDisplay.innerText = wind;
-    windDisplay.style.color = wind > 0 ? '#05d9e8' : '#ff2a6d';
-}
-
-// MAIN LOOP
-function loop() {
-    ctx.clearRect(0,0,cvs.width,cvs.height);
-
-    // 1. DRAW SCENE
-    // Ground
-    ctx.fillStyle = "#164023";
-    ctx.fillRect(0, cvs.height-10, cvs.width, 10);
-
-    // Wall (Defenders)
-    ctx.fillStyle = "#ff2a6d";
-    ctx.fillRect(WALL_X, cvs.height - 10 - WALL_H, 20, WALL_H);
-    ctx.fillStyle = "#fff"; // Heads
-    ctx.beginPath(); ctx.arc(WALL_X+10, cvs.height - 10 - WALL_H, 10, 0, Math.PI*2); ctx.fill();
-
-    // Goal
-    ctx.fillStyle = "#fff";
-    ctx.fillRect(cvs.width - 60, cvs.height - 110, 5, 100); // Post
-    ctx.strokeStyle = "#fff"; ctx.lineWidth=2;
-    ctx.beginPath(); // Net
-    ctx.moveTo(cvs.width - 60, cvs.height - 110);
-    ctx.lineTo(cvs.width - 10, cvs.height - 10);
-    ctx.stroke();
-
-    // 2. STATE LOGIC
-    if (state === 'ANGLE') {
-        // Oscillate Arrow
-        arrow.angle += 1 * arrow.dir;
-        if(arrow.angle > 80) arrow.dir = -1;
-        if(arrow.angle < 10) arrow.dir = 1;
-        
-        drawArrow(ball.x, ball.y, arrow.angle, 60, '#ffc800');
-    } 
-    else if (state === 'POWER') {
-        // Freeze Arrow, Oscillate Power
-        drawArrow(ball.x, ball.y, arrow.angle, 60, '#555'); // Ghost arrow
-        
-        power += 2 * powerDir;
-        if(power > 100) powerDir = -1;
-        if(power < 0) powerDir = 1;
-        
-        pwrFill.style.width = power + "%";
-    }
-    else if (state === 'SHOOTING') {
-        // Physics
-        ball.vx -= parseFloat(wind) * 0.02; // Wind Resistance
-        ball.vy += GRAVITY; // Gravity
-        
-        ball.x += ball.vx;
-        ball.y += ball.vy;
-
-        // Collision: Floor
-        if(ball.y > cvs.height - 15) {
-            state = 'END';
-            checkWin();
-        }
-
-        // Collision: Wall
-        if (ball.x > WALL_X && ball.x < WALL_X + 20 && ball.y > cvs.height - 10 - WALL_H) {
-             ball.vx *= -0.5; // Bounce back
-             state = 'END';
-             btn.innerText = "BLOCKED! RESET?";
-             btn.style.background = "#ff2a6d";
-        }
-    }
-
-    // Draw Ball
-    ctx.beginPath();
-    ctx.arc(ball.x, ball.y, ball.r, 0, Math.PI*2);
-    ctx.fillStyle = "#fff"; ctx.fill();
-    ctx.strokeStyle = "#000"; ctx.stroke();
-
-    requestAnimationFrame(loop);
-}
-
-function drawArrow(x, y, ang, len, color) {
-    const rad = ang * Math.PI / 180;
-    const endX = x + len * Math.cos(-rad);
-    const endY = y + len * Math.sin(-rad);
+    // --- CONFIGURATION ---
+    let balance = 1000000;
+    let spinsLeft = 3;
+    let currentBet = 0;
+    const reel = document.getElementById('reel');
+    const balanceSpan = document.getElementById('balance');
+    const spinsSpan = document.getElementById('spins');
+    const msgArea = document.getElementById('message-area');
+    const spinBtn = document.getElementById('spinBtn');
     
-    ctx.beginPath();
-    ctx.moveTo(x, y);
-    ctx.lineTo(endX, endY);
-    ctx.strokeStyle = color;
-    ctx.lineWidth = 4;
-    ctx.stroke();
-}
+    // --- DATA ---
+    // The items on the wheel
+    const outcomes = [
+        { label: "GOAL!", type: "win", mul: 2, text: "x2" },
+        { label: "OWN GOAL", type: "loss", mul: 0, text: "LOSE BET" },
+        { label: "STRIKE!", type: "win", mul: 1.5, text: "x1.5" },
+        { label: "VAR CHECK", type: "loss", mul: 0.5, text: "HALF BACK" },
+        { label: "HAT-TRICK", type: "win", mul: 5, text: "x5" },
+        { label: "RED CARD", type: "loss", mul: -1, text: "BANKRUPT" }, // Special case
+        { label: "WORLDIE", type: "win", mul: 10, text: "x10" },
+        { label: "SAFE HANDS", type: "win", mul: 1.2, text: "x1.2" },
+        { label: "OFFSIDE", type: "loss", mul: 0, text: "LOSE BET" }
+    ];
 
-// INPUT HANDLER
-function handleInput() {
-    if (state === 'IDLE' || state === 'END') {
-        state = 'ANGLE';
-        resetBall();
-        btn.innerText = "LOCK ANGLE";
-        btn.style.background = "#05d9e8";
-        btn.style.color = "#000";
-        pwrBar.style.display = "none";
-    } 
-    else if (state === 'ANGLE') {
-        state = 'POWER';
-        btn.innerText = "LOCK POWER";
-        btn.style.background = "#ffc800";
-        pwrBar.style.display = "block";
-    } 
-    else if (state === 'POWER') {
-        state = 'SHOOTING';
-        btn.innerText = "SHOOTING...";
-        btn.style.background = "#555";
-        btn.style.color = "#fff";
-        
-        // Calculate Velocity
-        const rad = arrow.angle * Math.PI / 180;
-        const speed = power * 0.18; // Multiplier to tune speed
-        
-        ball.vx = speed * Math.cos(-rad);
-        ball.vy = speed * Math.sin(-rad);
+    // 30 Players shop
+    const players = [
+        {n:"R.BIT", v:12000000}, {n:"M.PIXEL", v:8000000}, {n:"L.NEON", v:6000000},
+        {n:"Z.CYAN", v:5500000}, {n:"K.PINK", v:5000000}, {n:"J.ARCADE", v:4500000},
+        {n:"G.RETRO", v:4000000}, {n:"S.SCAN", v:3500000}, {n:"D.PAD", v:3000000},
+        {n:"A.BUTTON", v:2500000}, {n:"B.BUTTON", v:2000000}, {n:"ST.ART", v:1800000},
+        {n:"SEL.ECT", v:1600000}, {n:"P.ONE", v:1400000}, {n:"P.TWO", v:1200000},
+        {n:"C.ROM", v:1000000}, {n:"R.AM", v:900000}, {n:"B.YTE", v:800000},
+        {n:"G.LITCH", v:700000}, {n:"L.AG", v:600000}, {n:"P.ING", v:500000},
+        {n:"S.ERVER", v:400000}, {n:"C.ODE", v:300000}, {n:"J.AVA", v:200000},
+        {n:"H.TML", v:150000}, {n:"C.SS", v:100000}, {n:"S.CRIPT", v:50000},
+        {n:"N.OOB", v:25000}, {n:"B.OT", v:10000}, {n:"NULL", v:5000}
+    ];
+
+    // --- INITIALIZE REEL ---
+    // We create a long strip repeating the outcomes to simulate infinite scroll
+    let reelContent = [];
+    // Repeat the array 10 times to give us space to spin
+    for(let i=0; i<10; i++) {
+        reelContent = reelContent.concat(outcomes);
     }
-}
+    
+    reelContent.forEach((item) => {
+        const div = document.createElement('div');
+        div.className = `reel-item ${item.type === 'win' ? 'item-win' : 'item-loss'}`;
+        div.innerHTML = `<div>${item.label}</div><div class="item-val">${item.text}</div>`;
+        reel.appendChild(div);
+    });
 
-function checkWin() {
-    // Did it land in the goal area?
-    // Goal is between x=cvs.width-60 and cvs.width
-    if (ball.x > cvs.width - 60 && ball.x < cvs.width) {
-        btn.innerText = "GOAL!!! (+10 PTS)";
-        btn.style.background = "#05d9e8"; // Success Cyan
-    } else {
-        btn.innerText = "MISSED. TRY AGAIN.";
-        btn.style.background = "#ff2a6d"; // Fail Pink
+    // --- GAME LOGIC ---
+
+    function setBet(amount) {
+        if(spinsLeft <= 0) return;
+        
+        if (amount === 'all') {
+            currentBet = balance;
+        } else {
+            currentBet = amount;
+        }
+
+        if (currentBet > balance) {
+            msgArea.innerText = "INSUFFICIENT FUNDS!";
+            msgArea.style.color = "red";
+            spinBtn.disabled = true;
+            return;
+        }
+        
+        msgArea.innerText = `BET LOCKED: £${currentBet.toLocaleString()}`;
+        msgArea.style.color = "#fff";
+        spinBtn.disabled = false;
     }
-}
 
-// Start
-loop();
+    function updateShop() {
+        const grid = document.getElementById('shopGrid');
+        grid.innerHTML = '';
+        players.forEach(p => {
+            const card = document.createElement('div');
+            card.className = 'player-card';
+            if (balance >= p.v) card.classList.add('unlocked');
+            card.innerHTML = `<div class="p-name">${p.n}</div><div class="p-cost">£${p.v.toLocaleString()}</div>`;
+            grid.appendChild(card);
+        });
+    }
+
+    function spinWheel() {
+        if(spinsLeft <= 0 || currentBet === 0) return;
+
+        // 1. Deduct Bet temporarily
+        balance -= currentBet;
+        balanceSpan.innerText = balance.toLocaleString();
+        spinsLeft--;
+        spinsSpan.innerText = spinsLeft;
+        
+        // Disable controls
+        const btns = document.querySelectorAll('button');
+        btns.forEach(b => b.disabled = true);
+        msgArea.innerText = "SPINNING...";
+
+        // 2. Determine Result randomly
+        const resultIndex = Math.floor(Math.random() * outcomes.length);
+        const result = outcomes[resultIndex];
+        
+        // 3. Calculate Scroll Position
+        // The reel item width is 200px.
+        // We want to land on the item in the MIDDLE of the strip (e.g., 5th repetition)
+        // plus the random index offset.
+        const itemWidth = 200;
+        const middleSet = 5 * outcomes.length; 
+        const targetIndex = middleSet + resultIndex;
+        
+        // Add random jitter so it doesn't always land dead center of the box
+        const jitter = Math.floor(Math.random() * 40) - 20; 
+        
+        // Calculate translateX. 
+        // We want the target item centered. 
+        // Reel starts at left:50%.
+        const moveAmount = (targetIndex * itemWidth) + (itemWidth / 2);
+        
+        reel.style.transform = `translateX(-${moveAmount}px)`;
+
+        // 4. Resolve after animation
+        setTimeout(() => {
+            handleResult(result);
+            // Re-enable (unless game over)
+            if(spinsLeft > 0 && balance > 0) {
+                document.querySelectorAll('.btn-bet').forEach(b => b.disabled = false);
+            } else {
+                endGame();
+            }
+        }, 3000); // 3s matches CSS transition
+    }
+
+    function handleResult(res) {
+        let winnings = 0;
+
+        if (res.label === "RED CARD") {
+            balance = 0; // Bankrupt
+            msgArea.innerText = "RED CARD! BANKRUPT!";
+            msgArea.style.color = "var(--neon-pink)";
+        } else if (res.type === "win") {
+            winnings = currentBet * res.mul;
+            balance += winnings;
+            msgArea.innerText = `${res.label}! WON £${winnings.toLocaleString()}`;
+            msgArea.style.color = "var(--neon-cyan)";
+            document.body.classList.add('flash-effect');
+            setTimeout(() => document.body.classList.remove('flash-effect'), 200);
+        } else {
+            // Loss types
+            if (res.mul > 0) {
+                // Return some money (e.g. VAR Check x0.5)
+                winnings = Math.floor(currentBet * res.mul);
+                balance += winnings;
+                msgArea.innerText = `${res.label}! RECOVERED £${winnings.toLocaleString()}`;
+            } else {
+                msgArea.innerText = `${res.label}! LOST BET`;
+            }
+            msgArea.style.color = "var(--neon-pink)";
+        }
+        
+        balanceSpan.innerText = balance.toLocaleString();
+        updateShop();
+        
+        // Reset Reel visually for next spin (instant jump back to identical position in first set)
+        // This is a trick to allow infinite spinning, but for 3 spins we don't strictly need it.
+        // We will just leave it at the stopped position.
+    }
+
+    function endGame() {
+        msgArea.innerText = "MARKET OPEN! BUY PLAYERS BELOW";
+        msgArea.style.color = "var(--neon-yellow)";
+        // Update shop one last time
+        updateShop();
+    }
+
+    // Init
+    updateShop();
+
 </script>
 </body>
 </html>
